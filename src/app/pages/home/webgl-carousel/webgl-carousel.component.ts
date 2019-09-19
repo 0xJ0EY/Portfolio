@@ -31,6 +31,7 @@ export class WebGLCarouselComponent implements AfterViewInit, OnDestroy {
     }
 
     this.renderer = new WebGLRenderer(gl);
+    this.renderer.init();
 
     this.animationFrameId = this.window.requestAnimationFrame(this.onAnimationFrame.bind(this));
   }
@@ -46,7 +47,6 @@ export class WebGLCarouselComponent implements AfterViewInit, OnDestroy {
     const deltaTime = now - this.then;
     this.then = now; 
 
-    this.renderer.init();
     this.renderer.update(deltaTime);
     
     // Restart the animation frame
