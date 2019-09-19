@@ -12,7 +12,7 @@ export class WebGLCarouselComponent implements AfterViewInit, OnDestroy {
   
   @ViewChild('webGL', {static: false}) public webGL: ElementRef;
 
-  private window: any;
+  public window: any;
 
   private renderer: WebGLRenderer;
   private animationFrameId: number;
@@ -23,6 +23,9 @@ export class WebGLCarouselComponent implements AfterViewInit, OnDestroy {
   }
 
   ngAfterViewInit(): void {
+    this.webGL.nativeElement.width = this.window.innerWidth;
+    this.webGL.nativeElement.height = this.window.innerHeight;
+
     var gl = this.webGL.nativeElement.getContext('webgl');
 
     if (!gl) {
