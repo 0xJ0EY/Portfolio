@@ -31,6 +31,10 @@ export class WebGLRenderer {
         this.buffers = this.initBuffers();
     }
 
+    resize() {
+        this.gl.viewport(0, 0, this.gl.canvas.width, this.gl.canvas.height);
+    }
+
     update(deltaTime: number) {
         // Draw the scene
         

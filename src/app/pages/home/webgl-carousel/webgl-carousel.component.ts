@@ -1,6 +1,8 @@
 import { Component, ElementRef, ViewChild, AfterViewInit, OnDestroy } from '@angular/core';
 import { WindowRefService } from 'src/app/shared/helpers/window-ref.service';
 import { WebGLRenderer } from "./webgl-renderer/webgl-renderer";
+import { ResizeService } from '../../../shared/services/resize.service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-webgl-carousel',
@@ -13,18 +15,23 @@ export class WebGLCarouselComponent implements AfterViewInit, OnDestroy {
   @ViewChild('webGL', {static: false}) public webGL: ElementRef;
 
   public window: any;
+  private resizeSubscription: Subscription;
 
   private renderer: WebGLRenderer;
   private animationFrameId: number;
   private then: number = 0;
 
-  constructor(private windowRefService: WindowRefService) {
+  constructor(
+    private windowRefService: WindowRefService, 
+    private resizeService: ResizeService
+  ) {
     this.window = this.windowRefService.nativeWindow;
   }
 
   ngAfterViewInit(): void {
-    this.webGL.nativeElement.width = this.window.innerWidth;
-    this.webGL.nativeElement.height = this.window.innerHeight;
+    this.onResize();
+
+    this.resizeSubscription = this.resizeService.onResize.subscribe(this.onResize.bind(this));
 
     var gl = this.webGL.nativeElement.getContext('webgl');
 
@@ -39,9 +46,21 @@ export class WebGLCarouselComponent implements AfterViewInit, OnDestroy {
     this.animationFrameId = this.window.requestAnimationFrame(this.onAnimationFrame.bind(this));
   }
 
+  onResize(): void {
+    this.webGL.nativeElement.width = this.window.innerWidth;
+    this.webGL.nativeElement.height = this.window.innerHeight;
+
+    // If it has a viewport, update it aswell
+    if (this.renderer != null) {
+      this.renderer.resize();
+    }
+  }
+
   ngOnDestroy(): void {
     // Destory leaking loop
     this.window.cancelAnimationFrame(this.animationFrameId);
+
+    this.resizeSubscription.unsubscribe();
   }
 
   onAnimationFrame(now): void {
