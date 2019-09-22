@@ -3,6 +3,8 @@ import { WindowRefService } from 'src/app/shared/helpers/window-ref.service';
 import { WebGLRenderer } from "./webgl-renderer/webgl-renderer";
 import { ResizeService } from '../../../shared/services/resize.service';
 import { Subscription } from 'rxjs';
+import { WebGLObjectManager } from './webgl-renderer/webgl-object-manager';
+import { WebGLCube } from '../../../shared/models/webgl-cube.model';
 
 @Component({
   selector: 'app-webgl-carousel',
@@ -18,6 +20,8 @@ export class WebGLCarouselComponent implements AfterViewInit, OnDestroy {
   private resizeSubscription: Subscription;
 
   private renderer: WebGLRenderer;
+  private objectManager: WebGLObjectManager;
+
   private animationFrameId: number;
   private then: number = 0;
 
@@ -40,8 +44,14 @@ export class WebGLCarouselComponent implements AfterViewInit, OnDestroy {
       return;
     }
 
-    this.renderer = new WebGLRenderer(gl);
+    this.objectManager = new WebGLObjectManager(gl);
+
+    this.renderer = new WebGLRenderer(gl, this.objectManager);
     this.renderer.init();
+
+    this.objectManager.add(new WebGLCube());
+    this.objectManager.add(new WebGLCube());
+    this.objectManager.add(new WebGLCube());
 
     this.animationFrameId = this.window.requestAnimationFrame(this.onAnimationFrame.bind(this));
   }
@@ -69,7 +79,8 @@ export class WebGLCarouselComponent implements AfterViewInit, OnDestroy {
     const deltaTime = now - this.then;
     this.then = now; 
 
-    this.renderer.update(deltaTime);
+    this.objectManager.update(deltaTime);
+    this.renderer.update();
     
     // Restart the animation frame
     this.animationFrameId = this.window.requestAnimationFrame(this.onAnimationFrame.bind(this));

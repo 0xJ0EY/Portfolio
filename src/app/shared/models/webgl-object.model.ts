@@ -1,14 +1,22 @@
-export interface WebGLObject {
+export abstract class WebGLObject {
 
-    getPositionX(): number;
-    getPositionY(): number;
-    getPositionZ(): number;
+    abstract getPositionX(): number;
+    abstract getPositionY(): number;
+    abstract getPositionZ(): number;
 
-    getRotationX(): number;
-    getRotationY(): number;
-    getRotationZ(): number;
+    abstract getRotationX(): number;
+    abstract getRotationY(): number;
+    abstract getRotationZ(): number;
     
-    getVertices(): number[];
-    getIndices(): number[];
+    abstract getVertices(): number[];
+    abstract getIndices(): number[];
+
+    abstract getVertexShader(): string;
+    abstract generateAttribLocations(gl: WebGLRenderingContext, shaderProgram: WebGLProgram): any;
+
+    abstract getFragmentShader(): string;
+    abstract generateUniformLocations(gl: WebGLRenderingContext, shaderProgram: WebGLProgram): any;
+
+    update(deltaTime: number) {}
 
 }
