@@ -1,12 +1,15 @@
 export abstract class WebGLObject {
 
-    abstract getPositionX(): number;
-    abstract getPositionY(): number;
-    abstract getPositionZ(): number;
+    protected position = { x: 0, y: 0, z: 0 }
+    protected rotation = { x: 0, y: 0, z: 0 }
 
-    abstract getRotationX(): number;
-    abstract getRotationY(): number;
-    abstract getRotationZ(): number;
+    getPositionX(): number { return this.position.x };
+    getPositionY(): number { return this.position.y };
+    getPositionZ(): number { return this.position.z };
+
+    getRotationX(): number { return this.rotation.x };
+    getRotationY(): number { return this.rotation.y };
+    getRotationZ(): number { return this.rotation.z };
     
     abstract getVertices(): number[];
     abstract getIndices(): number[];
@@ -18,5 +21,7 @@ export abstract class WebGLObject {
     abstract generateUniformLocations(gl: WebGLRenderingContext, shaderProgram: WebGLProgram): any;
 
     update(deltaTime: number) {}
+
+    delete() {}
 
 }

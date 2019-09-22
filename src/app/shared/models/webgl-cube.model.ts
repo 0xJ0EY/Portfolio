@@ -2,33 +2,18 @@ import vertexShaderSource from '!!raw-loader!src/app/shared/shaders/vertex-shade
 import fragmentShaderSource from '!!raw-loader!src/app/shared/shaders/fragment-shader.frag';
 import { WebGLObject } from "./webgl-object.model";
 
-export class WebGLCube implements WebGLObject {
+export class WebGLCube extends WebGLObject {
 
-    private x = (Math.random() * 10) - 5;
-    private y = (Math.random() * 10) - 5;
-    private z = -10 - (Math.random() * 10);
+    constructor() {
+        super();
 
-    private rotX = Math.random() * (Math.PI * 2);
-    private rotY = Math.random() * (Math.PI * 2);
-    private rotZ = Math.random() * (Math.PI * 2);
+        this.position.x = (Math.random() * 10) - 5;
+        this.position.y = (Math.random() * 10) - 5;
+        this.position.z = -10 - (Math.random() * 10);
 
-    getPositionX(): number {
-        return this.x;
-    }    
-    getPositionY(): number {
-        return this.y;
-    }
-    getPositionZ(): number {
-        return this.z;
-    }
-    getRotationX(): number {
-        return this.rotX;
-    }
-    getRotationY(): number {
-        return this.rotY;
-    }
-    getRotationZ(): number {
-        return this.rotZ;
+        this.rotation.x = Math.random() * (Math.PI * 2);
+        this.rotation.y = Math.random() * (Math.PI * 2);
+        this.rotation.z = Math.random() * (Math.PI * 2);
     }
 
     getVertices(): number[] {
@@ -82,9 +67,8 @@ export class WebGLCube implements WebGLObject {
     }
 
     update(deltaTime: number): void {
-
-        this.rotX += deltaTime;
-        this.rotY += deltaTime;
+        this.rotation.x += deltaTime;
+        this.rotation.y += deltaTime;
     }
 
     getVertexShader(): string {
