@@ -47,7 +47,6 @@ export class WebGLCarouselComponent implements AfterViewInit, OnDestroy {
     this.objectManager = new WebGLObjectManager(gl);
 
     this.renderer = new WebGLRenderer(gl, this.objectManager);
-    this.renderer.init();
 
     this.objectManager.add(new WebGLCube());
     this.objectManager.add(new WebGLCube());

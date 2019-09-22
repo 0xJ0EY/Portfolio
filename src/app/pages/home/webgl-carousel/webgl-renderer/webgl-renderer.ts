@@ -1,6 +1,3 @@
-import vertexShaderSource from '!!raw-loader!src/app/shared/shaders/vertex-shader.vert';
-import fragmentShaderSource from '!!raw-loader!src/app/shared/shaders/fragment-shader.frag';
-import { WebGLCube } from '../../../../shared/models/webgl-cube.model';
 import { mat4 } from "gl-matrix";
 import { WebGLObjectManager } from './webgl-object-manager';
 
@@ -8,56 +5,11 @@ export class WebGLRenderer {
 
     constructor(private gl: WebGLRenderingContext, private objectManager: WebGLObjectManager) {}
 
-    private shaderProgram: WebGLProgram;
-    private programInfo: any;
-    private buffers: any;
-
-    private shaderProgram1: WebGLProgram;
-    private programInfo1: any;
-    private buffers1: any;
-
-    private cubeRotation = 0;
-
-    init() {
-        this.shaderProgram = this.initShaderProgram(vertexShaderSource, fragmentShaderSource);
-
-        this.programInfo = {
-            program: this.shaderProgram,
-            attribLocations: {
-                vertexPosition: this.gl.getAttribLocation(this.shaderProgram, 'aVertexPosition'),
-                vertexColor: this.gl.getAttribLocation(this.shaderProgram, 'aVertexColor'),
-            },
-            uniformLocations: {
-                projectionMatrix: this.gl.getUniformLocation(this.shaderProgram, 'uProjectionMatrix'),
-                modelViewMatrix: this.gl.getUniformLocation(this.shaderProgram, 'uModelViewMatrix'),
-            },
-        }
-
-        this.buffers = this.initBuffers();
-
-        this.shaderProgram1 = this.initShaderProgram(vertexShaderSource, fragmentShaderSource);
-
-        this.programInfo1 = {
-            program: this.shaderProgram1,
-            attribLocations: {
-                vertexPosition: this.gl.getAttribLocation(this.shaderProgram1, 'aVertexPosition'),
-                vertexColor: this.gl.getAttribLocation(this.shaderProgram1, 'aVertexColor'),
-            },
-            uniformLocations: {
-                projectionMatrix: this.gl.getUniformLocation(this.shaderProgram1, 'uProjectionMatrix'),
-                modelViewMatrix: this.gl.getUniformLocation(this.shaderProgram1, 'uModelViewMatrix'),
-            },
-        }
-
-        this.buffers1 = this.initBuffers();
-    }
-
     resize() {
         this.gl.viewport(0, 0, this.gl.canvas.width, this.gl.canvas.height);
     }
 
     update() {
-        // Draw the scene
         
         this.gl.clearColor(0, 0, 0, 1);
         this.gl.clearDepth(1);
@@ -91,7 +43,7 @@ export class WebGLRenderer {
                 [ // amount to translate
                     renderObject.object.getPositionX(),
                     renderObject.object.getPositionY(),
-                    renderObject.object.getPositionZ(),
+                    renderObject.object.getPositionZ() - 10,
                 ]
             );
 
@@ -125,7 +77,7 @@ export class WebGLRenderer {
                 const normalize = false;
                 const stride = 0;
                 const offset = 0;
-                this.gl.bindBuffer(this.gl.ARRAY_BUFFER, this.buffers.position);
+                this.gl.bindBuffer(this.gl.ARRAY_BUFFER, renderObject.buffers.position);
                 this.gl.vertexAttribPointer(
                     renderObject.programInfo.attribLocations.vertexPosition,
                     numComponents,
@@ -147,7 +99,7 @@ export class WebGLRenderer {
                 const normalize = false;
                 const stride = 0;
                 const offset = 0;
-                this.gl.bindBuffer(this.gl.ARRAY_BUFFER, this.buffers.color);
+                this.gl.bindBuffer(this.gl.ARRAY_BUFFER, renderObject.buffers.color);
                 this.gl.vertexAttribPointer(
                     renderObject.programInfo.attribLocations.vertexColor,
                     numComponents,
@@ -162,9 +114,8 @@ export class WebGLRenderer {
                 );
             }
 
-
             // Tell WebGL which indices to use to index the vertices
-            this.gl.bindBuffer(this.gl.ELEMENT_ARRAY_BUFFER, this.buffers.indices);
+            this.gl.bindBuffer(this.gl.ELEMENT_ARRAY_BUFFER, renderObject.buffers.indices);
 
             // Tell WebGL to use our program when drawing
 
@@ -192,87 +143,6 @@ export class WebGLRenderer {
             }
         });
 
-
-    }
-
-    private initBuffers() : any {
-        const positionBuffer = this.gl.createBuffer();
-
-        // Select the position buffer
-        this.gl.bindBuffer(this.gl.ARRAY_BUFFER, positionBuffer);
-
-        const cube = new WebGLCube();
-
-        this.gl.bufferData(this.gl.ARRAY_BUFFER, new Float32Array(cube.getVertices()), this.gl.STATIC_DRAW)
-
-
-        const faceColors = [
-            [1.0,  1.0,  1.0,  1.0],    // Front face: white
-            [1.0,  0.0,  0.0,  1.0],    // Back face: red
-            [0.0,  1.0,  0.0,  1.0],    // Top face: green
-            [0.0,  0.0,  1.0,  1.0],    // Bottom face: blue
-            [1.0,  1.0,  0.0,  1.0],    // Right face: yellow
-            [1.0,  0.0,  1.0,  1.0],    // Left face: purple
-        ];
-    
-        // Convert the array of colors into a table for all the vertices.
-    
-        var colors = [];
-    
-        for (var j = 0; j < faceColors.length; ++j) {
-            const c = faceColors[j];
-        
-            // Repeat each color four times for the four vertices of the face
-            colors = colors.concat(c, c, c, c);
-        }
-    
-        const colorBuffer = this.gl.createBuffer();
-        this.gl.bindBuffer(this.gl.ARRAY_BUFFER, colorBuffer);
-        this.gl.bufferData(this.gl.ARRAY_BUFFER, new Float32Array(colors), this.gl.STATIC_DRAW);
-
-        const indexBuffer = this.gl.createBuffer();
-        this.gl.bindBuffer(this.gl.ELEMENT_ARRAY_BUFFER, indexBuffer);
-
-        this.gl.bufferData(this.gl.ELEMENT_ARRAY_BUFFER, new Uint16Array(cube.getIndices()), this.gl.STATIC_DRAW);
-
-        return {
-            'position': positionBuffer,
-            'color': colorBuffer,
-            'indices': indexBuffer
-        };
-    }
-
-    private initShaderProgram(vertexShaderSrc: string, fragmentShaderSrc: string): WebGLProgram {
-        const vertexShader = this.loadShader(this.gl.VERTEX_SHADER, vertexShaderSrc);
-        const fragmentShader = this.loadShader(this.gl.FRAGMENT_SHADER, fragmentShaderSrc);
-
-        const shaderProgram: WebGLProgram = this.gl.createProgram();
-
-        this.gl.attachShader(shaderProgram, vertexShader);
-        this.gl.attachShader(shaderProgram, fragmentShader);
-
-        this.gl.linkProgram(shaderProgram);
-
-        if (!this.gl.getProgramParameter(shaderProgram, this.gl.LINK_STATUS)) {
-            throw new Error('Unable to initialize the shader program: ' + this.gl.getProgramInfoLog(shaderProgram));
-        }
-
-        return shaderProgram;
-    }
-
-    private loadShader(type: GLenum, source: string): WebGLShader | null {
-        const shader = this.gl.createShader(type); 
-
-        this.gl.shaderSource(shader, source);
-
-        this.gl.compileShader(shader);
-
-        if (!this.gl.getShaderParameter(shader, this.gl.COMPILE_STATUS)) {
-            this.gl.deleteShader(shader);
-            throw new Error('An error occurred compiling the shaders: ' + this.gl.getShaderInfoLog(shader))
-        }
-
-        return shader;
     }
     
 }
