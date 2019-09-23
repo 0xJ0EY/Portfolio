@@ -69,6 +69,17 @@ export class WebGLRenderer {
         ]
       );
 
+      mat4.rotate(
+        modelViewMatrix,  // destination matrix
+        modelViewMatrix,  // matrix to rotate
+        renderObject.object.getRotationY(),// amount to rotate in radians
+        [ // axis to rotate around (Y)
+          1,
+          0,
+          0
+        ]
+      );
+
       // Tell WebGL how to pull out the positions from the position
       // buffer into the vertexPosition attribute
       {

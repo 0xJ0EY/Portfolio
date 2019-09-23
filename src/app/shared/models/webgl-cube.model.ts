@@ -4,16 +4,18 @@ import { WebGLObject } from "./webgl-object.model";
 
 export class WebGLCube extends WebGLObject {
 
+  private distance: number = -5;
+
   constructor() {
     super();
 
-    this.position.x = (Math.random() * 10) - 5;
-    this.position.y = (Math.random() * 10) - 5;
-    this.position.z = -10 - (Math.random() * 10);
+    this.position.x = 0;
+    this.position.y = 0;
+    this.position.z = -10;
 
-    this.rotation.x = Math.random() * (Math.PI * 2);
-    this.rotation.y = Math.random() * (Math.PI * 2);
-    this.rotation.z = Math.random() * (Math.PI * 2);
+    // Set the X and Y rotation axis in radians
+    this.rotation.x = Math.atan(this.position.x / this.position.z) || 0; // Yaw
+    this.rotation.y = Math.atan(-this.position.y / this.position.z) || 0; // Pitch
   }
 
   getVertices(): number[] {
@@ -67,8 +69,9 @@ export class WebGLCube extends WebGLObject {
   }
 
   update(deltaTime: number): void {
-    this.rotation.x += deltaTime;
-    this.rotation.y += deltaTime;
+
+    // TODO: LEt it zoom in
+    
   }
 
   getVertexShader(): string {
