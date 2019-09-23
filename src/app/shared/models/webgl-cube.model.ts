@@ -4,18 +4,20 @@ import { WebGLObject } from "./webgl-object.model";
 
 export class WebGLCube extends WebGLObject {
 
-  private distance: number = -5;
+  private speed: number = 5;
 
   constructor() {
     super();
 
-    this.position.x = 0;
-    this.position.y = 0;
+    this.position.x = -5 + Math.random() * 10;
+    this.position.y = -5 + Math.random() * 10;
     this.position.z = -10;
 
     // Set the X and Y rotation axis in radians
     this.rotation.x = Math.atan(this.position.x / this.position.z) || 0; // Yaw
-    this.rotation.y = Math.atan(-this.position.y / this.position.z) || 0; // Pitch
+    this.rotation.y = Math.atan(this.position.y / this.position.z) || 0; // Pitch
+
+    console.log(this.rotation.x * 180/Math.PI, this.rotation.y * 180/Math.PI);
   }
 
   getVertices(): number[] {
@@ -70,8 +72,22 @@ export class WebGLCube extends WebGLObject {
 
   update(deltaTime: number): void {
 
-    // TODO: LEt it zoom in
-    
+    // Euclidean distance
+    const euclideanDistance = Math.sqrt(this.position.x**2 + this.position.y**2 + this.position.z**2);
+
+    const cords = {
+      x: Math.sin(this.rotation.x) * Math.cos(this.rotation.y),
+      y: Math.sin(this.rotation.y),
+      z: Math.cos(this.rotation.x)
+    }
+
+    if (this.position.z <= 0) {
+      this.position.x += cords.x * this.speed * deltaTime;
+      this.position.y += cords.y * this.speed * deltaTime;
+      this.position.z += cords.z * this.speed * deltaTime;
+    }
+
+    console.log(this.position);
   }
 
   getVertexShader(): string {

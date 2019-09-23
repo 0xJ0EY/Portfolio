@@ -74,7 +74,7 @@ export class WebGLRenderer {
         modelViewMatrix,  // matrix to rotate
         renderObject.object.getRotationY(),// amount to rotate in radians
         [ // axis to rotate around (Y)
-          1,
+          -1,
           0,
           0
         ]
