@@ -1,23 +1,20 @@
 import vertexShaderSource from '!!raw-loader!src/app/shared/shaders/vertex-shader.vert';
 import fragmentShaderSource from '!!raw-loader!src/app/shared/shaders/fragment-shader.frag';
 import { WebGLObject } from "./webgl-object.model";
+import { mat4, vec3, quat } from 'gl-matrix';
 
 export class WebGLCube extends WebGLObject {
 
-  private speed: number = 5;
+  private speed: number = 15;
+  private radius = 20;
+
+  private degreeRotation = { x: 0, y: 0 }
 
   constructor() {
     super();
 
-    this.position.x = -5 + Math.random() * 10;
-    this.position.y = -5 + Math.random() * 10;
-    this.position.z = -10;
-
-    // Set the X and Y rotation axis in radians
-    this.rotation.x = Math.atan(this.position.x / this.position.z) || 0; // Yaw
-    this.rotation.y = Math.atan(this.position.y / this.position.z) || 0; // Pitch
-
-    console.log(this.rotation.x * 180/Math.PI, this.rotation.y * 180/Math.PI);
+    this.degreeRotation.x = -30 + Math.random() * 60;
+    this.degreeRotation.y = -30 + Math.random() * 60;
   }
 
   getVertices(): number[] {
@@ -72,22 +69,16 @@ export class WebGLCube extends WebGLObject {
 
   update(deltaTime: number): void {
 
-    // Euclidean distance
-    const euclideanDistance = Math.sqrt(this.position.x**2 + this.position.y**2 + this.position.z**2);
+    this.rotation.x = this.degreeRotation.x * Math.PI / 180;
+    this.rotation.y = this.degreeRotation.y * Math.PI / 180;
 
-    const cords = {
-      x: Math.sin(this.rotation.x) * Math.cos(this.rotation.y),
-      y: Math.sin(this.rotation.y),
-      z: Math.cos(this.rotation.x)
-    }
+    this.position.z = (Math.cos(this.rotation.x) * Math.cos(this.rotation.y)) * -this.radius;
+    this.position.x = Math.sin(this.rotation.x) * -this.radius;
+    this.position.y = Math.sin(this.rotation.y) * -this.radius;
 
-    if (this.position.z <= 0) {
-      this.position.x += cords.x * this.speed * deltaTime;
-      this.position.y += cords.y * this.speed * deltaTime;
-      this.position.z += cords.z * this.speed * deltaTime;
-    }
+    if (this.radius > 0)
+      this.radius -= deltaTime * this.speed;
 
-    console.log(this.position);
   }
 
   getVertexShader(): string {

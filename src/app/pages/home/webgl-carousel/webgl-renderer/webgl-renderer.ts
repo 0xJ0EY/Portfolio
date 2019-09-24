@@ -43,25 +43,14 @@ export class WebGLRenderer {
         [ // amount to translate
           renderObject.object.getPositionX(),
           renderObject.object.getPositionY(),
-          renderObject.object.getPositionZ() - 10,
+          renderObject.object.getPositionZ() - 10, // Prob better to move the camera back
         ]
       );
 
       mat4.rotate(
         modelViewMatrix,  // destination matrix
         modelViewMatrix,  // matrix to rotate
-        renderObject.object.getRotationZ(),     // amount to rotate in radians
-        [ // axis to rotate around (Z)
-          0, 
-          0, 
-          1
-        ]   
-      );
-
-      mat4.rotate(
-        modelViewMatrix,  // destination matrix
-        modelViewMatrix,  // matrix to rotate
-        renderObject.object.getRotationX(),// amount to rotate in radians
+        renderObject.object.getRotationX(), // amount to rotate in radians
         [ // axis to rotate around (X)
           0,
           1,
@@ -72,12 +61,23 @@ export class WebGLRenderer {
       mat4.rotate(
         modelViewMatrix,  // destination matrix
         modelViewMatrix,  // matrix to rotate
-        renderObject.object.getRotationY(),// amount to rotate in radians
+        renderObject.object.getRotationY(), // amount to rotate in radians
         [ // axis to rotate around (Y)
           -1,
           0,
           0
         ]
+      );
+
+      mat4.rotate(
+        modelViewMatrix,  // destination matrix
+        modelViewMatrix,  // matrix to rotate
+        renderObject.object.getRotationZ(), // amount to rotate in radians
+        [ // axis to rotate around (Z)
+          0, 
+          0, 
+          1
+        ]   
       );
 
       // Tell WebGL how to pull out the positions from the position
