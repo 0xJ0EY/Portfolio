@@ -1,6 +1,6 @@
 import { Component, ElementRef, ViewChild, AfterViewInit, OnDestroy } from '@angular/core';
 import { WindowRefService } from 'src/app/shared/helpers/window-ref.service';
-import { WebGLRenderer } from "./webgl-renderer/webgl-renderer";
+import { WebGLRenderer } from './webgl-renderer/webgl-renderer';
 import { ResizeService } from '../../../shared/services/resize.service';
 import { Subscription } from 'rxjs';
 import { WebGLObjectManager } from './webgl-renderer/webgl-object-manager';
@@ -13,7 +13,7 @@ import { WebGLCube } from '../../../shared/models/webgl-cube.model';
 })
 
 export class WebGLCarouselComponent implements AfterViewInit, OnDestroy {
-  
+
   @ViewChild('webGL', {static: false}) public webGL: ElementRef;
 
   public window: any;
@@ -23,10 +23,10 @@ export class WebGLCarouselComponent implements AfterViewInit, OnDestroy {
   private objectManager: WebGLObjectManager;
 
   private animationFrameId: number;
-  private then: number = 0;
+  private then = 0;
 
   constructor(
-    private windowRefService: WindowRefService, 
+    private windowRefService: WindowRefService,
     private resizeService: ResizeService
   ) {
     this.window = this.windowRefService.nativeWindow;
@@ -37,10 +37,10 @@ export class WebGLCarouselComponent implements AfterViewInit, OnDestroy {
 
     this.resizeSubscription = this.resizeService.onResize.subscribe(this.onResize.bind(this));
 
-    var gl = this.webGL.nativeElement.getContext('webgl');
+    const gl = this.webGL.nativeElement.getContext('webgl');
 
     if (!gl) {
-      alert('Unable to initialize WebGL. Your browser or machine may not support it.')
+      alert('Unable to initialize WebGL. Your browser or machine may not support it.');
       return;
     }
 
@@ -74,11 +74,11 @@ export class WebGLCarouselComponent implements AfterViewInit, OnDestroy {
 
     now *= 0.001; // Convert to seconds
     const deltaTime = now - this.then;
-    this.then = now; 
+    this.then = now;
 
     this.objectManager.update(deltaTime);
     this.renderer.update();
-    
+
     // Restart the animation frame
     this.animationFrameId = this.window.requestAnimationFrame(this.onAnimationFrame.bind(this));
   }

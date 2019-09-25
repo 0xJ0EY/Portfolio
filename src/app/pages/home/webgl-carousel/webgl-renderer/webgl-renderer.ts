@@ -1,4 +1,4 @@
-import { mat4 } from "gl-matrix";
+import { mat4 } from 'gl-matrix';
 import { WebGLObjectManager } from './webgl-object-manager';
 
 export class WebGLRenderer {
@@ -10,7 +10,7 @@ export class WebGLRenderer {
   }
 
   update() {
-    
+
     this.gl.clearColor(0, 0, 0, 1);
     this.gl.clearDepth(1);
     this.gl.enable(this.gl.DEPTH_TEST);
@@ -20,10 +20,10 @@ export class WebGLRenderer {
 
     // Our FOV is currently 45, but subject to change
     const fov = 45 * Math.PI / 180;
-    const aspect = this.gl.canvas.width / this.gl.canvas.height;           
+    const aspect = this.gl.canvas.width / this.gl.canvas.height;
     const zNear = .1;
     const zFar = 100;
-    
+
     const projectionMatrix = mat4.create();
 
     mat4.perspective(
@@ -74,10 +74,10 @@ export class WebGLRenderer {
         modelViewMatrix,  // matrix to rotate
         renderObject.object.getRotationZ(), // amount to rotate in radians
         [ // axis to rotate around (Z)
-          0, 
-          0, 
+          0,
+          0,
           1
-        ]   
+        ]
       );
 
       // Tell WebGL how to pull out the positions from the position
@@ -155,5 +155,5 @@ export class WebGLRenderer {
     });
 
   }
-    
+
 }

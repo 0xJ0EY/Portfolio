@@ -12,9 +12,9 @@ export class ResizeService {
   constructor(private eventManager: EventManager) {
     this.subject = new Subject();
     this.eventManager.addGlobalEventListener('window', 'resize', (
-        (event: UIEvent) => {this.subject.next(<Window> event.target)}
+        (event: UIEvent) => {this.subject.next(event.target as Window); }
       ).bind(this)
-    )
+    );
   }
 
   get onResize(): Observable<Window> {

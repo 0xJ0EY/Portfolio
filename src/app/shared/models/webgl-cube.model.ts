@@ -1,14 +1,14 @@
 import vertexShaderSource from '!!raw-loader!src/app/shared/shaders/vertex-shader.vert';
 import fragmentShaderSource from '!!raw-loader!src/app/shared/shaders/fragment-shader.frag';
-import { WebGLObject } from "./webgl-object.model";
+import { WebGLObject } from './webgl-object.model';
 import { mat4, vec3, quat } from 'gl-matrix';
 
 export class WebGLCube extends WebGLObject {
 
-  private speed: number = 15;
+  private speed = 15;
   private radius = 20;
 
-  private degreeRotation = { x: 0, y: 0 }
+  private degreeRotation = { x: 0, y: 0 };
 
   constructor() {
     super();
@@ -76,8 +76,9 @@ export class WebGLCube extends WebGLObject {
     this.position.x = Math.sin(this.rotation.x) * -this.radius;
     this.position.y = Math.sin(this.rotation.y) * -this.radius;
 
-    if (this.radius > 0)
+    if (this.radius > 0) {
       this.radius -= deltaTime * this.speed;
+    }
 
   }
 
@@ -89,7 +90,7 @@ export class WebGLCube extends WebGLObject {
     return {
       vertexPosition: gl.getAttribLocation(shaderProgram, 'aVertexPosition'),
       vertexColor: gl.getAttribLocation(shaderProgram, 'aVertexColor')
-    }
+    };
   }
 
   getFragmentShader(): string {
@@ -100,7 +101,7 @@ export class WebGLCube extends WebGLObject {
     return {
       projectionMatrix: gl.getUniformLocation(shaderProgram, 'uProjectionMatrix'),
       modelViewMatrix: gl.getUniformLocation(shaderProgram, 'uModelViewMatrix'),
-    }
+    };
   }
 
 }
