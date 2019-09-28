@@ -1,8 +1,7 @@
 import vertexShaderSource from '!!raw-loader!src/app/shared/shaders/vertex-shader.vert';
 import fragmentShaderSource from '!!raw-loader!src/app/shared/shaders/fragment-shader.frag';
 import { WebGLObject } from './webgl-object.model';
-import { mat4, vec3, quat } from 'gl-matrix';
-import { rotationMatrix, euclideanDistance, quadraticEaseOut, cubicEaseOut, quintEaseOut, clamp } from '../helpers/math';
+import { rotationMatrix, euclideanDistance, quadraticEaseOut, clamp } from '../helpers/math';
 
 export class WebGLCube extends WebGLObject {
 

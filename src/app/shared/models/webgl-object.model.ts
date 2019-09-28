@@ -1,8 +1,15 @@
+import { WebGLInputManager } from 'src/app/pages/home/webgl-carousel/webgl-renderer/webgl-input-manager';
+
 export abstract class WebGLObject {
 
   protected position = { x: 0, y: 0, z: 0 };
   protected rotation = { x: 0, y: 0, z: 0 };
   protected scale = { x: 1, y: 1, z: 1 };
+  protected input: WebGLInputManager;
+
+  setInput(input: WebGLInputManager): void {
+    this.input = input;
+  }
 
   getPositionX(): number { return this.position.x; }
   getPositionY(): number { return this.position.y; }

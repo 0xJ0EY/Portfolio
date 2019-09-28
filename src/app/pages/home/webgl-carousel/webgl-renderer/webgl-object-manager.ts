@@ -1,4 +1,5 @@
 import { WebGLObject } from 'src/app/shared/models/webgl-object.model';
+import { WebGLInputManager } from 'src/app/pages/home/webgl-carousel/webgl-renderer/webgl-input-manager';
 
 export class WebGLRenderObject {
   public shaderProgram: WebGLProgram;
@@ -9,15 +10,17 @@ export class WebGLRenderObject {
 
 export class WebGLObjectManager {
 
+  private readonly inputManager = new WebGLInputManager(this.document, this.gl.canvas);
   private objects: WebGLRenderObject[] = [];
 
-  constructor(private gl: WebGLRenderingContext) {}
+  constructor(private gl: WebGLRenderingContext, private document: Document) {}
 
   get renderObjects(): WebGLRenderObject[] {
     return this.objects;
   }
 
   public add(object: WebGLObject): void {
+    object.setInput(this.inputManager);
 
     const renderObject = new WebGLRenderObject();
 
@@ -124,6 +127,10 @@ export class WebGLObjectManager {
 
   public clear(): void {
     this.objects = [];
+  }
+
+  public onDestroy() {
+    this.inputManager.onDestroy();
   }
 
 }

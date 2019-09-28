@@ -147,7 +147,7 @@ export class WebGLRenderer {
       );
 
       {
-        const vertexCount = 36;
+        const vertexCount = renderObject.object.getIndices().length;
         const type = this.gl.UNSIGNED_SHORT;
         const offset = 0;
         this.gl.drawElements(this.gl.TRIANGLES, vertexCount, type, offset);
