@@ -2,14 +2,94 @@ import vertexShaderSource from '!!raw-loader!src/app/shared/shaders/vertex-shade
 import fragmentShaderSource from '!!raw-loader!src/app/shared/shaders/fragment-shader.frag';
 import { WebGLObject } from './webgl-object.model';
 import { rotationMatrix, euclideanDistance, quadraticEaseOut, clamp } from '../helpers/math';
+import { WebGLInputManager } from '../../pages/home/webgl-carousel/webgl-renderer/webgl-input-manager';
+
+abstract class WebGLCubeState {
+
+  protected parent: WebGLCube;
+  protected parentInput: WebGLInputManager;
+
+  set cube(cube: WebGLCube) {
+    this.parent = cube;
+  }
+
+  set input(input: WebGLInputManager) {
+    this.parentInput = input;
+  }
+
+  abstract calculateRadius(deltaTime: number): number;
+  abstract calculateRotation(deltaTime: number): { x: number, y: number };
+}
+
+class WebGLCubeStateMoveAway extends WebGLCubeState {
+
+  calculateRadius(deltaTime: number): number {
+    throw new Error('Method not implemented.');
+  }
+
+  calculateRotation(deltaTime: number): { x: number; y: number; } {
+    throw new Error('Method not implemented.');
+  }
+
+}
+
+class WebGLCubeStateIdle extends WebGLCubeState {
+
+  calculateRadius(deltaTime: number): number {
+    return this.parent.radius;
+  }
+
+  calculateRotation(deltaTime: number): { x: number; y: number; } {
+    const mousePosition = this.parentInput.mouse.percentage;
+
+    if (mousePosition.x !== 0 && mousePosition.y !== 0) {
+      const xRot = -45 + mousePosition.x * 90;
+      const yRot = 45 - mousePosition.y * 90;
+
+      return { x: xRot, y: yRot};
+
+    } else {
+      return this.parent.degreeRotation;
+    }
+  }
+
+}
+
+class WebGLCubeStateMoveToCenter extends WebGLCubeState {
+
+  calculateRadius(deltaTime: number): number {
+    if (this.parent.radius > 0.1) {
+      const euclideanDist = euclideanDistance(
+        this.parent.getPositionX(),
+        this.parent.getPositionY(),
+        this.parent.getPositionZ()
+      );
+
+      const progress = clamp(euclideanDist / this.parent.startDistance, 0, 1);
+      const ratio = quadraticEaseOut(1 - progress);
+
+      return Math.max(this.parent.radius - deltaTime * this.parent.speed * ratio, 0);
+    } else {
+      this.parent.setState(new WebGLCubeStateIdle());
+      return this.parent.radius;
+    }
+  }
+
+  calculateRotation(deltaTime: number): { x: number; y: number; } {
+    return this.parent.degreeRotation;
+  }
+
+}
 
 export class WebGLCube extends WebGLObject {
 
-  private speed = 15;
-  private radius = 20;
+  public speed = 15;
+  public radius = 20;
 
-  private degreeRotation = { x: 0, y: 0 };
-  private startDistance: number;
+  public degreeRotation = { x: 0, y: 0 };
+  public startDistance: number;
+
+  private state: WebGLCubeState;
 
   constructor() {
     super();
@@ -21,6 +101,7 @@ export class WebGLCube extends WebGLObject {
 
     this.updateRotation();
     this.updatePosition();
+    this.setState(new WebGLCubeStateMoveToCenter());
   }
 
   getVertices(): number[] {
@@ -74,17 +155,17 @@ export class WebGLCube extends WebGLObject {
   }
 
   update(deltaTime: number): void {
+    this.radius = this.state.calculateRadius(deltaTime);
+    this.degreeRotation = this.state.calculateRotation(deltaTime);
+
     this.updateRotation();
     this.updatePosition();
+  }
 
-    if (this.radius > 0) {
-      const progress = clamp(this.calculateCurrentDistance() / this.startDistance, 0, 1);
-      const ratio = quadraticEaseOut(1 - progress);
-
-      this.radius -= deltaTime * (this.speed * ratio);
-    } else {
-      this.radius = 0;
-    }
+  setState(state: WebGLCubeState) {
+    state.cube = this;
+    state.input = this.input;
+    this.state = state;
   }
 
   private updateRotation(): void {
@@ -98,10 +179,6 @@ export class WebGLCube extends WebGLObject {
     this.position.x = rotationMat.x * -this.radius;
     this.position.y = rotationMat.y * -this.radius;
     this.position.z = rotationMat.z * -this.radius;
-  }
-
-  private calculateCurrentDistance(): number {
-    return euclideanDistance(this.position.x, this.position.y, this.position.z);
   }
 
   getVertexShader(): string {

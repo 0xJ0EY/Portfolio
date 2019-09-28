@@ -16,10 +16,20 @@ export class MouseInput implements WebGLInput {
   private mouseCoords: MouseInputCoords = new MouseInputCoords();
   private mouseButtons: MouseInputButtons = new MouseInputButtons();
 
+  private mouseMoveListener: any;
+  private mouseClickDownListener: any;
+  private mouseClickUpListener: any;
+
   constructor(private canvas: HTMLCanvasElement) {
-    this.canvas.addEventListener('mousemove', this.onMouseMove.bind(this));
-    this.canvas.addEventListener('mousedown', this.onMouseClickDown.bind(this));
-    this.canvas.addEventListener('mouseup', this.onMouseClickUp.bind(this));
+
+    this.mouseMoveListener = this.onMouseMove.bind(this);
+    this.mouseClickDownListener = this.onMouseClickDown.bind(this);
+    this.mouseClickUpListener = this.onMouseClickUp.bind(this);
+
+    this.canvas.addEventListener('mousemove', this.mouseMoveListener);
+    this.canvas.addEventListener('mousedown', this.mouseClickDownListener);
+    this.canvas.addEventListener('mouseup', this.mouseClickUpListener);
+    this.canvas.oncontextmenu = () => false;
   }
 
   get x(): number {
@@ -32,6 +42,27 @@ export class MouseInput implements WebGLInput {
 
   get coords(): MouseInputCoords {
     return this.mouseCoords;
+  }
+
+  get xPercentage(): number {
+    return this.mouseCoords.x / this.canvas.getBoundingClientRect().width;
+  }
+
+  get yPercentage(): number {
+    return this.mouseCoords.y / this.canvas.getBoundingClientRect().height;
+  }
+
+  get percentage(): MouseInputCoords {
+    const mouseInputCoords = new MouseInputCoords();
+
+    mouseInputCoords.x = this.xPercentage;
+    mouseInputCoords.y = this.yPercentage;
+
+    return mouseInputCoords;
+  }
+
+  get parent(): HTMLCanvasElement {
+    return this.canvas;
   }
 
   get buttons(): MouseInputButtons {
@@ -62,8 +93,12 @@ export class MouseInput implements WebGLInput {
   }
 
   public onDestroy(): void {
-    this.canvas.removeEventListener('mousemove', this.onMouseMove);
-    this.canvas.removeEventListener('mousedown', this.onMouseClickDown);
-    this.canvas.removeEventListener('mouseup', this.onMouseClickUp);
+    this.canvas.removeEventListener('mousemove', this.mouseMoveListener);
+    this.canvas.removeEventListener('mousedown', this.mouseClickDownListener);
+    this.canvas.removeEventListener('mouseup', this.mouseClickUpListener);
+
+    this.mouseMoveListener = null;
+    this.mouseClickDownListener = null;
+    this.mouseClickUpListener = null;
   }
 }
