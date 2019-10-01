@@ -32,6 +32,8 @@ export abstract class WebGLObject {
   abstract getFragmentShader(): string;
   abstract generateUniformLocations(gl: WebGLRenderingContext, shaderProgram: WebGLProgram): any;
 
+  init() {}
+
   update(deltaTime: number) {}
 
   delete() {}

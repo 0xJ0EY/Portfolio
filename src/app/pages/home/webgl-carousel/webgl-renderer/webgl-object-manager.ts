@@ -21,6 +21,7 @@ export class WebGLObjectManager {
 
   public add(object: WebGLObject): void {
     object.setInput(this.inputManager);
+    object.init();
 
     const renderObject = new WebGLRenderObject();
 

@@ -19,13 +19,14 @@ export class WebGLRenderer {
     this.gl.clear(this.gl.COLOR_BUFFER_BIT | this.gl.DEPTH_BUFFER_BIT);
 
     // Our FOV is currently 45, but subject to change
-    const fov = 45 * Math.PI / 180;
+    const fov = 50 * Math.PI / 180;
     const aspect = this.gl.canvas.width / this.gl.canvas.height;
     const zNear = .1;
     const zFar = 100;
 
     const projectionMatrix = mat4.create();
 
+    // Set camera perspective
     mat4.perspective(
       projectionMatrix,
       fov,
@@ -34,49 +35,41 @@ export class WebGLRenderer {
       zFar
     );
 
+    // Move camera back
+    mat4.translate(
+      projectionMatrix,
+      projectionMatrix,
+      [
+        0,
+        0,
+        -8
+      ]
+    );
+
     this.objectManager.renderObjects.forEach((renderObject) => {
       const modelViewMatrix = mat4.create();
 
       mat4.translate(
-        modelViewMatrix,     // destination matrix
-        modelViewMatrix,     // matrix to translate
-        [ // amount to translate
+        modelViewMatrix,
+        modelViewMatrix,
+        [
           renderObject.object.getPositionX(),
           renderObject.object.getPositionY(),
-          renderObject.object.getPositionZ() - 10, // Prob better to move the camera back
+          renderObject.object.getPositionZ(),
         ]
       );
 
-      mat4.rotate(
-        modelViewMatrix,  // destination matrix
-        modelViewMatrix,  // matrix to rotate
-        renderObject.object.getRotationX(), // amount to rotate in radians
-        [ // axis to rotate around (X)
-          0,
-          1,
-          0
-        ]
-      );
+      mat4.rotateX(modelViewMatrix, modelViewMatrix, renderObject.object.getRotationX());
+      mat4.rotateY(modelViewMatrix, modelViewMatrix, renderObject.object.getRotationY());
+      mat4.rotateZ(modelViewMatrix, modelViewMatrix, renderObject.object.getRotationZ());
 
-      mat4.rotate(
-        modelViewMatrix,  // destination matrix
-        modelViewMatrix,  // matrix to rotate
-        renderObject.object.getRotationY(), // amount to rotate in radians
-        [ // axis to rotate around (Y)
-          -1,
-          0,
-          0
-        ]
-      );
-
-      mat4.rotate(
-        modelViewMatrix,  // destination matrix
-        modelViewMatrix,  // matrix to rotate
-        renderObject.object.getRotationZ(), // amount to rotate in radians
-        [ // axis to rotate around (Z)
-          0,
-          0,
-          1
+      mat4.scale(
+        modelViewMatrix,
+        modelViewMatrix,
+        [
+          renderObject.object.getScaleX(),
+          renderObject.object.getScaleY(),
+          renderObject.object.getScaleZ()
         ]
       );
 
@@ -129,11 +122,9 @@ export class WebGLRenderer {
       this.gl.bindBuffer(this.gl.ELEMENT_ARRAY_BUFFER, renderObject.buffers.indices);
 
       // Tell WebGL to use our program when drawing
-
       this.gl.useProgram(renderObject.programInfo.program);
 
       // Set the shader uniforms
-
       this.gl.uniformMatrix4fv(
         renderObject.programInfo.uniformLocations.projectionMatrix,
         false,

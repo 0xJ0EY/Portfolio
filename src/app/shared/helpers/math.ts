@@ -1,8 +1,14 @@
 export function rotationMatrix(x: number, y: number): any {
+  // return {
+  //   z: Math.cos(x) * Math.cos(y),
+  //   x: Math.sin(x),
+  //   y: Math.sin(y)
+  // };
+
   return {
-    z: Math.cos(x) * Math.cos(y),
-    x: Math.sin(x),
-    y: Math.sin(y)
+    z: 1,
+    x: 0,
+    y: 0
   };
 }
 
@@ -15,13 +21,13 @@ export function euclideanDistance(x: number, y: number, z: number): number {
 }
 
 export function cubicEaseOut(t: number): number {
-  return 1 - t * t * t;
+  return 1 - t ** 3;
 }
 
 export function quadraticEaseOut(t: number): number {
-  return 1 - t * t * t * t;
+  return 1 - t ** 4;
 }
 
 export function quintEaseOut(t: number): number {
-  return 1 - t * t * t * t * t;
+  return 1 - t ** 5;
 }

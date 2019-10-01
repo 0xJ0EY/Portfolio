@@ -43,11 +43,11 @@ class WebGLCubeStateIdle extends WebGLCubeState {
     const mousePosition = this.parentInput.mouse.percentage;
 
     if (mousePosition.x !== 0 && mousePosition.y !== 0) {
-      const xRot = -45 + mousePosition.x * 90;
-      const yRot = 45 - mousePosition.y * 90;
 
-      return { x: xRot, y: yRot};
+      const verticalRotation = -45 + mousePosition.x * 90;
+      const horizontalRotation = -45 + mousePosition.y * 90;
 
+      return { x: horizontalRotation, y: verticalRotation };
     } else {
       return this.parent.degreeRotation;
     }
@@ -99,8 +99,11 @@ export class WebGLCube extends WebGLObject {
 
     this.startDistance = this.radius;
 
-    this.updateRotation();
-    this.updatePosition();
+    this.updateRotation(0);
+    this.updatePosition(0);
+  }
+
+  init() {
     this.setState(new WebGLCubeStateMoveToCenter());
   }
 
@@ -158,8 +161,8 @@ export class WebGLCube extends WebGLObject {
     this.radius = this.state.calculateRadius(deltaTime);
     this.degreeRotation = this.state.calculateRotation(deltaTime);
 
-    this.updateRotation();
-    this.updatePosition();
+    this.updateRotation(deltaTime);
+    this.updatePosition(deltaTime);
   }
 
   setState(state: WebGLCubeState) {
@@ -168,17 +171,21 @@ export class WebGLCube extends WebGLObject {
     this.state = state;
   }
 
-  private updateRotation(): void {
+  private updateRotation(deltaTime: number): void {
     this.rotation.x = this.degreeRotation.x * Math.PI / 180;
     this.rotation.y = this.degreeRotation.y * Math.PI / 180;
   }
 
-  private updatePosition(): void {
+  private updatePosition(deltaTime: number): void {
     const rotationMat = rotationMatrix(this.rotation.x, this.rotation.y);
 
-    this.position.x = rotationMat.x * -this.radius;
-    this.position.y = rotationMat.y * -this.radius;
-    this.position.z = rotationMat.z * -this.radius;
+    this.position.z -= deltaTime;
+    // this.position.x = this.position.x + (1 * deltaTime);
+
+    // this.position.x = rotationMat.x * this.radius;
+    // this.position.y = rotationMat.y * this.radius;
+    // console.log(rotationMat.z);
+    // this.position.z = rotationMat.z * this.radius;
   }
 
   getVertexShader(): string {

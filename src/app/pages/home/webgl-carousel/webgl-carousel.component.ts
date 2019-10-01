@@ -71,8 +71,7 @@ export class WebGLCarouselComponent implements AfterViewInit, OnDestroy {
     this.resizeSubscription.unsubscribe();
   }
 
-  onAnimationFrame(now): void {
-
+  onAnimationFrame(now: number): void {
     now *= 0.001; // Convert to seconds
     const deltaTime = now - this.then;
     this.then = now;
