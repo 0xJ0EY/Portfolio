@@ -179,13 +179,9 @@ export class WebGLCube extends WebGLObject {
   private updatePosition(deltaTime: number): void {
     const rotationMat = rotationMatrix(this.rotation.x, this.rotation.y);
 
-    this.position.z -= deltaTime;
-    // this.position.x = this.position.x + (1 * deltaTime);
-
-    // this.position.x = rotationMat.x * this.radius;
-    // this.position.y = rotationMat.y * this.radius;
-    // console.log(rotationMat.z);
-    // this.position.z = rotationMat.z * this.radius;
+    this.position.x = this.radius * -rotationMat.y;
+    this.position.y = this.radius * rotationMat.x;
+    this.position.z = this.radius * -rotationMat.z;
   }
 
   getVertexShader(): string {

@@ -1,9 +1,9 @@
 export function rotationMatrix(x: number, y: number): any {
-  // return {
-  //   z: Math.cos(x) * Math.cos(y),
-  //   x: Math.sin(x),
-  //   y: Math.sin(y)
-  // };
+  return {
+    z: Math.cos(x) * Math.cos(y),
+    x: Math.sin(x),
+    y: Math.sin(y)
+  };
 
   return {
     z: 1,
