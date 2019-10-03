@@ -1,7 +1,7 @@
 import vertexShaderSource from '!!raw-loader!src/app/shared/shaders/vertex-shader.vert';
 import fragmentShaderSource from '!!raw-loader!src/app/shared/shaders/fragment-shader.frag';
 import { WebGLObject } from './webgl-object.model';
-import { rotationMatrix, euclideanDistance, quadraticEaseOut, clamp } from '../helpers/math';
+import { rotationMatrix, euclideanDistance, quadraticEaseOut, clamp, quintEaseOut } from '../helpers/math';
 import { WebGLInputManager } from '../../pages/home/webgl-carousel/webgl-renderer/webgl-input-manager';
 
 abstract class WebGLCubeState {
@@ -17,17 +17,22 @@ abstract class WebGLCubeState {
     this.parentInput = input;
   }
 
-  abstract calculateRadius(deltaTime: number): number;
-  abstract calculateRotation(deltaTime: number): { x: number, y: number };
+  abstract calculateRadius(deltaTime: number, oldRadius: number): number;
+  abstract calculateRotation(deltaTime: number, oldRotation: any): { x: number, y: number };
+  abstract calculateScale(deltaTime: number, oldScale: any): { x: number, y: number, z: number };
 }
 
 class WebGLCubeStateMoveAway extends WebGLCubeState {
 
-  calculateRadius(deltaTime: number): number {
+  calculateRadius(deltaTime: number, oldRadius: any): number {
     throw new Error('Method not implemented.');
   }
 
-  calculateRotation(deltaTime: number): { x: number; y: number; } {
+  calculateRotation(deltaTime: number, oldRotation: any): { x: number; y: number; } {
+    throw new Error('Method not implemented.');
+  }
+
+  calculateScale(deltaTime: number, oldScale: any): { x: number; y: number; z: number; } {
     throw new Error('Method not implemented.');
   }
 
@@ -35,11 +40,12 @@ class WebGLCubeStateMoveAway extends WebGLCubeState {
 
 class WebGLCubeStateIdle extends WebGLCubeState {
 
-  calculateRadius(deltaTime: number): number {
-    return this.parent.radius;
+  calculateRadius(deltaTime: number, oldRadius: number): number {
+    // Cube can only idle at 0 point
+    return oldRadius;
   }
 
-  calculateRotation(deltaTime: number): { x: number; y: number; } {
+  calculateRotation(deltaTime: number, oldRotation: any): { x: number; y: number; } {
     const mousePosition = this.parentInput.mouse.percentage;
 
     if (mousePosition.x !== 0 && mousePosition.y !== 0) {
@@ -49,45 +55,59 @@ class WebGLCubeStateIdle extends WebGLCubeState {
 
       return { x: horizontalRotation, y: verticalRotation };
     } else {
-      return this.parent.degreeRotation;
+      return oldRotation;
     }
+  }
+
+  calculateScale(deltaTime: number, oldScale: any): { x: number; y: number; z: number; } {
+    return oldScale;
   }
 
 }
 
 class WebGLCubeStateMoveToCenter extends WebGLCubeState {
 
-  calculateRadius(deltaTime: number): number {
-    if (this.parent.radius > 0.1) {
-      const euclideanDist = euclideanDistance(
-        this.parent.getPositionX(),
-        this.parent.getPositionY(),
-        this.parent.getPositionZ()
-      );
+  calculateRadius(deltaTime: number, oldRadius: number): number {
 
-      const progress = clamp(euclideanDist / this.parent.startDistance, 0, 1);
-      const ratio = quadraticEaseOut(1 - progress);
+    if (Math.round(oldRadius * 100) / 100 > 0) {
+      const progress = this.calculateProgress();
+      const ratio = quintEaseOut(1 - progress);
 
-      return Math.max(this.parent.radius - deltaTime * this.parent.speed * ratio, 0);
+      return Math.max(oldRadius - (this.parent.SPEED * deltaTime * ratio), 0);
     } else {
       this.parent.setState(new WebGLCubeStateIdle());
-      return this.parent.radius;
+      return 0;
     }
   }
 
-  calculateRotation(deltaTime: number): { x: number; y: number; } {
-    return this.parent.degreeRotation;
+  calculateRotation(deltaTime: number, oldRotation: any): { x: number; y: number; } {
+    return oldRotation;
+  }
+
+  calculateScale(deltaTime: number, oldScale: any): { x: number; y: number; z: number; } {
+    oldScale.z = 1 + this.calculateProgress() * this.parent.SCALE;
+    return oldScale;
+  }
+
+  private calculateProgress(): number {
+    const euclideanDist = euclideanDistance(
+      this.parent.getPositionX(),
+      this.parent.getPositionY(),
+      this.parent.getPositionZ()
+    );
+
+    return clamp(euclideanDist / this.parent.RADIUS, 0, 1) || 0;
   }
 
 }
 
 export class WebGLCube extends WebGLObject {
+  public readonly SPEED = 50;
+  public readonly RADIUS = 30;
+  public readonly SCALE = 10;
 
-  public speed = 15;
-  public radius = 20;
-
+  private currentRadius = this.RADIUS;
   public degreeRotation = { x: 0, y: 0 };
-  public startDistance: number;
 
   private state: WebGLCubeState;
 
@@ -97,7 +117,7 @@ export class WebGLCube extends WebGLObject {
     this.degreeRotation.x = -30 + Math.random() * 60;
     this.degreeRotation.y = -30 + Math.random() * 60;
 
-    this.startDistance = this.radius;
+    // this.startDistance = this.RADIUS;
 
     this.updateRotation(0);
     this.updatePosition(0);
@@ -158,11 +178,12 @@ export class WebGLCube extends WebGLObject {
   }
 
   update(deltaTime: number): void {
-    this.radius = this.state.calculateRadius(deltaTime);
-    this.degreeRotation = this.state.calculateRotation(deltaTime);
+    this.currentRadius = this.state.calculateRadius(deltaTime, this.currentRadius);
+    this.degreeRotation = this.state.calculateRotation(deltaTime, this.degreeRotation);
+    this.scale = this.state.calculateScale(deltaTime, this.scale);
 
     this.updateRotation(deltaTime);
-    this.updatePosition(deltaTime);
+    this.updatePosition(this.currentRadius);
   }
 
   setState(state: WebGLCubeState) {
@@ -176,12 +197,12 @@ export class WebGLCube extends WebGLObject {
     this.rotation.y = this.degreeRotation.y * Math.PI / 180;
   }
 
-  private updatePosition(deltaTime: number): void {
+  private updatePosition(radius: number): void {
     const rotationMat = rotationMatrix(this.rotation.x, this.rotation.y);
 
-    this.position.x = this.radius * -rotationMat.y;
-    this.position.y = this.radius * rotationMat.x;
-    this.position.z = this.radius * -rotationMat.z;
+    this.position.x = radius * -rotationMat.y;
+    this.position.y = radius * rotationMat.x;
+    this.position.z = radius * -rotationMat.z;
   }
 
   getVertexShader(): string {

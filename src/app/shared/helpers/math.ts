@@ -4,12 +4,6 @@ export function rotationMatrix(x: number, y: number): any {
     x: Math.sin(x),
     y: Math.sin(y)
   };
-
-  return {
-    z: 1,
-    x: 0,
-    y: 0
-  };
 }
 
 export function clamp(value: number, min: number, max: number): number {

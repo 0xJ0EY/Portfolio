@@ -21,7 +21,6 @@ export class MouseInput implements WebGLInput {
   private mouseClickUpListener: any;
 
   constructor(private canvas: HTMLCanvasElement) {
-
     this.mouseMoveListener = this.onMouseMove.bind(this);
     this.mouseClickDownListener = this.onMouseClickDown.bind(this);
     this.mouseClickUpListener = this.onMouseClickUp.bind(this);

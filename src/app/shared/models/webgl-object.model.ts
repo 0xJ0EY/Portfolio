@@ -21,7 +21,7 @@ export abstract class WebGLObject {
 
   getScaleX(): number { return this.scale.x; }
   getScaleY(): number { return this.scale.y; }
-  getScaleZ(): number { return this.scale.y; }
+  getScaleZ(): number { return this.scale.z; }
 
   abstract getVertices(): number[];
   abstract getIndices(): number[];
