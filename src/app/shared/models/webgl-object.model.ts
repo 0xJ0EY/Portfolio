@@ -1,4 +1,5 @@
 import { WebGLInputManager } from 'src/app/pages/home/webgl-carousel/webgl-renderer/webgl-input-manager';
+import { WebGLTimeManager } from 'src/app/pages/home/webgl-carousel/webgl-renderer/webgl-time-manager';
 
 export abstract class WebGLObject {
 
@@ -6,9 +7,14 @@ export abstract class WebGLObject {
   protected rotation = { x: 0, y: 0, z: 0 };
   protected scale = { x: 1, y: 1, z: 1 };
   protected input: WebGLInputManager;
+  protected time: WebGLTimeManager;
 
   setInput(input: WebGLInputManager): void {
     this.input = input;
+  }
+
+  setTime(time: WebGLTimeManager): void {
+    this.time = time;
   }
 
   getPositionX(): number { return this.position.x; }

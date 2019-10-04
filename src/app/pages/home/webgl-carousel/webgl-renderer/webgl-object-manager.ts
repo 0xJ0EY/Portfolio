@@ -1,5 +1,6 @@
 import { WebGLObject } from 'src/app/shared/models/webgl-object.model';
 import { WebGLInputManager } from 'src/app/pages/home/webgl-carousel/webgl-renderer/webgl-input-manager';
+import { WebGLTimeManager } from 'src/app/pages/home/webgl-carousel/webgl-renderer/webgl-time-manager';
 
 export class WebGLRenderObject {
   public shaderProgram: WebGLProgram;
@@ -11,6 +12,8 @@ export class WebGLRenderObject {
 export class WebGLObjectManager {
 
   private readonly inputManager = new WebGLInputManager(this.document, this.gl.canvas);
+  private readonly timeManager = new WebGLTimeManager();
+
   private objects: WebGLRenderObject[] = [];
 
   constructor(private gl: WebGLRenderingContext, private document: Document) {}
@@ -21,6 +24,7 @@ export class WebGLObjectManager {
 
   public add(object: WebGLObject): void {
     object.setInput(this.inputManager);
+    object.setTime(this.timeManager);
     object.init();
 
     const renderObject = new WebGLRenderObject();
@@ -123,6 +127,7 @@ export class WebGLObjectManager {
 
   // Update the inner objects
   public update(deltaTime: number): void {
+    this.timeManager.add(deltaTime);
     this.objects.forEach(val => val.object.update(deltaTime));
   }
 
