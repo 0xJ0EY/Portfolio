@@ -25,7 +25,3 @@ export function quadraticEaseOut(t: number): number {
 export function quintEaseOut(t: number): number {
   return 1 - t ** 5;
 }
-
-export function quintEaseInOut(t: number): number {
-  return ((t *= 2) <= 1 ? t * t : --t * (2 - t) + 1) / 2;
-}

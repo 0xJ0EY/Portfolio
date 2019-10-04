@@ -1,7 +1,7 @@
 import vertexShaderSource from '!!raw-loader!src/app/shared/shaders/vertex-shader.vert';
 import fragmentShaderSource from '!!raw-loader!src/app/shared/shaders/fragment-shader.frag';
 import { WebGLObject } from './webgl-object.model';
-import { rotationMatrix, euclideanDistance, quadraticEaseOut, clamp, quintEaseOut, quintEaseInOut } from '../helpers/math';
+import { rotationMatrix, euclideanDistance, quadraticEaseOut, clamp, quintEaseOut } from '../helpers/math';
 import { WebGLInputManager } from '../../pages/home/webgl-carousel/webgl-renderer/webgl-input-manager';
 
 abstract class WebGLCubeState {
@@ -41,7 +41,6 @@ class WebGLCubeStateMoveAway extends WebGLCubeState {
 class WebGLCubeStateIdle extends WebGLCubeState {
 
   calculateRadius(deltaTime: number, oldRadius: number): number {
-    // Cube can only idle at 0 point
     return oldRadius;
   }
 
@@ -103,7 +102,7 @@ class WebGLCubeStateMoveToCenter extends WebGLCubeState {
 
 export class WebGLCube extends WebGLObject {
   public readonly SPEED = 50;
-  public readonly ROTATION_SPEED = 100;
+  public readonly ROTATION_SPEED = 350;
   public readonly RADIUS = 30;
   public readonly SCALE = 10;
 
@@ -121,14 +120,16 @@ export class WebGLCube extends WebGLObject {
   constructor() {
     super();
 
-    this.degreeRotation.x = -30 + Math.random() * 60;
-    this.degreeRotation.y = -30 + Math.random() * 60;
-
     this.targetRotation = this.startRotation = this.degreeRotation;
   }
 
   init() {
     this.setState(new WebGLCubeStateMoveToCenter());
+
+    const mousePosition = this.input.mouse.percentage;
+
+    this.degreeRotation.x = -45 + mousePosition.x * 90;
+    this.degreeRotation.y = -45 + mousePosition.y * 90;
 
     this.updateRotation(0);
     this.updatePosition(0);
@@ -211,6 +212,19 @@ export class WebGLCube extends WebGLObject {
 
   private updateRotation(deltaTime: number): void {
 
+    const distanceCovered = (this.time.time - this.rotationStartTime) * this.ROTATION_SPEED;
+
+    const xRotationDistance = Math.sqrt(this.startRotation.x ** 2 + this.targetRotation.x ** 2);
+    const xRotationFraction = clamp(distanceCovered / xRotationDistance, 0, 1);
+    const xRot = (1 - xRotationFraction) * this.startRotation.x + xRotationFraction * this.targetRotation.x;
+
+    const yRotationDistance = Math.sqrt(this.startRotation.y ** 2 + this.targetRotation.y ** 2);
+    const yRotationFraction = clamp(distanceCovered / yRotationDistance, 0, 1);
+    const yRot = (1 - yRotationFraction) * this.startRotation.y + yRotationFraction * this.targetRotation.y;
+
+    this.rotation.x = xRot * Math.PI / 180;
+    this.rotation.y = yRot * Math.PI / 180;
+
     if (this.rotationChanged) {
       this.rotationChanged = false;
       this.targetRotation = this.degreeRotation;
@@ -222,20 +236,6 @@ export class WebGLCube extends WebGLObject {
 
       this.rotationStartTime = this.time.time;
     }
-
-    const distanceCovered = (this.time.time - this.rotationStartTime) * this.ROTATION_SPEED;
-    const xRotationDistance = Math.sqrt(this.startRotation.x ** 2 + this.targetRotation.x ** 2);
-    const xRotationFraction = clamp(distanceCovered / xRotationDistance, 0, 1);
-    const xRotationRatio = quintEaseInOut(xRotationFraction);
-    const xRot = (1 - xRotationRatio) * this.startRotation.x + xRotationRatio * this.targetRotation.x;
-
-    const yRotationDistance = Math.sqrt(this.startRotation.y ** 2 + this.targetRotation.y ** 2);
-    const yRotationFraction = clamp(distanceCovered / yRotationDistance, 0, 1);
-    const yRotationRatio = quintEaseInOut(yRotationFraction);
-    const yRot = (1 - yRotationRatio) * this.startRotation.y + yRotationRatio * this.targetRotation.y;
-
-    this.rotation.x = xRot * Math.PI / 180;
-    this.rotation.y = yRot * Math.PI / 180;
   }
 
   private updatePosition(radius: number): void {
