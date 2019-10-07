@@ -47,8 +47,8 @@ class WebGLCubeStateIdle extends WebGLCubeState {
   calculateRotation(deltaTime: number, oldRotation: any): { x: number; y: number; } {
     const mousePosition = this.parentInput.mouse.percentage;
 
-    const verticalRotation = -45 + mousePosition.x * 90;
-    const horizontalRotation = -45 + mousePosition.y * 90;
+    const verticalRotation = -40 + mousePosition.x * 80;
+    const horizontalRotation = -40 + mousePosition.y * 80;
 
     return { x: horizontalRotation, y: verticalRotation };
   }
@@ -132,42 +132,47 @@ export class WebGLCube extends WebGLObject {
   }
 
   getVertices(): number[] {
+
+    const height = 1.3;
+    const width = height * 1.77;
+    const depth = 1.25;
+
     return [
       // Front face
-      -1.0, -1.0,  1.0,
-      1.0, -1.0,  1.0,
-      1.0,  1.0,  1.0,
-      -1.0,  1.0,  1.0,
+      -width, -height, depth,
+      width, -height, depth,
+      width,  height, depth,
+      -width,  height, depth,
 
       // Back face
-      -1.0, -1.0, -1.0,
-      -1.0,  1.0, -1.0,
-      1.0,  1.0, -1.0,
-      1.0, -1.0, -1.0,
+      -width, -height, -depth,
+      -width, height, -depth,
+      width, height, -depth,
+      width, -height, -depth,
 
       // Top face
-      -1.0,  1.0, -1.0,
-      -1.0,  1.0,  1.0,
-      1.0,  1.0,  1.0,
-      1.0,  1.0, -1.0,
+      -width, height, -depth,
+      -width, height, depth,
+      width, height, depth,
+      width, height, -depth,
 
       // Bottom face
-      -1.0, -1.0, -1.0,
-      1.0, -1.0, -1.0,
-      1.0, -1.0,  1.0,
-      -1.0, -1.0,  1.0,
+      -width, -height, -depth,
+      width, -height, -depth,
+      width, -height, depth,
+      -width, -height, depth,
 
       // Right face
-      1.0, -1.0, -1.0,
-      1.0,  1.0, -1.0,
-      1.0,  1.0,  1.0,
-      1.0, -1.0,  1.0,
+      width, -height, -depth,
+      width, height, -depth,
+      width, height, depth,
+      width, -height, depth,
 
       // Left face
-      -1.0, -1.0, -1.0,
-      -1.0, -1.0,  1.0,
-      -1.0,  1.0,  1.0,
-      -1.0,  1.0, -1.0,
+      -width, -height, -depth,
+      -width, -height, depth,
+      -width, height, depth,
+      -width, height, -depth,
     ];
   }
   getIndices(): number[] {
