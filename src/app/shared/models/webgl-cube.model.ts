@@ -47,18 +47,14 @@ class WebGLCubeStateIdle extends WebGLCubeState {
   calculateRotation(deltaTime: number, oldRotation: any): { x: number; y: number; } {
     const mousePosition = this.parentInput.mouse.percentage;
 
-    if (mousePosition.x !== 0 && mousePosition.y !== 0) {
+    const verticalRotation = -45 + mousePosition.x * 90;
+    const horizontalRotation = -45 + mousePosition.y * 90;
 
-      const verticalRotation = -45 + mousePosition.x * 90;
-      const horizontalRotation = -45 + mousePosition.y * 90;
-
-      return { x: horizontalRotation, y: verticalRotation };
-    } else {
-      return oldRotation;
-    }
+    return { x: horizontalRotation, y: verticalRotation };
   }
 
   calculateScale(deltaTime: number, oldScale: any): { x: number; y: number; z: number; } {
+    oldScale.z = 1;
     return oldScale;
   }
 
@@ -102,7 +98,7 @@ class WebGLCubeStateMoveToCenter extends WebGLCubeState {
 
 export class WebGLCube extends WebGLObject {
   public readonly SPEED = 50;
-  public readonly ROTATION_SPEED = 350;
+  public readonly ROTATION_SPEED = 500;
   public readonly RADIUS = 30;
   public readonly SCALE = 10;
 
@@ -186,15 +182,12 @@ export class WebGLCube extends WebGLObject {
   }
 
   update(deltaTime: number): void {
-    this.currentRadius = this.state.calculateRadius(deltaTime, this.currentRadius);
-
     const oldRotation = this.degreeRotation;
+
+    this.currentRadius = this.state.calculateRadius(deltaTime, this.currentRadius);
     this.degreeRotation = this.state.calculateRotation(deltaTime, this.degreeRotation);
 
-    if (
-      this.degreeRotation.x !== oldRotation.x &&
-      this.degreeRotation.y !== oldRotation.y
-    ) {
+    if (this.rotationHasChanged(oldRotation)) {
       this.rotationChanged = true;
     }
 
@@ -208,6 +201,11 @@ export class WebGLCube extends WebGLObject {
     state.cube = this;
     state.input = this.input;
     this.state = state;
+  }
+
+  private rotationHasChanged(oldRotation: { x: number, y: number }): boolean {
+    return  this.degreeRotation.x !== oldRotation.x ||
+            this.degreeRotation.y !== oldRotation.y;
   }
 
   private updateRotation(deltaTime: number): void {
