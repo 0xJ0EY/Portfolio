@@ -55,8 +55,11 @@ export class WebGLCarouselComponent implements AfterViewInit, OnDestroy {
   }
 
   onResize(): void {
-    this.webGL.nativeElement.width = this.window.innerWidth;
-    this.webGL.nativeElement.height = this.window.innerHeight;
+
+    const devicePixelRatio = window.devicePixelRatio || 1;
+
+    this.webGL.nativeElement.width = Math.round(this.window.innerWidth * devicePixelRatio);
+    this.webGL.nativeElement.height = Math.round(this.window.innerHeight * devicePixelRatio);
 
     // If it has a viewport, update it aswell
     if (this.renderer != null) {

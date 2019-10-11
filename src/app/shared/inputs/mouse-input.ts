@@ -13,6 +13,8 @@ class MouseInputCoords {
 
 export class MouseInput implements WebGLInput {
 
+  private devicePixelRatio = window.devicePixelRatio || 1;
+
   private mouseCoords: MouseInputCoords = new MouseInputCoords();
   private mouseButtons: MouseInputButtons = new MouseInputButtons();
 
@@ -35,8 +37,16 @@ export class MouseInput implements WebGLInput {
     return this.mouseCoords.x;
   }
 
+  get xNormalized(): number {
+    return this.mouseCoords.x / this.devicePixelRatio;
+  }
+
   get y(): number {
     return this.mouseCoords.y;
+  }
+
+  get yNormalized(): number {
+    return this.mouseCoords.y / this.devicePixelRatio;
   }
 
   get coords(): MouseInputCoords {
@@ -44,11 +54,11 @@ export class MouseInput implements WebGLInput {
   }
 
   get xPercentage(): number {
-    return this.mouseCoords.x / this.canvas.getBoundingClientRect().width;
+    return this.mouseCoords.x / (this.canvas.getBoundingClientRect().width * this.devicePixelRatio);
   }
 
   get yPercentage(): number {
-    return this.mouseCoords.y / this.canvas.getBoundingClientRect().height;
+    return this.mouseCoords.y / (this.canvas.getBoundingClientRect().height * this.devicePixelRatio);
   }
 
   get percentage(): MouseInputCoords {
@@ -69,8 +79,8 @@ export class MouseInput implements WebGLInput {
   }
 
   private onMouseMove(evt: MouseEvent) {
-    this.mouseCoords.x = evt.clientX;
-    this.mouseCoords.y = evt.clientY;
+    this.mouseCoords.x = (evt.pageX - this.canvas.offsetLeft) * this.devicePixelRatio;
+    this.mouseCoords.y = (evt.pageY - this.canvas.offsetTop) * this.devicePixelRatio;
   }
 
   private onMouseClickDown(evt: MouseEvent) {
