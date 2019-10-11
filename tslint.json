@@ -86,7 +86,8 @@
     "use-lifecycle-interface": true,
     "use-pipe-transform-interface": true,
     "no-bitwise": false,
-    "prefer-for-of": false
+    "prefer-for-of": false,
+    "no-empty-interface": false
   },
   "rulesDirectory": [
     "codelyzer"

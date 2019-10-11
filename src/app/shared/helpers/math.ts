@@ -25,3 +25,7 @@ export function quadraticEaseOut(t: number): number {
 export function quintEaseOut(t: number): number {
   return 1 - t ** 5;
 }
+
+export function isPowerOf2(x: number): boolean {
+  return x && (x & (x - 1)) === 0;
+}

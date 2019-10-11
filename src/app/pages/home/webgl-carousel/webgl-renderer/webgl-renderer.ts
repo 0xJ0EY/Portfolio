@@ -98,14 +98,14 @@ export class WebGLRenderer {
       // Tell WebGL how to pull out the colors from the color buffer
       // into the vertexColor attribute.
       {
-        const numComponents = 4;
+        const numComponents = 2;
         const type = this.gl.FLOAT;
         const normalize = false;
         const stride = 0;
         const offset = 0;
-        this.gl.bindBuffer(this.gl.ARRAY_BUFFER, renderObject.buffers.color);
+        this.gl.bindBuffer(this.gl.ARRAY_BUFFER, renderObject.buffers.textureCoords);
         this.gl.vertexAttribPointer(
-          renderObject.programInfo.attribLocations.vertexColor,
+          renderObject.programInfo.attribLocations.textureCoord,
           numComponents,
           type,
           normalize,
@@ -113,9 +113,7 @@ export class WebGLRenderer {
           offset
         );
 
-        this.gl.enableVertexAttribArray(
-          renderObject.programInfo.attribLocations.vertexColor
-        );
+        this.gl.enableVertexAttribArray(renderObject.programInfo.attribLocations.textureCoord);
       }
 
       // Tell WebGL which indices to use to index the vertices
@@ -136,6 +134,11 @@ export class WebGLRenderer {
         false,
         modelViewMatrix
       );
+
+      this.gl.activeTexture(this.gl.TEXTURE0);
+      this.gl.bindTexture(this.gl.TEXTURE_2D, renderObject.texture);
+
+      this.gl.uniform1i(renderObject.programInfo.uniformLocations.uSampler, 0);
 
       {
         const vertexCount = renderObject.object.getIndices().length;

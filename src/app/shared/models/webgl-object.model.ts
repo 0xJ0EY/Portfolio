@@ -1,5 +1,6 @@
 import { WebGLInputManager } from 'src/app/pages/home/webgl-carousel/webgl-renderer/webgl-input-manager';
 import { WebGLTimeManager } from 'src/app/pages/home/webgl-carousel/webgl-renderer/webgl-time-manager';
+import { WebGLObjectManager } from 'src/app/pages/home/webgl-carousel/webgl-renderer/webgl-object-manager';
 
 export abstract class WebGLObject {
 
@@ -8,6 +9,7 @@ export abstract class WebGLObject {
   protected scale = { x: 1, y: 1, z: 1 };
   protected input: WebGLInputManager;
   protected time: WebGLTimeManager;
+  protected objectManager: WebGLObjectManager;
 
   setInput(input: WebGLInputManager): void {
     this.input = input;
@@ -15,6 +17,10 @@ export abstract class WebGLObject {
 
   setTime(time: WebGLTimeManager): void {
     this.time = time;
+  }
+
+  setObjectManager(objectManager: WebGLObjectManager) {
+    this.objectManager = objectManager;
   }
 
   getPositionX(): number { return this.position.x; }
@@ -37,6 +43,9 @@ export abstract class WebGLObject {
 
   abstract getFragmentShader(): string;
   abstract generateUniformLocations(gl: WebGLRenderingContext, shaderProgram: WebGLProgram): any;
+
+  abstract getTexture(): string;
+  abstract getTextureCoordinates(): number[];
 
   init() {}
 

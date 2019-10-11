@@ -256,7 +256,7 @@ export class WebGLCube extends WebGLObject {
   generateAttribLocations(gl: WebGLRenderingContext, shaderProgram: WebGLProgram): {} {
     return {
       vertexPosition: gl.getAttribLocation(shaderProgram, 'aVertexPosition'),
-      vertexColor: gl.getAttribLocation(shaderProgram, 'aVertexColor')
+      textureCoord: gl.getAttribLocation(shaderProgram, 'aTextureCoord'),
     };
   }
 
@@ -268,7 +268,76 @@ export class WebGLCube extends WebGLObject {
     return {
       projectionMatrix: gl.getUniformLocation(shaderProgram, 'uProjectionMatrix'),
       modelViewMatrix: gl.getUniformLocation(shaderProgram, 'uModelViewMatrix'),
+      uSampler: gl.getUniformLocation(shaderProgram, 'uSampler')
     };
   }
 
+  getTexture(): string {
+    return 'https://www.totalwine.com/dynamic/490x/media/sys_master/twmmedia/hc2/h7c/10965840134174.png';
+  }
+
+  getTextureCoordinates(): number[] {
+    return [
+      // Front
+      1.0,  1.0,
+      0.0,  1.0,
+      0.0,  0.0,
+      1.0,  0.0,
+      // Back
+      1.0,  1.0,
+      1.0,  0.0,
+      0.0,  0.0,
+      0.0,  1.0,
+      // Top
+      0.0,  0.0,
+      0.0,  1.0,
+      1.0,  1.0,
+      1.0,  0.0,
+      // Bottom
+      0.0,  0.0,
+      1.0,  0.0,
+      1.0,  1.0,
+      0.0,  1.0,
+      // Right
+      0.0,  0.0,
+      1.0,  0.0,
+      1.0,  1.0,
+      0.0,  1.0,
+      // Left
+      0.0,  0.0,
+      1.0,  0.0,
+      1.0,  1.0,
+      0.0,  1.0,
+    ];
+  }
+
 }
+
+// -width, -height, -depth,
+// -width, height, -depth,
+// width, height, -depth,
+// width, -height, -depth,
+
+// // Top face
+// -width, height, -depth,
+// -width, height, depth,
+// width, height, depth,
+// width, height, -depth,
+
+// // Bottom face
+// -width, -height, -depth,
+// width, -height, -depth,
+// width, -height, depth,
+// -width, -height, depth,
+
+// // Right face
+// width, -height, -depth,
+// width, height, -depth,
+// width, height, depth,
+// width, -height, depth,
+
+// // Left face
+// -width, -height, -depth,
+// -width, -height, depth,
+// -width, height, depth,
+// -width, height, -depth,
