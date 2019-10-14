@@ -3,7 +3,7 @@ import fragmentShaderSource from '!!raw-loader!src/app/shared/shaders/fragment-s
 import { WebGLObject } from './webgl-object.model';
 import { rotationMatrix, euclideanDistance, quadraticEaseOut, clamp, quintEaseOut } from '../helpers/math';
 import { WebGLInputManager } from '../../pages/home/webgl-carousel/webgl-renderer/webgl-input-manager';
-import { ImageTexture } from '../../pages/home/webgl-carousel/webgl-renderer/webgl-object-manager';
+import { ImageTexture, Texture } from '../../pages/home/webgl-carousel/webgl-renderer/webgl-object-manager';
 
 abstract class WebGLCubeState {
 
@@ -272,7 +272,7 @@ export class WebGLCube extends WebGLObject {
     };
   }
 
-  getTextures(): import('../../pages/home/webgl-carousel/webgl-renderer/webgl-object-manager').Texture[] {
+  getTextures(): Texture[] {
     return [
       new ImageTexture(
         'https://www.totalwine.com/dynamic/490x/media/sys_master/twmmedia/hc2/h7c/10965840134174.png',
@@ -287,20 +287,26 @@ export class WebGLCube extends WebGLObject {
           1.0,  0.0,
           0.0,  0.0,
           0.0,  1.0,
-          // Top
-          0.0,  0.0,
-          0.0,  1.0,
-          1.0,  1.0,
-          1.0,  0.0,
         ]
       ),
       new ImageTexture(
         'https://vsrv1assets4.gtp.com.au/clients/c/cellarbrationssubiaco/largeimages/455747_master.jpg',
         [
+          // Top
+          0.0,  0.0,
+          0.0,  1.0,
+          1.0,  1.0,
+          1.0,  0.0,
+          // Bottom
           0.0,  0.0,
           1.0,  0.0,
           1.0,  1.0,
           0.0,  1.0,
+        ]
+      ),
+      new ImageTexture(
+        'https://i.imgur.com/1uznUQP.jpg',
+        [
           // Right
           0.0,  0.0,
           1.0,  0.0,

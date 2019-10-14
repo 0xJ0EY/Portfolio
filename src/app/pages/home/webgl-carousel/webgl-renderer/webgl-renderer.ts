@@ -135,24 +135,33 @@ export class WebGLRenderer {
         modelViewMatrix
       );
 
-      let textureOffset = 0;
+      let sidesDrawn = 0;
 
       renderObject.textures.forEach(texture => {
+
+        const vertexCount = 6;
+        const textureCoordCount = 8;
+        const sides = texture.from.getTextureCoords().length / textureCoordCount;
+
+        const type = this.gl.UNSIGNED_SHORT;
+        const UNSIGNED_SHORT_SIZEOF_IN_BYTES = 2;
 
         this.gl.activeTexture(this.gl.TEXTURE0);
         this.gl.bindTexture(this.gl.TEXTURE_2D, texture.loaded);
 
-        this.gl.uniform1i(renderObject.programInfo.uniformLocations.uSampler, 0);
+        for (let i = 0; i  < sides; i++) {
 
-        const size = texture.from.getTextureCoords().length;
+          const offset = (sidesDrawn + i) * vertexCount;
 
-        {
-          const vertexCount = size;
-          const type = this.gl.UNSIGNED_SHORT;
-          this.gl.drawElements(this.gl.TRIANGLES, vertexCount, type, textureOffset);
+          this.gl.drawElements(
+            this.gl.TRIANGLES,
+            vertexCount,
+            type,
+            offset * UNSIGNED_SHORT_SIZEOF_IN_BYTES
+          );
         }
 
-        textureOffset += size;
+        sidesDrawn += sides;
       });
 
     });
