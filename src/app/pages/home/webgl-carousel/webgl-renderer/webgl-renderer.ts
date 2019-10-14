@@ -135,29 +135,25 @@ export class WebGLRenderer {
         modelViewMatrix
       );
 
+      let textureOffset = 0;
 
-      // Find a way to split this up in the amount of textures that are bound to the model
-      this.gl.activeTexture(this.gl.TEXTURE0);
-      this.gl.bindTexture(this.gl.TEXTURE_2D, renderObject.textures[0]);
+      renderObject.textures.forEach(texture => {
 
-      this.gl.uniform1i(renderObject.programInfo.uniformLocations.uSampler, 0);
+        this.gl.activeTexture(this.gl.TEXTURE0);
+        this.gl.bindTexture(this.gl.TEXTURE_2D, texture.loaded);
 
-      {
-        const vertexCount = renderObject.object.getIndices().length / 2;
-        const type = this.gl.UNSIGNED_SHORT;
-        const offset = 0;
-        this.gl.drawElements(this.gl.TRIANGLES, vertexCount, type, offset);
-      }
+        this.gl.uniform1i(renderObject.programInfo.uniformLocations.uSampler, 0);
 
-      // this.gl.activeTexture(this.gl.TEXTURE1);
-      this.gl.bindTexture(this.gl.TEXTURE_2D, renderObject.textures[1]);
+        const size = texture.from.getTextureCoords().length;
 
-      {
-        const vertexCount = renderObject.object.getIndices().length / 2;
-        const type = this.gl.UNSIGNED_SHORT;
-        const offset = renderObject.object.getIndices().length;
-        this.gl.drawElements(this.gl.TRIANGLES, vertexCount, type, offset);
-      }
+        {
+          const vertexCount = size;
+          const type = this.gl.UNSIGNED_SHORT;
+          this.gl.drawElements(this.gl.TRIANGLES, vertexCount, type, textureOffset);
+        }
+
+        textureOffset += size;
+      });
 
     });
 

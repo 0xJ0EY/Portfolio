@@ -7,7 +7,7 @@ export class WebGLRenderObject {
   public shaderProgram: WebGLProgram;
   public programInfo: any;
   public buffers: any;
-  public textures: WebGLTexture[];
+  public textures: { loaded: WebGLTexture, from: Texture }[];
   public object: WebGLObject;
 }
 
@@ -95,7 +95,10 @@ export class WebGLObjectManager {
     renderObject.textures = [];
 
     object.getTextures().forEach(texture => {
-      renderObject.textures.push(texture.loadTexture(this.gl));
+      renderObject.textures.push({
+        loaded: texture.loadTexture(this.gl),
+        from: texture
+      });
     });
 
     renderObject.programInfo = {
