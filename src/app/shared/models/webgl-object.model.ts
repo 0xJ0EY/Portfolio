@@ -1,6 +1,7 @@
 import { WebGLInputManager } from 'src/app/pages/home/webgl-carousel/webgl-renderer/webgl-input-manager';
 import { WebGLTimeManager } from 'src/app/pages/home/webgl-carousel/webgl-renderer/webgl-time-manager';
-import { WebGLObjectManager } from 'src/app/pages/home/webgl-carousel/webgl-renderer/webgl-object-manager';
+import { WebGLObjectManager, Texture } from 'src/app/pages/home/webgl-carousel/webgl-renderer/webgl-object-manager';
+
 
 export abstract class WebGLObject {
 
@@ -44,8 +45,7 @@ export abstract class WebGLObject {
   abstract getFragmentShader(): string;
   abstract generateUniformLocations(gl: WebGLRenderingContext, shaderProgram: WebGLProgram): any;
 
-  abstract getTexture(): string;
-  abstract getTextureCoordinates(): number[];
+  abstract getTextures(): Texture[];
 
   init() {}
 

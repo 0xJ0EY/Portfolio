@@ -3,6 +3,7 @@ import fragmentShaderSource from '!!raw-loader!src/app/shared/shaders/fragment-s
 import { WebGLObject } from './webgl-object.model';
 import { rotationMatrix, euclideanDistance, quadraticEaseOut, clamp, quintEaseOut } from '../helpers/math';
 import { WebGLInputManager } from '../../pages/home/webgl-carousel/webgl-renderer/webgl-input-manager';
+import { ImageTexture } from '../../pages/home/webgl-carousel/webgl-renderer/webgl-object-manager';
 
 abstract class WebGLCubeState {
 
@@ -156,7 +157,6 @@ export class WebGLCube extends WebGLObject {
       width, height, depth,
       width, height, -depth,
 
-      // Bottom face
       -width, -height, -depth,
       width, -height, -depth,
       width, -height, depth,
@@ -272,72 +272,47 @@ export class WebGLCube extends WebGLObject {
     };
   }
 
-  getTexture(): string {
-    return 'https://www.totalwine.com/dynamic/490x/media/sys_master/twmmedia/hc2/h7c/10965840134174.png';
-  }
-
-  getTextureCoordinates(): number[] {
+  getTextures(): import('../../pages/home/webgl-carousel/webgl-renderer/webgl-object-manager').Texture[] {
     return [
-      // Front
-      1.0,  1.0,
-      0.0,  1.0,
-      0.0,  0.0,
-      1.0,  0.0,
-      // Back
-      1.0,  1.0,
-      1.0,  0.0,
-      0.0,  0.0,
-      0.0,  1.0,
-      // Top
-      0.0,  0.0,
-      0.0,  1.0,
-      1.0,  1.0,
-      1.0,  0.0,
-      // Bottom
-      0.0,  0.0,
-      1.0,  0.0,
-      1.0,  1.0,
-      0.0,  1.0,
-      // Right
-      0.0,  0.0,
-      1.0,  0.0,
-      1.0,  1.0,
-      0.0,  1.0,
-      // Left
-      0.0,  0.0,
-      1.0,  0.0,
-      1.0,  1.0,
-      0.0,  1.0,
+      new ImageTexture(
+        'https://www.totalwine.com/dynamic/490x/media/sys_master/twmmedia/hc2/h7c/10965840134174.png',
+        [
+          // Front
+          1.0,  1.0,
+          0.0,  1.0,
+          0.0,  0.0,
+          1.0,  0.0,
+          // Back
+          1.0,  1.0,
+          1.0,  0.0,
+          0.0,  0.0,
+          0.0,  1.0,
+          // Top
+          0.0,  0.0,
+          0.0,  1.0,
+          1.0,  1.0,
+          1.0,  0.0,
+        ]
+      ),
+      new ImageTexture(
+        'https://vsrv1assets4.gtp.com.au/clients/c/cellarbrationssubiaco/largeimages/455747_master.jpg',
+        [
+          0.0,  0.0,
+          1.0,  0.0,
+          1.0,  1.0,
+          0.0,  1.0,
+          // Right
+          0.0,  0.0,
+          1.0,  0.0,
+          1.0,  1.0,
+          0.0,  1.0,
+          // Left
+          0.0,  0.0,
+          1.0,  0.0,
+          1.0,  1.0,
+          0.0,  1.0,
+        ]
+      )
     ];
   }
-
 }
-
-// -width, -height, -depth,
-// -width, height, -depth,
-// width, height, -depth,
-// width, -height, -depth,
-
-// // Top face
-// -width, height, -depth,
-// -width, height, depth,
-// width, height, depth,
-// width, height, -depth,
-
-// // Bottom face
-// -width, -height, -depth,
-// width, -height, -depth,
-// width, -height, depth,
-// -width, -height, depth,
-
-// // Right face
-// width, -height, -depth,
-// width, height, -depth,
-// width, height, depth,
-// width, -height, depth,
-
-// // Left face
-// -width, -height, -depth,
-// -width, -height, depth,
-// -width, height, depth,
-// -width, height, -depth,

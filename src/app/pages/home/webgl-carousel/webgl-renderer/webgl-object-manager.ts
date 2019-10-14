@@ -7,8 +7,64 @@ export class WebGLRenderObject {
   public shaderProgram: WebGLProgram;
   public programInfo: any;
   public buffers: any;
-  public texture: any;
+  public textures: WebGLTexture[];
   public object: WebGLObject;
+}
+
+export interface Texture {
+  loadTexture(gl: WebGLRenderingContext): WebGLTexture;
+  getTextureCoords(): number[];
+}
+
+export class ImageTexture implements Texture {
+
+  constructor(private url: string, private coords: number[]) {}
+
+  loadTexture(gl: WebGLRenderingContext): WebGLTexture {
+    const texture = gl.createTexture();
+    gl.bindTexture(gl.TEXTURE_2D, texture);
+
+    const mipmapLevel = 0;
+    const internalFormat = gl.RGBA;
+    const width = 1;
+    const height = 1;
+    const border = 0;
+    const srcFormat = gl.RGBA;
+    const srcType = gl.UNSIGNED_BYTE;
+    const pixel = new Uint8Array([255, 255, 255, 255]);
+
+    gl.texImage2D(
+      gl.TEXTURE_2D, mipmapLevel, internalFormat,
+      width, height, border, srcFormat, srcType, pixel
+    );
+
+    const image = new Image();
+    image.onload = () => {
+
+      gl.bindTexture(gl.TEXTURE_2D, texture);
+      gl.texImage2D(
+        gl.TEXTURE_2D, mipmapLevel, internalFormat,
+        srcFormat, srcType, image
+      );
+
+      if (isPowerOf2(image.width) && isPowerOf2(image.height)) {
+        gl.generateMipmap(gl.TEXTURE_2D);
+      } else {
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
+      }
+    };
+
+    image.crossOrigin = '';
+    image.src = this.url;
+
+    return texture;
+  }
+
+  getTextureCoords(): number[] {
+    return this.coords;
+  }
 }
 
 export class WebGLObjectManager {
@@ -34,7 +90,13 @@ export class WebGLObjectManager {
 
     renderObject.object = object;
     renderObject.shaderProgram = this.createProgram(object.getVertexShader(), object.getFragmentShader());
-    renderObject.texture = this.loadTexture(object.getTexture());
+
+    // Load textures
+    renderObject.textures = [];
+
+    object.getTextures().forEach(texture => {
+      renderObject.textures.push(texture.loadTexture(this.gl));
+    });
 
     renderObject.programInfo = {
       program: renderObject.shaderProgram,
@@ -91,7 +153,12 @@ export class WebGLObjectManager {
     const textureCoordBuffer = this.gl.createBuffer();
 
     this.gl.bindBuffer(this.gl.ARRAY_BUFFER, textureCoordBuffer);
-    this.gl.bufferData(this.gl.ARRAY_BUFFER, new Float32Array(object.getTextureCoordinates()), this.gl.STATIC_DRAW);
+
+    const textureCoords = object.getTextures()
+                                .map(x => x.getTextureCoords())
+                                .reduce((x, y) => x.concat(y));
+
+    this.gl.bufferData(this.gl.ARRAY_BUFFER, new Float32Array(textureCoords), this.gl.STATIC_DRAW);
 
     // Indices buffer
     const indexBuffer = this.gl.createBuffer();
@@ -104,55 +171,6 @@ export class WebGLObjectManager {
       textureCoords: textureCoordBuffer,
       indices: indexBuffer
     };
-  }
-
-  private loadTexture(url: string): WebGLTexture | null {
-    const texture = this.gl.createTexture();
-    this.gl.bindTexture(this.gl.TEXTURE_2D, texture);
-
-    const mipmapLevel = 0;
-    const internalFormat = this.gl.RGBA;
-    const width = 1;
-    const height = 1;
-    const border = 0;
-    const srcFormat = this.gl.RGBA;
-    const srcType = this.gl.UNSIGNED_BYTE;
-    const pixel = new Uint8Array([255, 255, 255, 255]);
-
-    this.gl.texImage2D(
-      this.gl.TEXTURE_2D, mipmapLevel, internalFormat,
-      width, height, border, srcFormat, srcType, pixel
-    );
-
-    const image = new Image();
-    image.onload = () => {
-
-      console.log(image)
-
-      this.gl.bindTexture(this.gl.TEXTURE_2D, texture);
-      this.gl.texImage2D(
-        this.gl.TEXTURE_2D, mipmapLevel, internalFormat,
-        srcFormat, srcType, image
-      );
-
-      // TODO: Might have to set the way the mipmap is rendered;
-
-      console.log(width, height);
-      console.log(isPowerOf2(width), isPowerOf2(height));
-
-      if (isPowerOf2(image.width) && isPowerOf2(image.height)) {
-        this.gl.generateMipmap(this.gl.TEXTURE_2D);
-      } else {
-        this.gl.texParameteri(this.gl.TEXTURE_2D, this.gl.TEXTURE_WRAP_S, this.gl.CLAMP_TO_EDGE);
-        this.gl.texParameteri(this.gl.TEXTURE_2D, this.gl.TEXTURE_WRAP_T, this.gl.CLAMP_TO_EDGE);
-        this.gl.texParameteri(this.gl.TEXTURE_2D, this.gl.TEXTURE_MIN_FILTER, this.gl.LINEAR);
-      }
-    };
-
-    image.crossOrigin = '';
-    image.src = url;
-
-    return texture;
   }
 
   public remove(object: WebGLObject): void {
