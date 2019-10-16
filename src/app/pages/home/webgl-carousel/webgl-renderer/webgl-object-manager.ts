@@ -67,6 +67,42 @@ export class ImageTexture implements Texture {
   }
 }
 
+export class ColourTexture implements Texture {
+
+  constructor(private colour: { r: number, g: number, b: number }, private coords: number[]) {}
+
+  loadTexture(gl: WebGLRenderingContext): WebGLTexture {
+    const texture = gl.createTexture();
+    gl.bindTexture(gl.TEXTURE_2D, texture);
+
+    const mipmapLevel = 0;
+    const internalFormat = gl.RGBA;
+    const width = 1;
+    const height = 1;
+    const border = 0;
+    const srcFormat = gl.RGBA;
+    const srcType = gl.UNSIGNED_BYTE;
+    const pixel = new Uint8Array([
+      this.colour.r,
+      this.colour.g,
+      this.colour.b,
+      255
+    ]);
+
+    gl.texImage2D(
+      gl.TEXTURE_2D, mipmapLevel, internalFormat,
+      width, height, border, srcFormat, srcType, pixel
+    );
+
+    return texture;
+  }
+
+  getTextureCoords(): number[] {
+    return this.coords;
+  }
+
+}
+
 export class WebGLObjectManager {
 
   private readonly inputManager = new WebGLInputManager(this.document, this.gl.canvas);

@@ -3,7 +3,7 @@ import fragmentShaderSource from '!!raw-loader!src/app/shared/shaders/fragment-s
 import { WebGLObject } from './webgl-object.model';
 import { rotationMatrix, euclideanDistance, quadraticEaseOut, clamp, quintEaseOut } from '../helpers/math';
 import { WebGLInputManager } from '../../pages/home/webgl-carousel/webgl-renderer/webgl-input-manager';
-import { ImageTexture, Texture } from '../../pages/home/webgl-carousel/webgl-renderer/webgl-object-manager';
+import { ImageTexture, Texture, ColourTexture } from '../../pages/home/webgl-carousel/webgl-renderer/webgl-object-manager';
 
 abstract class WebGLCubeState {
 
@@ -289,8 +289,8 @@ export class WebGLCube extends WebGLObject {
           0.0,  1.0,
         ]
       ),
-      new ImageTexture(
-        'https://vsrv1assets4.gtp.com.au/clients/c/cellarbrationssubiaco/largeimages/455747_master.jpg',
+      new ColourTexture(
+        { r: 255, g: 0, b: 0 },
         [
           // Top
           0.0,  0.0,
