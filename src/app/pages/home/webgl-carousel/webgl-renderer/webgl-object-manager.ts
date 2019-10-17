@@ -1,106 +1,14 @@
 import { WebGLObject } from 'src/app/shared/models/webgl-object.model';
 import { WebGLInputManager } from 'src/app/pages/home/webgl-carousel/webgl-renderer/webgl-input-manager';
 import { WebGLTimeManager } from 'src/app/pages/home/webgl-carousel/webgl-renderer/webgl-time-manager';
-import { isPowerOf2 } from 'src/app/shared/helpers/math';
+import { Texture, AnimatedTexture, isAnimatedTexture } from './webgl-textures';
 
 export class WebGLRenderObject {
   public shaderProgram: WebGLProgram;
   public programInfo: any;
   public buffers: any;
-  public textures: { loaded: WebGLTexture, from: Texture }[];
+  public textures: Texture[];
   public object: WebGLObject;
-}
-
-export interface Texture {
-  loadTexture(gl: WebGLRenderingContext): WebGLTexture;
-  getTextureCoords(): number[];
-}
-
-export class ImageTexture implements Texture {
-
-  constructor(private url: string, private coords: number[]) {}
-
-  loadTexture(gl: WebGLRenderingContext): WebGLTexture {
-    const texture = gl.createTexture();
-    gl.bindTexture(gl.TEXTURE_2D, texture);
-
-    const mipmapLevel = 0;
-    const internalFormat = gl.RGBA;
-    const width = 1;
-    const height = 1;
-    const border = 0;
-    const srcFormat = gl.RGBA;
-    const srcType = gl.UNSIGNED_BYTE;
-    const pixel = new Uint8Array([255, 255, 255, 255]);
-
-    gl.texImage2D(
-      gl.TEXTURE_2D, mipmapLevel, internalFormat,
-      width, height, border, srcFormat, srcType, pixel
-    );
-
-    const image = new Image();
-    image.onload = () => {
-
-      gl.bindTexture(gl.TEXTURE_2D, texture);
-      gl.texImage2D(
-        gl.TEXTURE_2D, mipmapLevel, internalFormat,
-        srcFormat, srcType, image
-      );
-
-      if (isPowerOf2(image.width) && isPowerOf2(image.height)) {
-        gl.generateMipmap(gl.TEXTURE_2D);
-      } else {
-        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
-        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
-        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
-      }
-    };
-
-    image.crossOrigin = '';
-    image.src = this.url;
-
-    return texture;
-  }
-
-  getTextureCoords(): number[] {
-    return this.coords;
-  }
-}
-
-export class ColourTexture implements Texture {
-
-  constructor(private colour: { r: number, g: number, b: number }, private coords: number[]) {}
-
-  loadTexture(gl: WebGLRenderingContext): WebGLTexture {
-    const texture = gl.createTexture();
-    gl.bindTexture(gl.TEXTURE_2D, texture);
-
-    const mipmapLevel = 0;
-    const internalFormat = gl.RGBA;
-    const width = 1;
-    const height = 1;
-    const border = 0;
-    const srcFormat = gl.RGBA;
-    const srcType = gl.UNSIGNED_BYTE;
-    const pixel = new Uint8Array([
-      this.colour.r,
-      this.colour.g,
-      this.colour.b,
-      255
-    ]);
-
-    gl.texImage2D(
-      gl.TEXTURE_2D, mipmapLevel, internalFormat,
-      width, height, border, srcFormat, srcType, pixel
-    );
-
-    return texture;
-  }
-
-  getTextureCoords(): number[] {
-    return this.coords;
-  }
-
 }
 
 export class WebGLObjectManager {
@@ -131,10 +39,8 @@ export class WebGLObjectManager {
     renderObject.textures = [];
 
     object.getTextures().forEach(texture => {
-      renderObject.textures.push({
-        loaded: texture.loadTexture(this.gl),
-        from: texture
-      });
+      texture.renderTexture(this.gl);
+      renderObject.textures.push(texture);
     });
 
     renderObject.programInfo = {
@@ -219,7 +125,13 @@ export class WebGLObjectManager {
   // Update the inner objects
   public update(deltaTime: number): void {
     this.timeManager.add(deltaTime);
-    this.objects.forEach(val => val.object.update(deltaTime));
+    this.objects.forEach(val => {
+      val.object.update(deltaTime);
+
+      val.textures
+        .filter(texture => isAnimatedTexture(texture))
+        .forEach(texture => (texture as AnimatedTexture).update(this.gl));
+    });
   }
 
   public clear(): void {

@@ -3,7 +3,7 @@ import fragmentShaderSource from '!!raw-loader!src/app/shared/shaders/fragment-s
 import { WebGLObject } from './webgl-object.model';
 import { rotationMatrix, euclideanDistance, quadraticEaseOut, clamp, quintEaseOut } from '../helpers/math';
 import { WebGLInputManager } from '../../pages/home/webgl-carousel/webgl-renderer/webgl-input-manager';
-import { ImageTexture, Texture, ColourTexture } from '../../pages/home/webgl-carousel/webgl-renderer/webgl-object-manager';
+import { ImageTexture, Texture, ColourTexture, VideoTexture } from '../../pages/home/webgl-carousel/webgl-renderer/webgl-textures';
 
 abstract class WebGLCubeState {
 
@@ -274,8 +274,8 @@ export class WebGLCube extends WebGLObject {
 
   getTextures(): Texture[] {
     return [
-      new ImageTexture(
-        'https://www.totalwine.com/dynamic/490x/media/sys_master/twmmedia/hc2/h7c/10965840134174.png',
+      new VideoTexture(
+        'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4',
         [
           // Front
           1.0,  1.0,

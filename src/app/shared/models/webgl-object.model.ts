@@ -1,6 +1,7 @@
 import { WebGLInputManager } from 'src/app/pages/home/webgl-carousel/webgl-renderer/webgl-input-manager';
 import { WebGLTimeManager } from 'src/app/pages/home/webgl-carousel/webgl-renderer/webgl-time-manager';
-import { WebGLObjectManager, Texture } from 'src/app/pages/home/webgl-carousel/webgl-renderer/webgl-object-manager';
+import { WebGLObjectManager } from 'src/app/pages/home/webgl-carousel/webgl-renderer/webgl-object-manager';
+import { Texture } from 'src/app/pages/home/webgl-carousel/webgl-renderer/webgl-textures';
 
 
 export abstract class WebGLObject {
