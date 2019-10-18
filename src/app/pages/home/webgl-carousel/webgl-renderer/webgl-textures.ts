@@ -144,6 +144,8 @@ export class VideoTexture implements AnimatedTexture {
     video.muted = true;
     video.loop = true;
 
+    video.setAttribute('playsinline', '');
+
     const checkStatus = () => {
       if (playing && timeupdate) {
         this.loaded = true;
