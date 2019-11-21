@@ -54,11 +54,15 @@ export class MouseInput implements WebGLInput {
   }
 
   get xPercentage(): number {
-    return this.mouseCoords.x / (this.canvas.getBoundingClientRect().width * this.devicePixelRatio);
+    const width = this.canvas.getBoundingClientRect().width * this.devicePixelRatio;
+    const x = Math.min(this.mouseCoords.x, width);
+    return x / width;
   }
 
   get yPercentage(): number {
-    return this.mouseCoords.y / (this.canvas.getBoundingClientRect().height * this.devicePixelRatio);
+    const height = this.canvas.getBoundingClientRect().height * this.devicePixelRatio;
+    const y = Math.min(this.mouseCoords.y, height);
+    return y / height;
   }
 
   get percentage(): MouseInputCoords {
