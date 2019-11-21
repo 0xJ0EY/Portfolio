@@ -71,11 +71,17 @@ export class ImageTexture implements Texture {
   }
 }
 
+export class TextureColour {
+  public r: number;
+  public g: number;
+  public b: number;
+}
+
 export class ColourTexture implements Texture {
 
   private texture: WebGLTexture;
 
-  constructor(private colour: { r: number, g: number, b: number }, private coords: number[]) {}
+  constructor(private colour: TextureColour, private coords: number[]) {}
 
   renderTexture(gl: WebGLRenderingContext): void {
     const texture = gl.createTexture();
@@ -152,15 +158,22 @@ export class VideoTexture implements AnimatedTexture {
       }
     };
 
-    video.addEventListener('playing', () => {
+    const checkPlaying = () => {
       playing = true;
       checkStatus();
-    });
 
-    video.addEventListener('timeupdate', () => {
+      video.removeEventListener('playing', checkPlaying);
+    };
+
+    const checkTimeupdate = () => {
       timeupdate = true;
       checkStatus();
-    });
+
+      video.removeEventListener('timeupdate', checkTimeupdate);
+    };
+
+    video.addEventListener('playing', checkPlaying);
+    video.addEventListener('timeupdate', checkTimeupdate);
 
     video.crossOrigin = '';
     video.src = this.url;

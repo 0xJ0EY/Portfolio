@@ -1,101 +1,9 @@
 import vertexShaderSource from '!!raw-loader!src/app/shared/shaders/vertex-shader.vert';
 import fragmentShaderSource from '!!raw-loader!src/app/shared/shaders/fragment-shader.frag';
 import { WebGLObject } from './webgl-object.model';
-import { rotationMatrix, euclideanDistance, quadraticEaseOut, clamp, quintEaseOut } from '../helpers/math';
-import { WebGLInputManager } from '../../pages/home/webgl-carousel/webgl-renderer/webgl-input-manager';
-import { ImageTexture, Texture, ColourTexture, VideoTexture } from '../../pages/home/webgl-carousel/webgl-renderer/webgl-textures';
-
-abstract class WebGLCubeState {
-
-  protected parent: WebGLCube;
-  protected parentInput: WebGLInputManager;
-
-  set cube(cube: WebGLCube) {
-    this.parent = cube;
-  }
-
-  set input(input: WebGLInputManager) {
-    this.parentInput = input;
-  }
-
-  abstract calculateRadius(deltaTime: number, oldRadius: number): number;
-  abstract calculateRotation(deltaTime: number, oldRotation: any): { x: number, y: number };
-  abstract calculateScale(deltaTime: number, oldScale: any): { x: number, y: number, z: number };
-}
-
-class WebGLCubeStateMoveAway extends WebGLCubeState {
-
-  calculateRadius(deltaTime: number, oldRadius: any): number {
-    throw new Error('Method not implemented.');
-  }
-
-  calculateRotation(deltaTime: number, oldRotation: any): { x: number; y: number; } {
-    throw new Error('Method not implemented.');
-  }
-
-  calculateScale(deltaTime: number, oldScale: any): { x: number; y: number; z: number; } {
-    throw new Error('Method not implemented.');
-  }
-
-}
-
-class WebGLCubeStateIdle extends WebGLCubeState {
-
-  calculateRadius(deltaTime: number, oldRadius: number): number {
-    return oldRadius;
-  }
-
-  calculateRotation(deltaTime: number, oldRotation: any): { x: number; y: number; } {
-    const mousePosition = this.parentInput.mouse.percentage;
-
-    const verticalRotation = -40 + mousePosition.x * 80;
-    const horizontalRotation = -40 + mousePosition.y * 80;
-
-    return { x: horizontalRotation, y: verticalRotation };
-  }
-
-  calculateScale(deltaTime: number, oldScale: any): { x: number; y: number; z: number; } {
-    oldScale.z = 1;
-    return oldScale;
-  }
-
-}
-
-class WebGLCubeStateMoveToCenter extends WebGLCubeState {
-
-  calculateRadius(deltaTime: number, oldRadius: number): number {
-
-    if (Math.round(oldRadius * 100) / 100 > 0) {
-      const progress = this.calculateProgress();
-      const ratio = quintEaseOut(1 - progress);
-
-      return Math.max(oldRadius - (this.parent.SPEED * deltaTime * ratio), 0);
-    } else {
-      this.parent.setState(new WebGLCubeStateIdle());
-      return 0;
-    }
-  }
-
-  calculateRotation(deltaTime: number, oldRotation: any): { x: number; y: number; } {
-    return oldRotation;
-  }
-
-  calculateScale(deltaTime: number, oldScale: any): { x: number; y: number; z: number; } {
-    oldScale.z = 1 + this.calculateProgress() * this.parent.SCALE;
-    return oldScale;
-  }
-
-  private calculateProgress(): number {
-    const euclideanDist = euclideanDistance(
-      this.parent.getPositionX(),
-      this.parent.getPositionY(),
-      this.parent.getPositionZ()
-    );
-
-    return clamp(euclideanDist / this.parent.RADIUS, 0, 1) || 0;
-  }
-
-}
+import { rotationMatrix, clamp } from '../helpers/math';
+import { Texture, ColourTexture, VideoTexture, TextureColour } from '../../pages/home/webgl-carousel/webgl-renderer/webgl-textures';
+import { WebGLCubeState, WebGLCubeStateMoveToCenter } from './webgl-cube-state';
 
 export class WebGLCube extends WebGLObject {
   public readonly SPEED = 50;
@@ -114,7 +22,11 @@ export class WebGLCube extends WebGLObject {
 
   private state: WebGLCubeState;
 
-  constructor() {
+  constructor(
+    private videoUrl: string,
+    private horizontalColours: TextureColour,
+    private verticalColours: TextureColour
+  ) {
     super();
 
     this.targetRotation = this.startRotation = this.degreeRotation;
@@ -145,11 +57,6 @@ export class WebGLCube extends WebGLObject {
       width,  height, depth,
       -width,  height, depth,
 
-      // Back face
-      -width, -height, -depth,
-      -width, height, -depth,
-      width, height, -depth,
-      width, -height, -depth,
 
       // Top face
       -width, height, -depth,
@@ -182,7 +89,7 @@ export class WebGLCube extends WebGLObject {
       8,  9,  10,     8,  10, 11,   // top
       12, 13, 14,     12, 14, 15,   // bottom
       16, 17, 18,     16, 18, 19,   // right
-      20, 21, 22,     20, 22, 23,   // left
+
     ];
   }
 
@@ -275,22 +182,17 @@ export class WebGLCube extends WebGLObject {
   getTextures(): Texture[] {
     return [
       new VideoTexture(
-        'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4',
+        this.videoUrl,
         [
           // Front
-          1.0,  1.0,
           0.0,  1.0,
-          0.0,  0.0,
-          1.0,  0.0,
-          // Back
           1.0,  1.0,
           1.0,  0.0,
           0.0,  0.0,
-          0.0,  1.0,
         ]
       ),
       new ColourTexture(
-        { r: 255, g: 0, b: 0 },
+        this.horizontalColours,
         [
           // Top
           0.0,  0.0,
@@ -304,8 +206,8 @@ export class WebGLCube extends WebGLObject {
           0.0,  1.0,
         ]
       ),
-      new ImageTexture(
-        'https://i.imgur.com/1uznUQP.jpg',
+      new ColourTexture(
+        this.verticalColours,
         [
           // Right
           0.0,  0.0,
