@@ -89,7 +89,7 @@ export class WebGLCubeManager implements InteractiveCubeManager {
   }
 
   private fetchNext(): void {
-    if (this.hasNext()) { 
+    if (this.hasNext()) {
       // TOOD: Via Angular Service
     }
   }
