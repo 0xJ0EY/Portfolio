@@ -57,7 +57,7 @@ export class CubeService {
   }
 
   private hasNext(): boolean {
-    return this.index < this.projects.length;
+    return this.index + 1 < this.projects.length;
   }
 
   private hasPrevious(): boolean {
