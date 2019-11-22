@@ -1,6 +1,8 @@
 import { quintEaseOut, euclideanDistance, clamp } from '../helpers/math';
 import { WebGLCube } from './webgl-cube.model';
 import { WebGLInputManager } from 'src/app/pages/home/webgl-carousel/webgl-renderer/webgl-input-manager';
+import { MouseScroll, MouseScrollDirection } from '../inputs/mouse-input';
+import { InteractiveCubeManager } from 'src/app/pages/home/webgl-carousel/webgl-cube-manager/webgl-cube-manager';
 
 export abstract class WebGLCubeState {
 
@@ -15,12 +17,19 @@ export abstract class WebGLCubeState {
     this.parentInput = input;
   }
 
+  abstract onScroll(mouseScroll: MouseScroll, cubeManager: InteractiveCubeManager): void;
+
   abstract calculateRadius(deltaTime: number, oldRadius: number): number;
   abstract calculateRotation(deltaTime: number, oldRotation: any): { x: number, y: number };
   abstract calculateScale(deltaTime: number, oldScale: any): { x: number, y: number, z: number };
 }
 
 export class WebGLCubeStateMoveAway extends WebGLCubeState {
+
+  onScroll(mouseScroll: MouseScroll, cubeManager: InteractiveCubeManager): void {
+    // Noop
+    return;
+  }
 
   calculateRadius(deltaTime: number, oldRadius: any): number {
     const progress = this.calculateProgress();
@@ -52,6 +61,18 @@ export class WebGLCubeStateMoveAway extends WebGLCubeState {
 
 export class WebGLCubeStateIdle extends WebGLCubeState {
 
+  onScroll(mouseScroll: MouseScroll, cubeManager: InteractiveCubeManager): void {
+
+    switch (mouseScroll.direction) {
+      case MouseScrollDirection.Down:
+        cubeManager.showNext();
+        break;
+      case MouseScrollDirection.Up:
+        cubeManager.showPrevious();
+        break;
+    }
+  }
+
   calculateRadius(deltaTime: number, oldRadius: number): number {
     return oldRadius;
   }
@@ -73,6 +94,11 @@ export class WebGLCubeStateIdle extends WebGLCubeState {
 }
 
 export class WebGLCubeStateMoveToCenter extends WebGLCubeState {
+
+  onScroll(mouseScroll: MouseScroll, cubeManager: InteractiveCubeManager): void {
+    // Noop
+    return;
+  }
 
   calculateRadius(deltaTime: number, oldRadius: number): number {
 

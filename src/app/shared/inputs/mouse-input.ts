@@ -11,12 +11,23 @@ class MouseInputCoords {
   public y = 0;
 }
 
+export enum MouseScrollDirection {
+  None = 0,
+  Up,
+  Down
+}
+
+export class MouseScroll {
+  public direction: MouseScrollDirection = MouseScrollDirection.None;
+}
+
 export class MouseInput implements WebGLInput {
 
   private devicePixelRatio = window.devicePixelRatio || 1;
 
   private mouseCoords: MouseInputCoords = new MouseInputCoords();
   private mouseButtons: MouseInputButtons = new MouseInputButtons();
+  private mouseScroll: MouseScroll = new MouseScroll();
 
   private mouseMoveListener: any;
   private mouseClickDownListener: any;
@@ -30,6 +41,7 @@ export class MouseInput implements WebGLInput {
     this.canvas.addEventListener('mousemove', this.mouseMoveListener);
     this.canvas.addEventListener('mousedown', this.mouseClickDownListener);
     this.canvas.addEventListener('mouseup', this.mouseClickUpListener);
+    this.canvas.addEventListener('wheel', this.onScroll.bind(this));
     this.canvas.oncontextmenu = () => false;
   }
 
@@ -82,6 +94,10 @@ export class MouseInput implements WebGLInput {
     return this.mouseButtons;
   }
 
+  get scroll(): MouseScroll {
+    return this.mouseScroll;
+  }
+
   private onMouseMove(evt: MouseEvent) {
     this.mouseCoords.x = (evt.pageX - this.canvas.offsetLeft) * this.devicePixelRatio;
     this.mouseCoords.y = (evt.pageY - this.canvas.offsetTop) * this.devicePixelRatio;
@@ -105,6 +121,28 @@ export class MouseInput implements WebGLInput {
     return mouseButtons;
   }
 
+  private onScroll(evt: WheelEvent) {
+    evt.deltaY < 0 ? this.onScrollWheelUp() : this.onScrollWheelDown();
+  }
+
+  private onScrollNone() {
+    const mouseScroll = new MouseScroll();
+    mouseScroll.direction = MouseScrollDirection.None;
+    this.mouseScroll = mouseScroll;
+  }
+
+  private onScrollWheelUp() {
+    const mouseScroll = new MouseScroll();
+    mouseScroll.direction = MouseScrollDirection.Up;
+    this.mouseScroll = mouseScroll;
+  }
+
+  private onScrollWheelDown() {
+    const mouseScroll = new MouseScroll();
+    mouseScroll.direction = MouseScrollDirection.Down;
+    this.mouseScroll = mouseScroll;
+  }
+
   public onDestroy(): void {
     this.canvas.removeEventListener('mousemove', this.mouseMoveListener);
     this.canvas.removeEventListener('mousedown', this.mouseClickDownListener);
@@ -113,5 +151,10 @@ export class MouseInput implements WebGLInput {
     this.mouseMoveListener = null;
     this.mouseClickDownListener = null;
     this.mouseClickUpListener = null;
+  }
+
+  public release(): void {
+    // Reset scroll to none
+    this.onScrollNone();
   }
 }

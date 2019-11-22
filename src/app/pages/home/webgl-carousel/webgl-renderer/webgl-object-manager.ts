@@ -24,7 +24,7 @@ export class WebGLObjectManager {
     return this.objects;
   }
 
-  public add(object: WebGLObject): void {
+  public add(object: WebGLObject): WebGLRenderObject {
     object.setInput(this.inputManager);
     object.setTime(this.timeManager);
     object.setObjectManager(this);
@@ -52,6 +52,7 @@ export class WebGLObjectManager {
     renderObject.buffers = this.initBuffers(renderObject.object);
 
     this.objects.push(renderObject);
+    return renderObject;
   }
 
   private createProgram(vertexShaderSrc: string, fragmentShaderSrc: string): WebGLProgram {
@@ -119,7 +120,14 @@ export class WebGLObjectManager {
   }
 
   public remove(object: WebGLObject): void {
-    // TODO
+    // TODO: Change this to a hash based approach?
+    this.objects.forEach((element, index) => {
+      if (element.object === object) {
+        delete this.objects[index];
+        // Remove the undefined keyword
+        this.objects.splice(index, 1);
+      }
+    });
   }
 
   // Update the inner objects
@@ -132,6 +140,9 @@ export class WebGLObjectManager {
         .filter(texture => isAnimatedTexture(texture))
         .forEach(texture => (texture as AnimatedTexture).update(this.gl));
     });
+
+    // Clear old inputs by updating the inputmanager
+    this.inputManager.update();
   }
 
   public clear(): void {

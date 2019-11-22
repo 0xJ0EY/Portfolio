@@ -4,6 +4,8 @@ import { WebGLObject } from './webgl-object.model';
 import { rotationMatrix, clamp } from '../helpers/math';
 import { Texture, ColourTexture, VideoTexture, TextureColour } from '../../pages/home/webgl-carousel/webgl-renderer/webgl-textures';
 import { WebGLCubeState, WebGLCubeStateMoveToCenter } from './webgl-cube-state';
+import { InteractiveCubeManager } from '../../pages/home/webgl-carousel/webgl-cube-manager/webgl-cube-manager';
+import { MouseScrollDirection } from '../inputs/mouse-input';
 
 export class WebGLCube extends WebGLObject {
   public readonly SPEED = 50;
@@ -25,7 +27,8 @@ export class WebGLCube extends WebGLObject {
   constructor(
     private videoUrl: string,
     private horizontalColours: TextureColour,
-    private verticalColours: TextureColour
+    private verticalColours: TextureColour,
+    private cubeManager: InteractiveCubeManager,
   ) {
     super();
 
@@ -56,7 +59,6 @@ export class WebGLCube extends WebGLObject {
       width, -height, depth,
       width,  height, depth,
       -width,  height, depth,
-
 
       // Top face
       -width, height, -depth,
@@ -103,6 +105,10 @@ export class WebGLCube extends WebGLObject {
       this.rotationChanged = true;
     }
 
+    if (this.hasScrolled()) {
+      this.state.onScroll(this.input.mouse.scroll, this.cubeManager);
+    }
+
     this.scale = this.state.calculateScale(deltaTime, this.scale);
 
     this.updateRotation(deltaTime);
@@ -118,6 +124,10 @@ export class WebGLCube extends WebGLObject {
   private rotationHasChanged(oldRotation: { x: number, y: number }): boolean {
     return  this.degreeRotation.x !== oldRotation.x ||
             this.degreeRotation.y !== oldRotation.y;
+  }
+
+  private hasScrolled() {
+    return this.input.mouse.scroll.direction !== MouseScrollDirection.None;
   }
 
   private updateRotation(deltaTime: number): void {

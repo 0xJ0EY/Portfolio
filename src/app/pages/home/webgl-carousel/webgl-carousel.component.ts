@@ -4,9 +4,8 @@ import { WebGLRenderer } from './webgl-renderer/webgl-renderer';
 import { ResizeService } from '../../../shared/services/resize.service';
 import { Subscription } from 'rxjs';
 import { WebGLObjectManager } from './webgl-renderer/webgl-object-manager';
-import { WebGLCube } from '../../../shared/models/webgl-cube.model';
 import { DOCUMENT } from '@angular/common';
-import { TextureColour } from './webgl-renderer/webgl-textures';
+import { WebGLCubeManager } from './webgl-cube-manager/webgl-cube-manager';
 
 @Component({
   selector: 'app-webgl-carousel',
@@ -51,10 +50,7 @@ export class WebGLCarouselComponent implements AfterViewInit, OnDestroy {
 
     this.renderer = new WebGLRenderer(gl, this.objectManager);
 
-    const horizontalColours: TextureColour = { r: 255, g: 0, b: 0 };
-    const verticalColours: TextureColour = { r: 0, g: 255, b: 0 };
-
-    this.objectManager.add(new WebGLCube('/assets/Firefox.mp4', horizontalColours, verticalColours));
+    (new WebGLCubeManager(this.objectManager)).init();
 
     this.animationFrameId = this.window.requestAnimationFrame(this.onAnimationFrame.bind(this));
   }

@@ -13,6 +13,10 @@ export class WebGLInputManager implements WebGLInput {
     this.mouse = new MouseInput(this.canvas as HTMLCanvasElement);
   }
 
+  public update(): void {
+    this.mouse.release();
+  }
+
   public onDestroy(): void {
     this.mouse.onDestroy();
   }
