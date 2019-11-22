@@ -1,6 +1,8 @@
 import { WebGLCube } from '../../../../shared/models/webgl-cube.model';
 import { WebGLObjectManager, WebGLRenderObject } from '../webgl-renderer/webgl-object-manager';
 import { WebGLCubeStateMoveAway, WebGLCubeStateMoveToCenter } from '../../../../shared/models/webgl-cube-state';
+import { CubeService } from '../../../../shared/services/cube.service';
+import { Subscription, VirtualTimeScheduler } from 'rxjs';
 
 export interface InteractiveCubeManager {
   showPrevious(): void;
@@ -15,12 +17,35 @@ enum CubeManagerState {
 export class WebGLCubeManager implements InteractiveCubeManager {
   private state: CubeManagerState = CubeManagerState.Noop;
 
+  private cubeChangeSubscription: Subscription;
+
   private activeCubes: WebGLCube[] = [];
 
-  constructor(private objectManager: WebGLObjectManager) {}
+  constructor(private objectManager: WebGLObjectManager, private cubeService: CubeService) {}
 
   public init() {
+    this.cubeService.registerCubeManager(this);
     this.addCubeFromCurrentIndex();
+
+    this.cubeChangeSubscription = this.cubeService.onChange.subscribe(this.onCubeChange.bind(this));
+  }
+
+  public onDestroy() {
+    this.cubeChangeSubscription.unsubscribe();
+  }
+
+  private onCubeChange(): void {
+    this.startProcess();
+
+    this.fadeOutLastCube();
+
+    setTimeout(() => {
+      this.deleteLastCube();
+
+      this.addCubeFromCurrentIndex();
+
+      this.processDone();
+    }, 500);
   }
 
   private fadeOutLastCube(): void {
@@ -39,67 +64,20 @@ export class WebGLCubeManager implements InteractiveCubeManager {
   }
 
   private addCubeFromCurrentIndex(): void {
-
-    const r = Math.round(Math.random() * 255);
-    const g = Math.round(Math.random() * 255);
-    const b = Math.round(Math.random() * 255);
-
-    const cube = new WebGLCube('/assets/Firefox.mp4', { r, g, b }, { r, g, b }, this);
-
-
-    // We need a deep copy, not copy by reference because this destroys it.
-    // If we do not use a reference copy, we need to find a way to keep track of our cubes in the scene. Maybe another list?
+    const cube = this.cubeService.currentCube;
 
     this.objectManager.add(cube);
     this.activeCubes.push(cube);
   }
 
   showPrevious(): void {
-    if (!this.canProcess() || !this.hasPrevious()) { return; }
-    this.startProcess();
-
-    this.fadeOutLastCube();
-
-    setTimeout(() => {
-      this.deleteLastCube();
-      this.fetchPrevious();
-      this.addCubeFromCurrentIndex();
-      this.processDone(); // Add timeout
-    }, 500);
+    if (!this.canProcess()) { return; }
+    this.cubeService.previous();
   }
 
   showNext(): void {
-    if (!this.canProcess() || !this.hasNext()) { return; }
-    this.startProcess();
-
-    this.fadeOutLastCube();
-
-    setTimeout(() => {
-      this.deleteLastCube();
-      this.fetchNext();
-      this.addCubeFromCurrentIndex();
-      this.processDone(); // Add timeout
-    }, 500);
-  }
-
-  private fetchPrevious(): void {
-    if (this.hasPrevious()) {
-      // TODO: Via Angular Service
-    }
-  }
-
-  private fetchNext(): void {
-    if (this.hasNext()) {
-      // TOOD: Via Angular Service
-    }
-  }
-
-  private hasPrevious(): boolean {
-    return true;
-  }
-
-  private hasNext(): boolean {
-    return true;
+    if (!this.canProcess()) { return; }
+    this.cubeService.next();
   }
 
   private canProcess(): boolean {

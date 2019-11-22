@@ -6,6 +6,7 @@ import { Subscription } from 'rxjs';
 import { WebGLObjectManager } from './webgl-renderer/webgl-object-manager';
 import { DOCUMENT } from '@angular/common';
 import { WebGLCubeManager } from './webgl-cube-manager/webgl-cube-manager';
+import { CubeService } from '../../../shared/services/cube.service';
 
 @Component({
   selector: 'app-webgl-carousel',
@@ -22,6 +23,7 @@ export class WebGLCarouselComponent implements AfterViewInit, OnDestroy {
 
   private renderer: WebGLRenderer;
   private objectManager: WebGLObjectManager;
+  private cubeManager: WebGLCubeManager;
 
   private animationFrameId: number;
   private then = 0;
@@ -29,7 +31,8 @@ export class WebGLCarouselComponent implements AfterViewInit, OnDestroy {
   constructor(
     @Inject(DOCUMENT) private document: Document,
     private windowRefService: WindowRefService,
-    private resizeService: ResizeService
+    private resizeService: ResizeService,
+    private cubeService: CubeService
   ) {
     this.window = this.windowRefService.nativeWindow;
   }
@@ -47,10 +50,10 @@ export class WebGLCarouselComponent implements AfterViewInit, OnDestroy {
     }
 
     this.objectManager = new WebGLObjectManager(gl, this.document);
+    this.cubeManager = new WebGLCubeManager(this.objectManager, this.cubeService);
+    this.cubeManager.init();
 
     this.renderer = new WebGLRenderer(gl, this.objectManager);
-
-    (new WebGLCubeManager(this.objectManager)).init();
 
     this.animationFrameId = this.window.requestAnimationFrame(this.onAnimationFrame.bind(this));
   }
@@ -72,6 +75,7 @@ export class WebGLCarouselComponent implements AfterViewInit, OnDestroy {
     // Destory leaking loop
     this.window.cancelAnimationFrame(this.animationFrameId);
     this.objectManager.onDestroy();
+    this.cubeManager.onDestroy();
     this.resizeSubscription.unsubscribe();
   }
 
