@@ -40,8 +40,8 @@ export class WebGLCube extends WebGLObject {
 
     const mousePosition = this.input.mouse.percentage;
 
-    this.degreeRotation.x = -45 + mousePosition.x * 90;
-    this.degreeRotation.y = -45 + mousePosition.y * 90;
+    this.degreeRotation.x = -45 + mousePosition.y * 90;
+    this.degreeRotation.y = -45 + mousePosition.x * 90;
 
     this.updateRotation(0);
     this.updatePosition(0);
