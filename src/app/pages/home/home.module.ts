@@ -2,9 +2,10 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { HomePageComponent } from './home-page/home-page.component';
 import { WebGLCarouselComponent } from './webgl-carousel/webgl-carousel.component';
+import { ProjectNameComponent } from './project-name/project-name.component';
 
 @NgModule({
-  declarations: [HomePageComponent, WebGLCarouselComponent],
+  declarations: [HomePageComponent, WebGLCarouselComponent, ProjectNameComponent],
   imports: [
     CommonModule
   ],

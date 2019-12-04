@@ -6,3 +6,10 @@ html, body {
     padding: 0;
     margin: 0;
 }
+
+@font-face {
+    font-family: 'Galyon Bold Bold';
+    font-style: normal;
+    font-weight: normal;
+    src: local('Galyon Bold Bold'), url('/assets/fonts/Galyon-Bold.woff') format('woff');
+}

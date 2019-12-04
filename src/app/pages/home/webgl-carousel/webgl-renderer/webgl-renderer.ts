@@ -10,7 +10,6 @@ export class WebGLRenderer {
   }
 
   update() {
-
     this.gl.enable(this.gl.CULL_FACE);
     this.gl.enable(this.gl.DEPTH_TEST);
     this.gl.depthFunc(this.gl.LEQUAL);

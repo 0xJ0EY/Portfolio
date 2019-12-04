@@ -10,7 +10,7 @@ export class WebGLInputManager implements WebGLInput {
   public readonly keyboard = new KeyboardInput();
 
   constructor(private document: Document, private canvas: HTMLCanvasElement | OffscreenCanvas) {
-    this.mouse = new MouseInput(this.canvas as HTMLCanvasElement);
+    this.mouse = new MouseInput(document, this.canvas as HTMLCanvasElement);
   }
 
   public update(): void {

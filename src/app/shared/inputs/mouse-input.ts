@@ -33,15 +33,15 @@ export class MouseInput implements WebGLInput {
   private mouseClickDownListener: any;
   private mouseClickUpListener: any;
 
-  constructor(private canvas: HTMLCanvasElement) {
+  constructor(private document: Document, private canvas: HTMLCanvasElement) {
     this.mouseMoveListener = this.onMouseMove.bind(this);
     this.mouseClickDownListener = this.onMouseClickDown.bind(this);
     this.mouseClickUpListener = this.onMouseClickUp.bind(this);
 
-    this.canvas.addEventListener('mousemove', this.mouseMoveListener);
-    this.canvas.addEventListener('mousedown', this.mouseClickDownListener);
-    this.canvas.addEventListener('mouseup', this.mouseClickUpListener);
-    this.canvas.addEventListener('wheel', this.onScroll.bind(this));
+    this.document.addEventListener('mousemove', this.mouseMoveListener);
+    this.document.addEventListener('mousedown', this.mouseClickDownListener);
+    this.document.addEventListener('mouseup', this.mouseClickUpListener);
+    this.document.addEventListener('wheel', this.onScroll.bind(this));
     this.canvas.oncontextmenu = () => false;
   }
 

@@ -26,7 +26,7 @@ export class CubeService {
       }
     },
     {
-      name: 'Youi',
+      name: 'PCParts',
       description: 'lorem ipsum',
       colour: { r: 255, g: 255, b: 255 },
       cubeParams: {
@@ -36,7 +36,17 @@ export class CubeService {
       }
     },
     {
-      name: 'Youi',
+      name: 'Albert',
+      description: 'lorem ipsum',
+      colour: { r: 255, g: 255, b: 255 },
+      cubeParams: {
+        video: '/assets/Firefox.mp4',
+        horizontalColours: { r: 0, g: 0, b: 255 },
+        verticalColours: { r: 255, g: 0, b: 255 }
+      }
+    },
+    {
+      name: 'Paintboy',
       description: 'lorem ipsum',
       colour: { r: 255, g: 255, b: 255 },
       cubeParams: {
