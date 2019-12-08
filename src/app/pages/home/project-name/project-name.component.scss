@@ -1,14 +1,48 @@
-h1 {
-    position: absolute;
-    top: calc(50% - 80pt);
-    left: 100px;
-    color: white;
-    font-size: 80pt;
-    padding: 0;
-    margin: 0;
 
-    z-index: 10;
+.title {
+    position: absolute;
+    display: block;
+
+    top: 50%;
+    transform: translateY(-50%);
+
+    z-index: 100;
+
+    left: 100px;
+}
+
+.title h1 {
+    font-size: 100pt;
 
     font-family: 'Galyon Bold Bold';
     font-weight: normal;
+
+    transform-origin: 50% 50%;
 }
+
+.title h1.first-title {
+    position: relative;
+    z-index: 111;
+}
+
+.title h1.second-title {
+    position: absolute;
+    top: 0;
+    z-index: 110;
+}
+
+.title.intro h1.second-title {
+    transform-origin: 50% 50%;
+    transform: translate3d(0, 0, 0) scale(1, 1);
+}
+
+@keyframes slidein {
+    from {
+        transform: translate3d(0, 0, 0) scale(1.05, 1);
+    }
+  
+    to {
+        transform: translate3d(0, 0, 0) scale(1, 1);
+    }
+  }
+  

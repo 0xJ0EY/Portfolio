@@ -1,4 +1,11 @@
 
-<div class="title">
-    <h1>{{ this.name }}</h1>
+<div class="title intro">
+    <div class="wrapper">
+        <h1 class="first-title">{{ this.name }}</h1>
+        <h1 class="second-title" 
+            [@animationFade]="animationState" 
+            (@animationFade.done)="onAnimationEnd($event)">
+            {{ this.name }}
+        </h1>
+    </div>
 </div>
