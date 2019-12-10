@@ -14,8 +14,8 @@ import {
   templateUrl: './project-name.component.html',
   styleUrls: ['./project-name.component.scss'],
   animations: [
-    trigger('animationFade', [
-      state('in-out', style({
+    trigger('animationTextFadeIn', [
+      state('in', style({
         transform: 'translate3d(0, 0, 0) scale(1.05, 1)',
       })),
       state('idle', style({
@@ -24,13 +24,14 @@ import {
       state('out', style({
         transform: 'translate3d(0, 0, 0) scale(1.05, 1)',
       })),
-      transition('in-out => idle', [
-        animate('500ms')
+      transition('in => idle', [
+        animate('1s')
       ]),
-      transition('idle => in-out', [
-        animate('500ms')
+      transition('idle => out', [
+        animate('1s')
       ]),
-    ])
+      transition('out => in', [])
+    ]),
   ]
 })
 export class ProjectNameComponent implements OnInit, OnDestroy {
@@ -40,7 +41,9 @@ export class ProjectNameComponent implements OnInit, OnDestroy {
   private cubeServiceSubscription: Subscription;
   public name = '';
 
-  public animationState = 'in-out';
+  public animationState = 'in';
+  public prevAnimationState = 'in';
+  public angularAnimationState = 'in';
 
   constructor(private cubeService: CubeService) { }
 
@@ -53,7 +56,7 @@ export class ProjectNameComponent implements OnInit, OnDestroy {
   }
 
   updateNgStateToidle() {
-    this.updateAnimationState('idle');
+    this.triggerAngularAnimation('idle');
   }
 
   ngOnDestroy(): void {
@@ -67,21 +70,59 @@ export class ProjectNameComponent implements OnInit, OnDestroy {
       return;
     }
 
-    this.updateAnimationState('in-out');
+    console.log(this.animationState);
+
+    console.log('Project changed');
+    this.updateAnimationState('out');
+    this.triggerAngularAnimation('out');
   }
 
   private updateAnimationState(animState: string) {
-    if (!['in-out', 'idle'].includes(animState)) {
-      throw new Error('Unsupported state');
-    }
+    if (!this.validAnimState(animState)) { throw new Error('Unsupported state'); }
 
+    console.log(animState);
+
+    this.prevAnimationState = this.animationState;
     this.animationState = animState;
   }
 
-  public onAnimationEnd(event: any) {
-    if (event.fromState === 'idle' && event.toState === 'in-out') {
-      this.updateProjectName();
+  get concatAnimationState() {
+    return this.animationState + ' old_' + this.prevAnimationState;
+  }
+
+  private validAnimState(animState): boolean {
+    return ['in', 'out', 'idle'].includes(animState);
+  }
+
+  private triggerAngularAnimation(animState: string) {
+    if (!this.validAnimState(animState)) { throw new Error('Unsupported state'); }
+
+    this.angularAnimationState = animState;
+  }
+
+  // A nice produceral way of defining our animation states :^)
+  // Prob not the most efficient way to define states
+  public onAnimationStart(event: any) {
+    if (!this.validAnimState(event.fromState)) { return; }
+
+    if (event.fromState === 'in' && event.toState === 'idle') {
       this.updateAnimationState('idle');
+    }
+
+    if (event.fromState === 'out' && event.toState === 'in') {
+      this.updateAnimationState('idle');
+      this.triggerAngularAnimation('idle');
+    }
+  }
+
+  public onAnimationEnd(event: any) {
+
+    console.log(event);
+
+    if (event.toState === 'out') {
+      this.updateProjectName();
+      this.triggerAngularAnimation('in');
+      this.updateAnimationState('in');
     }
   }
 

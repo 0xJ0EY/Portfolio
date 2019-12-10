@@ -1,4 +1,6 @@
 
+$animation_time: 100ms;
+
 .title {
     position: absolute;
     display: block;
@@ -20,15 +22,86 @@
     transform-origin: 50% 50%;
 }
 
-.title h1.first-title {
-    position: relative;
-    z-index: 111;
+.outer-wrapper {
+    width: 110%;
+    padding-left: 5%;
+    overflow: hidden;
+    transform: matrix(1, 0, 0, 1, 0, 0);
+
+    -webkit-transition: $animation_time ease-in-out;
+    -moz-transition: $animation_time ease-in-out;
+    -o-transition: $animation_time ease-in-out;
+    transition: $animation_time ease-in-out;
 }
 
-.title h1.second-title {
+.outer-wrapper.idle {
+    transform: translate(0);
+}
+.outer-wrapper.in {
+    transform: translate(-100%);
+}
+.outer-wrapper.out {
+    transform: translate(100%);
+}
+.outer-wrapper.old_out.in {
+    -webkit-transition: 0ms !important;
+    -moz-transition: 0ms !important;
+    -o-transition: 0ms !important;
+    transition: 0ms !important;
+
+    transform: translate(-100%);
+}
+
+
+.inner-wrapper {
+    width: 105%;
+    margin-left: -5%;
+
+    -webkit-transition: $animation_time ease-in-out;
+    -moz-transition: $animation_time ease-in-out;
+    -o-transition: $animation_time ease-in-out;
+    transition: $animation_time ease-in-out;
+}
+
+.inner-wrapper.idle {
+    transform: translate(0);
+}
+.inner-wrapper.in {
+    transform: translate(100%);
+}
+.inner-wrapper.out {
+    transform: translate(-100%);
+}
+
+.inner-wrapper.old_out.in {
+    -webkit-transition: 0ms !important;
+    -moz-transition: 0ms !important;
+    -o-transition: 0ms !important;
+    transition: 0ms !important;
+
+    transform: translate(100%);
+}
+
+
+.title .first-title {
+    margin: 0;
+    position: relative;
+    z-index: 111;
+    white-space: nowrap;
+    letter-spacing: -5px;
+}
+
+.title .second-title {
+    margin: 0;
     position: absolute;
     top: 0;
+    transform: translateY(50%);
     z-index: 110;
+    letter-spacing: -5px;
+}
+
+h1 {
+    margin: 0;
 }
 
 .title.intro h1.second-title {

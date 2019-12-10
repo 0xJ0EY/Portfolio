@@ -1,11 +1,22 @@
 
 <div class="title intro">
-    <div class="wrapper">
-        <h1 class="first-title">{{ this.name }}</h1>
-        <h1 class="second-title" 
-            [@animationFade]="animationState" 
-            (@animationFade.done)="onAnimationEnd($event)">
-            {{ this.name }}
-        </h1>
+    <div class="outer-wrapper" [ngClass]="concatAnimationState">
+        <div class="inner-wrapper" [ngClass]="concatAnimationState">
+            <div class="first-title">
+                <h1>{{ this.name }}</h1>
+            </div>
+            <div class="second-title"
+                [@animationTextFadeIn]="angularAnimationState" 
+                (@animationTextFadeIn.start)="onAnimationStart($event)"
+                (@animationTextFadeIn.done)="onAnimationEnd($event)">
+                <h1>{{ this.name }}</h1>
+            </div>
+<!-- 
+            <h1 class="second-title" 
+                [@animationTextFadeIn]="animationState" 
+                (@animationTextFadeIn.done)="onAnimationEnd($event)">
+                {{ this.name }}
+            </h1> -->
+        </div>
     </div>
 </div>
