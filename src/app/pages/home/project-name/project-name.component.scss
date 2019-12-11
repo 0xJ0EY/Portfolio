@@ -19,6 +19,9 @@ $animation_time: 250ms;
     font-family: 'Galyon Bold Bold';
     font-weight: normal;
 
+    text-transform: uppercase;
+    font-kerning: -10px;
+
     transform-origin: 50% 50%;
 }
 
@@ -44,7 +47,7 @@ $animation_time: 250ms;
     transform: translate(100%);
 }
 .outer-wrapper.old_out.in {
-    -webkit-transition: 0ms !important;
+    -webkit-transition: 0ms !important; /* Move without animation */
     -moz-transition: 0ms !important;
     -o-transition: 0ms !important;
     transition: 0ms !important;
