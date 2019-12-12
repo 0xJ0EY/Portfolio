@@ -52,10 +52,10 @@ export class ProjectNameComponent implements OnInit, OnDestroy {
 
     this.cubeServiceSubscription = this.cubeService.onChange.subscribe(this.onProjectChange.bind(this));
 
-    setTimeout(this.updateNgStateToidle.bind(this), 100);
+    setTimeout(this.startAnimation.bind(this), 100);
   }
 
-  updateNgStateToidle() {
+  startAnimation() {
     this.triggerAngularAnimation('idle');
   }
 
@@ -70,17 +70,12 @@ export class ProjectNameComponent implements OnInit, OnDestroy {
       return;
     }
 
-    console.log(this.animationState);
-
-    console.log('Project changed');
     this.updateAnimationState('out');
     this.triggerAngularAnimation('out');
   }
 
   private updateAnimationState(animState: string) {
     if (!this.validAnimState(animState)) { throw new Error('Unsupported state'); }
-
-    console.log(animState);
 
     this.prevAnimationState = this.animationState;
     this.animationState = animState;
@@ -90,7 +85,7 @@ export class ProjectNameComponent implements OnInit, OnDestroy {
     return this.animationState + ' old_' + this.prevAnimationState;
   }
 
-  private validAnimState(animState): boolean {
+  private validAnimState(animState: string): boolean {
     return ['in', 'out', 'idle'].includes(animState);
   }
 
@@ -116,9 +111,6 @@ export class ProjectNameComponent implements OnInit, OnDestroy {
   }
 
   public onAnimationEnd(event: any) {
-
-    console.log(event);
-
     if (event.toState === 'out') {
       this.updateProjectName();
       this.triggerAngularAnimation('in');

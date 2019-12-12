@@ -1,0 +1,53 @@
+$start_animation_time: 250ms;
+$animation_time: 100ms;
+
+span.wrapper {
+    position: absolute;
+    display: block;
+
+    top: 50px;
+    right: 100px;
+
+    width: calc(100% - 100px); // Use all the width to fix a minor text rendering bug.
+
+    z-index: 100;
+    font-kerning: -10px;
+    font-size: 1.6em;
+    text-align: right;
+    transform: rotate3d(1, 0, 0, 90deg);
+
+    -webkit-transition: $start_animation_time ease-in-out;
+    -moz-transition: $start_animation_time ease-in-out;
+    -o-transition: $start_animation_time ease-in-out;
+    transition: $start_animation_time ease-in-out;
+}
+
+span.wrapper.loaded {
+    transform: rotate3d(0,0,0, 0deg);
+}
+
+span {
+
+    display: inline-block;
+
+    font-family: 'Galyon Bold Bold';
+    font-weight: normal;
+
+    text-transform: uppercase;
+
+    transform: rotate3d(1, 0, 0, 0);
+
+    -webkit-transition: $animation_time ease-in-out;
+    -moz-transition: $animation_time ease-in-out;
+    -o-transition: $animation_time ease-in-out;
+    transition: $animation_time ease-in-out;
+}
+
+span.out {
+    transform: rotate3d(.8, 0, 0, 90deg);
+}
+
+span.in {
+    transform: rotate3d(-.8, 0, 0, 90deg);
+}
+
