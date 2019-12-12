@@ -21,6 +21,7 @@ export class CubeService {
       colour: { r: 255, g: 255, b: 255 },
       cubeParams: {
         video: '/assets/Firefox.mp4',
+        thumbnail: '/assets/thumbnail.jpg',
         horizontalColours: { r: 255, g: 0, b: 255 },
         verticalColours: { r: 255, g: 255, b: 0 }
       }
@@ -31,6 +32,7 @@ export class CubeService {
       colour: { r: 255, g: 255, b: 255 },
       cubeParams: {
         video: '/assets/Firefox.mp4',
+        thumbnail: '/assets/thumbnail.jpg',
         horizontalColours: { r: 0, g: 255, b: 255 },
         verticalColours: { r: 255, g: 255, b: 0 }
       }
@@ -41,6 +43,7 @@ export class CubeService {
       colour: { r: 255, g: 255, b: 255 },
       cubeParams: {
         video: '/assets/Firefox.mp4',
+        thumbnail: '/assets/thumbnail.jpg',
         horizontalColours: { r: 0, g: 0, b: 255 },
         verticalColours: { r: 255, g: 0, b: 255 }
       }
@@ -51,6 +54,7 @@ export class CubeService {
       colour: { r: 255, g: 255, b: 255 },
       cubeParams: {
         video: '/assets/Firefox.mp4',
+        thumbnail: '/assets/thumbnail.jpg',
         horizontalColours: { r: 0, g: 0, b: 255 },
         verticalColours: { r: 255, g: 0, b: 255 }
       }
@@ -87,7 +91,13 @@ export class CubeService {
     // new ones with the saved parameters
 
     const params = this.getCurrentProject().cubeParams;
-    return new WebGLCube(params.video, params.horizontalColours, params.verticalColours, this.cubeManager);
+    return new WebGLCube(
+      params.video,
+      params.thumbnail,
+      params.horizontalColours,
+      params.verticalColours,
+      this.cubeManager
+    );
   }
 
   get currentPage() {

@@ -86,23 +86,15 @@ export class ProjectCounterComponent implements OnInit, OnDestroy {
   private updateAnimationState(animState: AnimationState) {
     this.prevAnimationState = this.animationState;
     this.animationState = animState;
-
-    console.log(this.concatAnimationState);
   }
 
   public onAnimationStart(event: any) {
-
-    // if (event.fromState === 'in' && event.toState === 'idle') {
-    //   this.updateAnimationState('idle');
-    // }
-
     if (event.fromState === AnimationState.OUT && event.toState === AnimationState.IN) {
       this.updateAnimationState(AnimationState.IDLE);
     }
   }
 
   public onAnimationEnd(event: any) {
-
     if (event.toState === AnimationState.OUT) {
       this.updateProjectName();
       this.updateAnimationState(AnimationState.IN);

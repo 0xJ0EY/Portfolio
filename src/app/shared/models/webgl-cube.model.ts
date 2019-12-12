@@ -26,6 +26,7 @@ export class WebGLCube extends WebGLObject {
 
   constructor(
     private videoUrl: string,
+    private thumbnailUrl: string,
     private horizontalColours: TextureColour,
     private verticalColours: TextureColour,
     private cubeManager: InteractiveCubeManager,
@@ -193,6 +194,7 @@ export class WebGLCube extends WebGLObject {
     return [
       new VideoTexture(
         this.videoUrl,
+        this.thumbnailUrl,
         [
           // Front
           0.0,  1.0,

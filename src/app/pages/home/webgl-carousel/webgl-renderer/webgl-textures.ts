@@ -128,17 +128,18 @@ export class VideoTexture implements AnimatedTexture {
   private texture: WebGLTexture;
   private video: TexImageSource;
 
-  constructor(private url: string, private coords: number[]) {}
+  constructor(private url: string, private thumbnail: string, private coords: number[]) {}
 
   renderTexture(gl: WebGLRenderingContext): void {
-    this.loadVideo();
 
     // Just use a black ColourTexture for the preload texture
-    const preloadTexture = new ColourTexture({ r: 0, g: 0, b: 0 }, this.coords);
+    const preloadTexture = new ImageTexture(this.thumbnail, this.coords);
 
     preloadTexture.renderTexture(gl);
 
     this.texture = preloadTexture.getTexture();
+
+    this.loadVideo();
   }
 
   private loadVideo(): void {
