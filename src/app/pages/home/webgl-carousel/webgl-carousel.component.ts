@@ -40,6 +40,11 @@ export class WebGLCarouselComponent implements AfterViewInit, OnDestroy {
   ngAfterViewInit(): void {
     this.onResize();
 
+    // Hack to render it after the page has been loaded, to improve performance
+    setTimeout(this.startRenderer.bind(this), 1);
+  }
+
+  startRenderer(): void {
     this.resizeSubscription = this.resizeService.onResize.subscribe(this.onResize.bind(this));
 
     const gl = this.webGL.nativeElement.getContext('webgl');
