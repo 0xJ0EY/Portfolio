@@ -9,11 +9,6 @@ import {
   transition
 } from '@angular/animations';
 
-enum AnimationState {
-  IN = 'in',
-  OUT = 'out',
-  IDLE = 'idle'
-}
 
 @Component({
   selector: 'app-project-counter',
@@ -21,16 +16,16 @@ enum AnimationState {
   styleUrls: ['./project-counter.component.scss'],
   animations: [
     trigger('animationChangeNumber', [
-      state(AnimationState.IN, style({})),
-      state(AnimationState.IDLE, style({})),
-      state(AnimationState.OUT, style({})),
-      transition(AnimationState.IN + ' => ' + AnimationState.IDLE, [
+      state('in', style({})),
+      state('idle', style({})),
+      state('out', style({})),
+      transition('in => idle', [
         animate('100ms')
       ]),
-      transition(AnimationState.IDLE + ' => ' + AnimationState.OUT, [
+      transition('idle => out', [
         animate('100ms')
       ]),
-      transition(AnimationState.OUT + ' => ' + AnimationState.IN, [])
+      transition('out => in', [])
     ])
   ]
 })
@@ -41,8 +36,8 @@ export class ProjectCounterComponent implements OnInit, OnDestroy {
   public currentProject = 1;
   public maxProjects = 1;
 
-  public animationState = AnimationState.IDLE;
-  public prevAnimationState = AnimationState.IN;
+  public animationState = 'idle';
+  public prevAnimationState = 'in';
 
   private cubeServiceSubscription: Subscription;
 
@@ -67,11 +62,11 @@ export class ProjectCounterComponent implements OnInit, OnDestroy {
   }
 
   onProjectChange() {
-    this.updateAnimationState(AnimationState.OUT);
+    this.updateAnimationState('out');
   }
 
   get concatAnimationState(): string {
-    return this.animationState + ' old_' + this.prevAnimationState;
+    return this.animationState + ' old_' + this.prevAnimationState + ' ' + this.currentProject;
   }
 
   get loadedState(): string {
@@ -83,21 +78,21 @@ export class ProjectCounterComponent implements OnInit, OnDestroy {
   }
 
 
-  private updateAnimationState(animState: AnimationState) {
+  private updateAnimationState(animState: string) {
     this.prevAnimationState = this.animationState;
     this.animationState = animState;
   }
 
   public onAnimationStart(event: any) {
-    if (event.fromState === AnimationState.OUT && event.toState === AnimationState.IN) {
-      this.updateAnimationState(AnimationState.IDLE);
+    if (event.fromState === 'out' && event.toState === 'in') {
+      this.updateAnimationState('idle');
     }
   }
 
   public onAnimationEnd(event: any) {
-    if (event.toState === AnimationState.OUT) {
+    if (event.toState === 'out') {
       this.updateProjectName();
-      this.updateAnimationState(AnimationState.IN);
+      this.updateAnimationState('in');
     }
   }
 
