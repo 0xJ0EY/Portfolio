@@ -6,9 +6,10 @@ import { ProjectNameComponent } from './project-name/project-name.component';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ProjectCounterComponent } from './project-counter/project-counter.component';
+import { TitleComponent } from './title/title.component';
 
 @NgModule({
-  declarations: [HomePageComponent, WebGLCarouselComponent, ProjectNameComponent, ProjectCounterComponent],
+  declarations: [HomePageComponent, WebGLCarouselComponent, ProjectNameComponent, ProjectCounterComponent, TitleComponent],
   imports: [
     CommonModule,
     BrowserModule,
