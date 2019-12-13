@@ -65,6 +65,10 @@ export class ProjectCounterComponent implements OnInit, OnDestroy {
     this.updateAnimationState('out');
   }
 
+  private validAnimState(animState: string): boolean {
+    return ['in', 'out', 'idle'].includes(animState);
+  }
+
   get concatAnimationState(): string {
     return this.animationState + ' old_' + this.prevAnimationState + ' ' + this.currentProject;
   }
@@ -77,8 +81,9 @@ export class ProjectCounterComponent implements OnInit, OnDestroy {
     this.currentProject = this.cubeService.currentPage;
   }
 
-
   private updateAnimationState(animState: string) {
+    if (!this.validAnimState(animState)) { throw new Error('Unsupported state'); }
+
     this.prevAnimationState = this.animationState;
     this.animationState = animState;
   }
