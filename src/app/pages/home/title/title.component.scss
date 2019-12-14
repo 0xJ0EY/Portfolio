@@ -1,3 +1,5 @@
+$start_animation_time: 250ms;
+
 .title {
     margin: 0;
     padding: 0;
@@ -14,4 +16,15 @@
     font-size: 1.6em;
 
     z-index: 100;
+
+    transform: rotate3d(1, 0, 0, 90deg);
+
+    -webkit-transition: $start_animation_time ease-in-out;
+    -moz-transition: $start_animation_time ease-in-out;
+    -o-transition: $start_animation_time ease-in-out;
+    transition: $start_animation_time ease-in-out;
+
+    &.loaded {
+        transform: rotate3d(0,0,0, 0deg);
+    }
 }

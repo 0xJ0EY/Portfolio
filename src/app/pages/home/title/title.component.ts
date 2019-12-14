@@ -7,9 +7,20 @@ import { Component, OnInit } from '@angular/core';
 })
 export class TitleComponent implements OnInit {
 
+  private initialLoad = false;
+
   constructor() { }
 
   ngOnInit() {
+    setTimeout(this.startAnimation.bind(this), 100);
+  }
+
+  startAnimation() {
+    this.initialLoad = true;
+  }
+
+  get loadedState(): string {
+    return this.initialLoad ? 'loaded' : '';
   }
 
 }
