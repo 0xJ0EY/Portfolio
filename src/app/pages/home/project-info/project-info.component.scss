@@ -39,3 +39,21 @@ $animation_time: 250ms;
 .header.open .chevron {
     transform: rotate(180deg);
 }
+
+.content {
+    display: block;
+
+    height: 0px;
+
+    overflow-y: auto;
+
+    -webkit-transition: $animation_time ease-in-out;
+    -moz-transition: $animation_time ease-in-out;
+    -o-transition: $animation_time ease-in-out;
+    transition: $animation_time ease-in-out;
+}
+
+.content.open {
+    height: 90vh;
+    display: block;
+}
