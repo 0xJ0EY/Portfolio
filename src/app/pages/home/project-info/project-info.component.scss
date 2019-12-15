@@ -1,0 +1,41 @@
+$animation_time: 250ms;
+
+.wrapper {
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+
+    width: 1000px;
+
+    z-index: 100;
+}
+
+.header {
+    -webkit-transition: $animation_time ease-in-out;
+    -moz-transition: $animation_time ease-in-out;
+    -o-transition: $animation_time ease-in-out;
+    transition: $animation_time ease-in-out;
+}
+
+.header a {
+    padding: 15px 20px;
+    font-family: 'Galyon Bold Bold';
+    font-weight: normal;
+    display: block;
+    cursor: pointer;
+}
+
+.chevron {
+    float: right;
+    transform: rotate(0deg);
+
+    -webkit-transition: $animation_time ease-in-out;
+    -moz-transition: $animation_time ease-in-out;
+    -o-transition: $animation_time ease-in-out;
+    transition: $animation_time ease-in-out;
+}
+
+.header.open .chevron {
+    transform: rotate(180deg);
+}

@@ -1,0 +1,11 @@
+<div class="wrapper">
+    <div class="header"
+        (click)="toggleHeader()" 
+        [ngStyle]="{'background-color': headerColour}" 
+        [ngClass]="headerState">
+        <a>
+            <span class="more-info">Meer informatie over {{ projectName }}</span>
+            <app-chevron class="chevron"></app-chevron>
+        </a>
+    </div>
+</div>

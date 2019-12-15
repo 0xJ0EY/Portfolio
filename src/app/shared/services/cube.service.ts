@@ -78,19 +78,19 @@ export class CubeService {
     return this.index > 0;
   }
 
-  private getCurrentProject() {
+  get getCurrentProject() {
     return this.projects[this.index];
   }
 
   get currentName() {
-    return this.getCurrentProject().name;
+    return this.getCurrentProject.name;
   }
 
   get currentCube(): WebGLCube {
     // Because we cannot re-use our objects with a deep copy, just create
     // new ones with the saved parameters
 
-    const params = this.getCurrentProject().cubeParams;
+    const params = this.getCurrentProject.cubeParams;
     return new WebGLCube(
       params.video,
       params.thumbnail,
