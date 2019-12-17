@@ -10,9 +10,11 @@
     </div>
 
     <div 
-        class="content no-scroll"
+        class="content-wrapper no-scroll"
         [ngStyle]="{'background-color': bodyColour}"
         [ngClass]="headerState">
 
+        <div class="content" [innerHtml]="bodyHtml">
+        </div>
     </div>
 </div>

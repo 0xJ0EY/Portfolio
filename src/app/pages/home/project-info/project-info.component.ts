@@ -1,11 +1,12 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, ViewEncapsulation } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { CubeService } from 'src/app/shared/services/cube.service';
 
 @Component({
   selector: 'app-project-info',
   templateUrl: './project-info.component.html',
-  styleUrls: ['./project-info.component.scss']
+  styleUrls: ['./project-info.component.scss'],
+  encapsulation: ViewEncapsulation.None
 })
 export class ProjectInfoComponent implements OnInit, OnDestroy {
 
@@ -15,6 +16,7 @@ export class ProjectInfoComponent implements OnInit, OnDestroy {
 
   public headerColour: any;
   public bodyColour: any;
+  public bodyHtml: string;
 
   public projectName: string;
 
@@ -31,6 +33,7 @@ export class ProjectInfoComponent implements OnInit, OnDestroy {
 
     this.updateColours(currentProject);
     this.updateProjectName(currentProject);
+    this.updateProjectContent(currentProject);
   }
 
   private updateColours(project: any): void {
@@ -49,6 +52,10 @@ export class ProjectInfoComponent implements OnInit, OnDestroy {
 
   private updateProjectName(project: any): void {
     this.projectName = project.name;
+  }
+
+  private updateProjectContent(project: any): void {
+    this.bodyHtml = project.description;
   }
 
   public toggleHeader(): void {

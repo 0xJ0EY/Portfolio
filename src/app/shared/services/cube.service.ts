@@ -17,7 +17,7 @@ export class CubeService {
   private projects: any[] = [
     {
       name: 'Youi',
-      description: 'lorem ipsum',
+      description: '<h1>Youi</h1>',
       colour: { r: 255, g: 255, b: 255 },
       cubeParams: {
         video: '/assets/Firefox.mp4',
@@ -28,7 +28,7 @@ export class CubeService {
     },
     {
       name: 'PCParts',
-      description: 'lorem ipsum',
+      description: '<h1>PCParts</h1>',
       colour: { r: 255, g: 255, b: 255 },
       cubeParams: {
         video: '/assets/Firefox.mp4',
@@ -39,7 +39,7 @@ export class CubeService {
     },
     {
       name: 'Albert',
-      description: 'lorem ipsum',
+      description: '<h1>Albert</h1>',
       colour: { r: 255, g: 255, b: 255 },
       cubeParams: {
         video: '/assets/Firefox.mp4',
@@ -50,7 +50,7 @@ export class CubeService {
     },
     {
       name: 'Paintboy',
-      description: 'lorem ipsum',
+      description: '<h1>Paintboy</h1>',
       colour: { r: 255, g: 255, b: 255 },
       cubeParams: {
         video: '/assets/Firefox.mp4',

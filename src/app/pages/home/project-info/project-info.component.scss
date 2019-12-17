@@ -40,7 +40,7 @@ $animation_time: 250ms;
     transform: rotate(180deg);
 }
 
-.content {
+.content-wrapper {
     display: block;
 
     height: 0px;
@@ -53,7 +53,18 @@ $animation_time: 250ms;
     transition: $animation_time ease-in-out;
 }
 
-.content.open {
-    height: 90vh;
-    display: block;
+.content-wrapper.open {
+    height: 90vh !important;
+}
+
+.content {
+    padding: 20px 20px;
+
+    h1, h2, h3, h4, h5, h6 {
+        margin: 0;
+        padding: 0;
+
+        font-family: 'Galyon Bold Bold';
+        font-weight: normal;
+    }
 }
