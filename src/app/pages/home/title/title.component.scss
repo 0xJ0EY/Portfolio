@@ -19,12 +19,39 @@ $start_animation_time: 250ms;
 
     transform: rotate3d(1, 0, 0, 90deg);
 
-    -webkit-transition: $start_animation_time ease-in-out;
-    -moz-transition: $start_animation_time ease-in-out;
-    -o-transition: $start_animation_time ease-in-out;
-    transition: $start_animation_time ease-in-out;
+    -webkit-transition: transform $start_animation_time ease-in-out;
+    -moz-transition: transform $start_animation_time ease-in-out;
+    -o-transition: transform $start_animation_time ease-in-out;
+    transition: transform $start_animation_time ease-in-out;
 
     &.loaded {
         transform: rotate3d(0,0,0, 0deg);
+    }
+
+    &.small {
+        display: none;
+    }
+}
+
+@media screen and (max-width: 600px) {
+    .title {
+        left: 40px;
+    }
+
+    .title h1 {
+        font-size: 80px;
+    }
+}
+
+@media screen and (max-width: 400px) {
+    
+    .title {
+        display: none;
+
+        left: 30px;
+
+        &.small {
+            display: block;
+        }
     }
 }

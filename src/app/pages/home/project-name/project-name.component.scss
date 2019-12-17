@@ -120,5 +120,31 @@ h1 {
     to {
         transform: translate3d(0, 0, 0) scale(1, 1);
     }
-  }
+}
+
+@media screen and (max-width: 800px) {
+    .title h1 {
+        font-size: 90px;
+    }
+}
   
+@media screen and (max-width: 600px) {
+    .title {
+        left: 40px;
+    }
+
+    .title h1 {
+        font-size: 80px;
+    }
+}
+
+@media screen and (max-width: 400px) {
+    .title {
+        left: 30px;
+        transform: translateY(calc(-50%));
+    }
+
+    .title h1 {
+        font-size: 60px;
+    }
+}

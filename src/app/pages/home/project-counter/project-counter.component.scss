@@ -51,3 +51,15 @@ span.in {
     transform: rotate3d(-.8, 0, 0, 90deg);
 }
 
+
+@media screen and (max-width: 600px) {
+    span.wrapper {
+        right: 40px;
+    }
+}
+
+@media screen and (max-width: 400px) {
+    span.wrapper {
+        right: 30px;
+    }
+}

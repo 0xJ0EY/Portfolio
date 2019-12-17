@@ -3,10 +3,29 @@ import { WebGLObjectManager } from './webgl-object-manager';
 
 export class WebGLRenderer {
 
-  constructor(private gl: WebGLRenderingContext, private objectManager: WebGLObjectManager) {}
+  private scale: number;
+
+  constructor(private gl: WebGLRenderingContext, private objectManager: WebGLObjectManager) {
+    this.scale = this.objectScaleOnWidth();
+  }
 
   resize() {
     this.gl.viewport(0, 0, this.gl.canvas.width, this.gl.canvas.height);
+    this.scale = this.objectScaleOnWidth();
+  }
+
+  private objectScaleOnWidth() {
+    const width = this.gl.canvas.width;
+
+    if (width > 800) {
+      return 1;
+    } else if (width > 600) { // 800 - 601
+      return .8;
+    } else if (width > 400) { // 401 - 600
+      return .6;
+    } else { // < 400
+      return .4;
+    }
   }
 
   update() {
@@ -65,9 +84,9 @@ export class WebGLRenderer {
         modelViewMatrix,
         modelViewMatrix,
         [
-          renderObject.object.getScaleX(),
-          renderObject.object.getScaleY(),
-          renderObject.object.getScaleZ()
+          renderObject.object.getScaleX() * this.scale,
+          renderObject.object.getScaleY() * this.scale,
+          renderObject.object.getScaleZ() * this.scale
         ]
       );
 
