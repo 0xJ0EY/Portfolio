@@ -8,7 +8,7 @@ $animation_time: 250ms;
 
     width: 1000px;
 
-    z-index: 100;
+    z-index: 120;
 }
 
 .project-info .header {
@@ -66,5 +66,23 @@ $animation_time: 250ms;
 
         font-family: 'Galyon Bold Bold';
         font-weight: normal;
+    }
+}
+
+.project-info.backdrop {
+    display: none;
+
+    &.open {
+        position: fixed;
+        display: block;
+        top: 0;
+        left: 0;
+    
+        width: 100vw;
+        height: 100vh;
+    
+        cursor: pointer;
+    
+        z-index: 110;
     }
 }

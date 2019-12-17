@@ -3,14 +3,14 @@
         (click)="toggleHeader()" 
         [ngStyle]="{'background-color': headerColour}" 
         [ngClass]="headerState">
-        <a class="no-scroll">
+        <a>
             <span class="more-info">Meer informatie over {{ projectName }}</span>
             <app-chevron class="chevron"></app-chevron>
         </a>
     </div>
 
     <div 
-        class="content-wrapper no-scroll"
+        class="content-wrapper"
         [ngStyle]="{'background-color': bodyColour}"
         [ngClass]="headerState">
 
@@ -18,3 +18,8 @@
         </div>
     </div>
 </div>
+
+<div class="project-info backdrop" 
+    [ngClass]="headerState"
+    (click)="closeHeader()" 
+></div>

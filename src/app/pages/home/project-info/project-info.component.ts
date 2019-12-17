@@ -1,6 +1,8 @@
-import { Component, OnInit, OnDestroy, ViewEncapsulation } from '@angular/core';
-import { Subscription } from 'rxjs';
+import { Component, OnInit, OnDestroy, ViewEncapsulation, Inject } from '@angular/core';
+import { Subscription, VirtualTimeScheduler } from 'rxjs';
 import { CubeService } from 'src/app/shared/services/cube.service';
+import { DOCUMENT } from '@angular/common';
+import { canScroll, hasClassInDOMTree } from '../../../shared/inputs/mouse-input';
 
 @Component({
   selector: 'app-project-info',
@@ -20,12 +22,16 @@ export class ProjectInfoComponent implements OnInit, OnDestroy {
 
   public projectName: string;
 
-  constructor(private cubeService: CubeService) { }
+  constructor(
+    @Inject(DOCUMENT) private document: Document,
+    private cubeService: CubeService
+  ) { }
 
   ngOnInit() {
     this.onProjectChange();
 
     this.cubeServiceSubscription = this.cubeService.onChange.subscribe(this.onProjectChange.bind(this));
+    this.document.addEventListener('keydown', this.onKeypress.bind(this));
   }
 
   onProjectChange() {
@@ -34,6 +40,14 @@ export class ProjectInfoComponent implements OnInit, OnDestroy {
     this.updateColours(currentProject);
     this.updateProjectName(currentProject);
     this.updateProjectContent(currentProject);
+  }
+
+  private onKeypress(evt: KeyboardEvent): void {
+    switch (evt.code) {
+      case 'Escape':
+        this.closeHeader();
+        break;
+    }
   }
 
   private updateColours(project: any): void {
@@ -62,12 +76,17 @@ export class ProjectInfoComponent implements OnInit, OnDestroy {
     this.openHeader = !this.openHeader;
   }
 
+  public closeHeader(): void {
+    this.openHeader = false;
+  }
+
   get headerState(): string {
-    return this.openHeader ? 'open' : 'closed';
+    return this.openHeader ? 'open no-scroll' : 'closed';
   }
 
   ngOnDestroy() {
     this.cubeServiceSubscription.unsubscribe();
+    this.document.removeEventListener('keydown', this.onKeypress.bind(this));
   }
 
   private createRgbString(r: number, g: number, b: number): string {

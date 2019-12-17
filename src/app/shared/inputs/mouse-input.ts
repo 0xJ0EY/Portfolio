@@ -21,6 +21,28 @@ export class MouseScroll {
   public direction: MouseScrollDirection = MouseScrollDirection.None;
 }
 
+export function hasClassInDOMTree(target: Element, cls: string): boolean {
+
+  // No classlist, must be an invalid target or the HTMLDocument.
+  if (target.classList == null) { return false; }
+
+  // Check if the current target has the class
+  if (target.classList.contains(cls)) {
+    return true;
+  }
+
+  // Call the parent if it has one.
+  if (target.parentElement !== null) {
+    return hasClassInDOMTree(target.parentElement as Element, cls);
+  }
+
+  return false;
+}
+
+export function canScroll(evt: WheelEvent): boolean {
+  return !hasClassInDOMTree(evt.target as Element, 'no-scroll');
+}
+
 export class MouseInput implements WebGLInput {
 
   private devicePixelRatio = window.devicePixelRatio || 1;
@@ -122,33 +144,9 @@ export class MouseInput implements WebGLInput {
   }
 
   private onScroll(evt: WheelEvent) {
-    if (!this.canScroll(evt)) { return; }
+    if (!canScroll(evt)) { return; }
 
     evt.deltaY < 0 ? this.onScrollWheelUp() : this.onScrollWheelDown();
-  }
-
-  private canScroll(evt: WheelEvent): boolean {
-    return !this.hasClassInDOMTree(evt.target as Element, 'no-scroll');
-  }
-
-  // This is an recursive fuction that walks through the DOM.
-  // Its performance is not really good, since it basicly does DOM read call every step.
-  private hasClassInDOMTree(target: Element, cls: string): boolean {
-
-    // No classlist, must be an invalid target or the HTMLDocument.
-    if (target.classList == null) { return false; }
-
-    // Check if the current target has the class
-    if (target.classList.contains(cls)) {
-      return true;
-    }
-
-    // Call the parent if it has one.
-    if (target.parentElement !== null) {
-      return this.hasClassInDOMTree(target.parentElement as Element, cls);
-    }
-
-    return false;
   }
 
   private onScrollNone() {
