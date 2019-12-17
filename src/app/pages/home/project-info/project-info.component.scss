@@ -1,6 +1,6 @@
 $animation_time: 250ms;
 
-.wrapper {
+.project-info.wrapper {
     position: absolute;
     bottom: 0;
     left: 50%;
@@ -11,14 +11,14 @@ $animation_time: 250ms;
     z-index: 100;
 }
 
-.header {
+.project-info .header {
     -webkit-transition: $animation_time ease-in-out;
     -moz-transition: $animation_time ease-in-out;
     -o-transition: $animation_time ease-in-out;
     transition: $animation_time ease-in-out;
 }
 
-.header a {
+.project-info .header a {
     padding: 15px 20px;
     font-family: 'Galyon Bold Bold';
     font-weight: normal;
@@ -26,7 +26,7 @@ $animation_time: 250ms;
     cursor: pointer;
 }
 
-.chevron {
+.project-info .chevron {
     float: right;
     transform: rotate(0deg);
 
@@ -36,11 +36,11 @@ $animation_time: 250ms;
     transition: $animation_time ease-in-out;
 }
 
-.header.open .chevron {
+.project-info .header.open .chevron {
     transform: rotate(180deg);
 }
 
-.content-wrapper {
+.project-info .content-wrapper {
     display: block;
 
     height: 0px;
@@ -53,11 +53,11 @@ $animation_time: 250ms;
     transition: $animation_time ease-in-out;
 }
 
-.content-wrapper.open {
+.project-info .content-wrapper.open {
     height: 90vh !important;
 }
 
-.content {
+.project-info .content {
     padding: 20px 20px;
 
     h1, h2, h3, h4, h5, h6 {
