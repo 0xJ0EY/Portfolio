@@ -20,9 +20,9 @@ export class WebGLRenderer {
     if (width > 800) {
       return 1;
     } else if (width > 600) { // 800 - 601
-      return .8;
+      return .75;
     } else if (width > 400) { // 401 - 600
-      return .6;
+      return .5;
     } else { // < 400
       return .4;
     }
