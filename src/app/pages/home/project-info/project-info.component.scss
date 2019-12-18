@@ -54,7 +54,7 @@ $animation_time: 250ms;
 }
 
 .project-info .content-wrapper.open {
-    height: 90vh !important;
+    height: calc(90vh - 80px) !important;
 }
 
 .project-info .content {
