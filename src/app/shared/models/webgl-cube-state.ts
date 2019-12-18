@@ -3,6 +3,7 @@ import { WebGLCube } from './webgl-cube.model';
 import { WebGLInputManager } from 'src/app/pages/home/webgl-carousel/webgl-renderer/webgl-input-manager';
 import { MouseScroll, MouseScrollDirection } from '../inputs/mouse-input';
 import { InteractiveCubeManager } from 'src/app/pages/home/webgl-carousel/webgl-cube-manager/webgl-cube-manager';
+import { SwipeState } from '../inputs/touch-input';
 
 export abstract class WebGLCubeState {
 
@@ -18,6 +19,7 @@ export abstract class WebGLCubeState {
   }
 
   abstract onScroll(mouseScroll: MouseScroll, cubeManager: InteractiveCubeManager): void;
+  abstract onSwipe(swipeState: SwipeState, cubeManager: InteractiveCubeManager): void;
 
   abstract calculateRadius(deltaTime: number, oldRadius: number): number;
   abstract calculateRotation(deltaTime: number, oldRotation: any): { x: number, y: number };
@@ -25,6 +27,11 @@ export abstract class WebGLCubeState {
 }
 
 export class WebGLCubeStateMoveAway extends WebGLCubeState {
+
+  onSwipe(swipeState: SwipeState, cubeManager: InteractiveCubeManager): void {
+    // Noop
+    return;
+  }
 
   onScroll(mouseScroll: MouseScroll, cubeManager: InteractiveCubeManager): void {
     // Noop
@@ -61,6 +68,17 @@ export class WebGLCubeStateMoveAway extends WebGLCubeState {
 
 export class WebGLCubeStateIdle extends WebGLCubeState {
 
+  onSwipe(swipeState: SwipeState, cubeManager: InteractiveCubeManager): void {
+    switch (swipeState) {
+      case SwipeState.LEFT:
+        cubeManager.showPrevious();
+        break;
+      case SwipeState.RIGHT:
+        cubeManager.showNext();
+        break;
+    }
+  }
+
   onScroll(mouseScroll: MouseScroll, cubeManager: InteractiveCubeManager): void {
 
     switch (mouseScroll.direction) {
@@ -78,10 +96,17 @@ export class WebGLCubeStateIdle extends WebGLCubeState {
   }
 
   calculateRotation(deltaTime: number, oldRotation: any): { x: number; y: number; } {
-    const mousePosition = this.parentInput.mouse.percentage;
 
-    const verticalRotation = -40 + mousePosition.x * 80;
-    const horizontalRotation = -40 + mousePosition.y * 80;
+    let position = {x: 0, y: 0};
+
+    if (this.parentInput.touch.canUseTouchInput()) {
+      position = this.parentInput.touch.percentage;
+    } else {
+      position = this.parentInput.mouse.percentage;
+    }
+
+    const verticalRotation = -40 + position.x * 80;
+    const horizontalRotation = -40 + position.y * 80;
 
     return { x: horizontalRotation, y: verticalRotation };
   }
@@ -94,6 +119,11 @@ export class WebGLCubeStateIdle extends WebGLCubeState {
 }
 
 export class WebGLCubeStateMoveToCenter extends WebGLCubeState {
+
+  onSwipe(swipeState: SwipeState, cubeManager: InteractiveCubeManager): void {
+    // Noop
+    return;
+  }
 
   onScroll(mouseScroll: MouseScroll, cubeManager: InteractiveCubeManager): void {
     // Noop

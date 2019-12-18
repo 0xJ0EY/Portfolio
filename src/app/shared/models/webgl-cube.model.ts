@@ -6,6 +6,7 @@ import { Texture, ColourTexture, VideoTexture, TextureColour } from '../../pages
 import { WebGLCubeState, WebGLCubeStateMoveToCenter } from './webgl-cube-state';
 import { InteractiveCubeManager } from '../../pages/home/webgl-carousel/webgl-cube-manager/webgl-cube-manager';
 import { MouseScrollDirection } from '../inputs/mouse-input';
+import { SwipeState } from '../inputs/touch-input';
 
 export class WebGLCube extends WebGLObject {
   public readonly SPEED = 50;
@@ -106,6 +107,10 @@ export class WebGLCube extends WebGLObject {
       this.rotationChanged = true;
     }
 
+    if (this.hasSwiped()) {
+      this.state.onSwipe(this.input.touch.currentSwipeState, this.cubeManager);
+    }
+
     if (this.hasScrolled()) {
       this.state.onScroll(this.input.mouse.scroll, this.cubeManager);
     }
@@ -125,6 +130,10 @@ export class WebGLCube extends WebGLObject {
   private rotationHasChanged(oldRotation: { x: number, y: number }): boolean {
     return  this.degreeRotation.x !== oldRotation.x ||
             this.degreeRotation.y !== oldRotation.y;
+  }
+
+  private hasSwiped() {
+    return this.input.touch.currentSwipeState !== SwipeState.NONE;
   }
 
   private hasScrolled() {

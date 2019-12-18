@@ -14,6 +14,7 @@ export enum SwipeState {
 
 export class TouchInput implements WebGLInput {
 
+  private touchInput = false;
   private devicePixelRatio = window.devicePixelRatio || 1;
 
   private panCoords: PanCoords = new PanCoords();
@@ -30,8 +31,10 @@ export class TouchInput implements WebGLInput {
   }
 
   private onPan(evt: any): void {
-    this.panCoords.x = evt.changedPointers[0].x as number;
-    this.panCoords.y = evt.changedPointers[0].y as number;
+    this.useTouchInput(evt.pointerType);
+
+    this.panCoords.x = evt.changedPointers[0].clientX as number;
+    this.panCoords.y = evt.changedPointers[0].clientY as number;
   }
 
   get x(): number {
@@ -58,7 +61,30 @@ export class TouchInput implements WebGLInput {
     return this.swipeState;
   }
 
+  get xPercentage(): number {
+    const width = this.canvas.getBoundingClientRect().width * this.devicePixelRatio;
+    const x = Math.min(this.x * this.devicePixelRatio, width);
+    return x / width;
+  }
+
+  get yPercentage(): number {
+    const height = this.canvas.getBoundingClientRect().height * this.devicePixelRatio;
+    const y = Math.min(this.y * this.devicePixelRatio, height);
+    return y / height;
+  }
+
+  get percentage(): PanCoords {
+    const panCoords = new PanCoords();
+
+    panCoords.x = this.xPercentage;
+    panCoords.y = this.yPercentage;
+
+    return panCoords;
+  }
+
   private onSwipe(evt: any): void {
+    this.useTouchInput(evt.pointerType);
+
     switch (evt.type) {
       case 'swipeleft':
         this.onSwipeLeft();
@@ -66,6 +92,16 @@ export class TouchInput implements WebGLInput {
       case 'swiperight':
         this.onSwipeRight();
         break;
+    }
+  }
+
+  public canUseTouchInput(): boolean {
+    return this.touchInput;
+  }
+
+  private useTouchInput(pointerType: string): void {
+    if (pointerType !== 'mouse') {
+      this.touchInput = true;
     }
   }
 
