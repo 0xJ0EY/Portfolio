@@ -18,6 +18,7 @@ export class WebGLInputManager implements WebGLInput {
 
   public update(): void {
     this.mouse.release();
+    this.touch.release();
   }
 
   public onDestroy(): void {
