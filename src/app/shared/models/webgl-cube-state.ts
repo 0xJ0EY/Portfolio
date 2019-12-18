@@ -70,10 +70,10 @@ export class WebGLCubeStateIdle extends WebGLCubeState {
 
   onSwipe(swipeState: SwipeState, cubeManager: InteractiveCubeManager): void {
     switch (swipeState) {
-      case SwipeState.LEFT:
+      case SwipeState.RIGHT:
         cubeManager.showPrevious();
         break;
-      case SwipeState.RIGHT:
+      case SwipeState.LEFT:
         cubeManager.showNext();
         break;
     }
