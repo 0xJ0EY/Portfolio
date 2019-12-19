@@ -14,7 +14,7 @@ export class ProjectInfoComponent implements OnInit, OnDestroy {
 
   private cubeServiceSubscription: Subscription;
 
-  public openHeader = false;
+  public headerIsOpen = false;
 
   public headerColour: any;
   public bodyColour: any;
@@ -32,6 +32,31 @@ export class ProjectInfoComponent implements OnInit, OnDestroy {
 
     this.cubeServiceSubscription = this.cubeService.onChange.subscribe(this.onProjectChange.bind(this));
     this.document.addEventListener('keydown', this.onKeypress.bind(this));
+
+    this.bindTouchEvents();
+  }
+
+  private bindTouchEvents(): void {
+    const body = document.querySelector('body');
+    const hammer = new Hammer(body as HTMLElement);
+
+    // Hammer defaults are horizontal only
+    hammer.get('swipe').set({ direction: Hammer.DIRECTION_ALL });
+
+    hammer.on('swipeup swipedown', this.onSwipe.bind(this));
+  }
+
+  private onSwipe(evt: any): void {
+    if (hasClassInDOMTree(evt.target, 'no-swipe')) { return; }
+
+    switch (evt.type) {
+      case 'swipeup':
+        this.openHeader();
+        break;
+      case 'swipedown':
+        this.closeHeader();
+        break;
+    }
   }
 
   onProjectChange() {
@@ -73,15 +98,19 @@ export class ProjectInfoComponent implements OnInit, OnDestroy {
   }
 
   public toggleHeader(): void {
-    this.openHeader = !this.openHeader;
+    this.headerIsOpen = !this.headerIsOpen;
+  }
+
+  public openHeader(): void {
+    this.headerIsOpen = true;
   }
 
   public closeHeader(): void {
-    this.openHeader = false;
+    this.headerIsOpen = false;
   }
 
   get headerState(): string {
-    return this.openHeader ? 'open no-scroll' : 'closed';
+    return this.headerIsOpen ? 'open no-scroll no-swipe' : 'closed';
   }
 
   ngOnDestroy() {
