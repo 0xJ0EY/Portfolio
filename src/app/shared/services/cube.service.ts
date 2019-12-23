@@ -31,10 +31,10 @@ export class CubeService {
       description: '<h1>PCParts</h1>',
       colour: { r: 255, g: 255, b: 255 },
       cubeParams: {
-        video: '/assets/Firefox.mp4',
-        thumbnail: '/assets/thumbnail.jpg',
-        horizontalColours: { r: 0, g: 255, b: 255 },
-        verticalColours: { r: 255, g: 255, b: 0 }
+        video: '/assets/pc-parts.mp4',
+        thumbnail: '/assets/pc-parts-thumbnail.png',
+        horizontalColours: { r: 245, g: 249, b: 252 },
+        verticalColours: { r: 0, g: 144, b: 248 }
       }
     },
     {
