@@ -4,6 +4,7 @@ export interface Texture {
   renderTexture(gl: WebGLRenderingContext): void;
   getTexture(): WebGLTexture;
   getTextureCoords(): number[];
+  remove(gl: WebGLRenderingContext): void;
 }
 
 export interface AnimatedTexture extends Texture {
@@ -69,6 +70,10 @@ export class ImageTexture implements Texture {
   getTextureCoords(): number[] {
     return this.coords;
   }
+
+  remove(gl: WebGLRenderingContext): void {
+    gl.deleteTexture(this.texture);
+  }
 }
 
 export class TextureColour {
@@ -119,6 +124,10 @@ export class ColourTexture implements Texture {
 
   getTextureCoords(): number[] {
     return this.coords;
+  }
+
+  remove(gl: WebGLRenderingContext): void {
+    gl.deleteTexture(this.texture);
   }
 
 }
@@ -202,6 +211,10 @@ export class VideoTexture implements AnimatedTexture {
 
   getTextureCoords(): number[] {
     return this.coords;
+  }
+
+  remove(gl: WebGLRenderingContext): void {
+    gl.deleteTexture(this.texture);
   }
 
 }
