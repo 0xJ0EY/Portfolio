@@ -15,3 +15,10 @@ html, body {
     font-weight: normal;
     src: local('Galyon Bold Bold'), url('/assets/fonts/Galyon-Bold.woff') format('woff');
 }
+
+@font-face {
+    font-family: 'Galyon Regular Regular';
+    font-style: normal;
+    font-weight: normal;
+    src: local('Galyon Regular Regular'), url('/assets/fonts/Galyon-Regular.woff') format('woff');
+}

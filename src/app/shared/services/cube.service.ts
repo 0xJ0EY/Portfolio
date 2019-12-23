@@ -28,7 +28,36 @@ export class CubeService {
     },
     {
       name: 'PCParts',
-      description: '<h1>PCParts</h1>',
+      description: `
+<h1>PCParts</h1>
+
+<p>
+PCParts is een webshop die ik heb gemaakt tijdens de derde periode van het tweede jaar (2019).</br>
+Tijdens deze periode werd er een module gegeven waarbij je een webshop moest realiseren doormiddel Angular 7 en Dropwizard.</br>
+Voor het eindproject van deze module voor deze module heb ik gekozen om een pc-onderdelen webshop te bouwen.
+</p>
+
+<h2>Technologie</h2>
+<p>
+Angular 7 & Dropwizard
+</p>
+
+<h2>Team</h2>
+<p>
+Joey de Ruiter
+</p>
+
+<h2>Code</h2>
+<p>
+<a href="https://github.com/0xJ0EY/IprwcApi">Code van de API</a></br>
+<a href="https://github.com/0xJ0EY/IprwcClient">Code van de SPA</a>
+</p>
+
+<h2>Contact</h2>
+<p>
+Om contact met mij op te nemen kun je me een mailtje schieten naar <a href="mailto:contact@joeyderuiter.me">contact@joeyderuiter.me</a>
+</p>
+`,
       colour: { r: 255, g: 255, b: 255 },
       cubeParams: {
         video: '/assets/pc-parts.mp4',
