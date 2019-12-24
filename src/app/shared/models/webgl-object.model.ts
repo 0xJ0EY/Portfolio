@@ -52,6 +52,10 @@ export abstract class WebGLObject {
 
   update(deltaTime: number) {}
 
-  delete() {}
+  delete() {
+    this.input = null;
+    this.time = null;
+    this.objectManager = null;
+  }
 
 }

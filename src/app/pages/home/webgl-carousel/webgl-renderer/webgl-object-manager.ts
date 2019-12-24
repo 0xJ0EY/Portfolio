@@ -120,14 +120,15 @@ export class WebGLObjectManager {
   }
 
   public remove(object: WebGLObject): void {
-    // TODO: Change this to a hash based approach?
     this.objects.forEach((element, index) => {
       if (element.object === object) {
-
         // Free the textures from the webgl instance
         element.textures.map(t => t.remove(this.gl));
 
-        // Remove the render object from the list
+        // Remove object bindings
+        object.delete();
+
+        // Remove the object from the list
         this.objects.splice(index, 1);
       }
     });

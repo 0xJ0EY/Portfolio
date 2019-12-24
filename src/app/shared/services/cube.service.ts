@@ -55,7 +55,7 @@ Joey de Ruiter
 
 <h2>Contact</h2>
 <p>
-Om contact met mij op te nemen kun je me een mailtje schieten naar <a href="mailto:contact@joeyderuiter.me">contact@joeyderuiter.me</a>
+Om contact met mij op te nemen kun je een mailtje schieten naar <a href="mailto:contact@joeyderuiter.me">contact@joeyderuiter.me</a>
 </p>
 `,
       colour: { r: 255, g: 255, b: 255 },
@@ -79,13 +79,29 @@ Om contact met mij op te nemen kun je me een mailtje schieten naar <a href="mail
     },
     {
       name: 'Paintboy',
-      description: '<h1>Paintboy</h1>',
+      description: `
+<h1>Paintboy</h1>
+<p>
+Paintboy is een game die was bedoeld om het Grafisch Lyceum Rotterdam te promoten. (2016)<br/>
+Dit project is gemaakt met een team van 6 personen waaronder 2 programmeurs & 4 game artists.<br/>
+De game is gemaakt in Unity 5 en de code is geschreven in C#.<br/>
+Tijdens dit project heb ik bijna alle game logica geschreven en een paar levels ontworpen.
+</p>
+
+<h2>Technologie</h2>
+<p>Unity 5 + C#</p>
+
+<h2>Contact</h2>
+<p>
+Om contact met mij op te nemen kun je een mailtje schieten naar <a href="mailto:contact@joeyderuiter.me">contact@joeyderuiter.me</a>
+</p>
+`,
       colour: { r: 255, g: 255, b: 255 },
       cubeParams: {
-        video: '/assets/Firefox.mp4',
-        thumbnail: '/assets/thumbnail.jpg',
-        horizontalColours: { r: 0, g: 0, b: 255 },
-        verticalColours: { r: 255, g: 0, b: 255 }
+        video: '/assets/paintboy.mp4',
+        thumbnail: '/assets/paintboy-thumbnail.png',
+        horizontalColours: { r: 244, g: 244, b: 244 },
+        verticalColours: { r: 143, g: 229, b: 7 }
       }
     }
   ];
