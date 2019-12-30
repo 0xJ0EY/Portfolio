@@ -73,6 +73,18 @@ $animation_time: 250ms;
         font-family: 'Galyon Regular Regular';
         font-weight: normal;
     }
+
+    ul {
+        margin: 5px 0 10px;
+        padding: 0;
+        list-style: none;
+
+       li {
+           margin: 0;
+           font-family: 'Galyon Regular Regular';
+           font-weight: normal;
+       } 
+    }
 }
 
 .project-info.backdrop {

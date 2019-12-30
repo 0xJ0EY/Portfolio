@@ -58,23 +58,56 @@ Joey de Ruiter
 Om contact met mij op te nemen kun je een mailtje schieten naar <a href="mailto:contact@joeyderuiter.me">contact@joeyderuiter.me</a>
 </p>
 `,
-      colour: { r: 255, g: 255, b: 255 },
+      colour: { r: 245, g: 249, b: 252 },
       cubeParams: {
         video: '/assets/pc-parts.mp4',
         thumbnail: '/assets/pc-parts-thumbnail.png',
-        horizontalColours: { r: 245, g: 249, b: 252 },
+        horizontalColours: { r: 5, g: 118, b: 218 },
         verticalColours: { r: 0, g: 144, b: 248 }
       }
     },
     {
       name: 'Albert',
-      description: '<h1>Albert</h1>',
+      description: `
+<h1>Albert</h1>
+
+<p>
+Albert is een simpel boekhoud programma gericht op MKB bedrijven. Het doel van dit project was om een
+ legacy programma van de opdrachtgever om te zetten naar een modern web gebaseerd project.
+</p>
+
+<p>
+Dit project is gemaakt door een groep van 5 studenten, waarvan ik voornamelijk betrokken was met het opzetten van een CI & CD straat.
+ Verder heb ik tijdens dit project gewerkt aan een tabel opzet structuur waarmee het mogelijk was om data via lazy loading in te laden.
+</p>
+
+<h2>Technologie</h2>
+<p>
+Angular 7, Dropwizard & TravisCI
+</p>
+
+<h2>Team</h2>
+<ul>
+  <li>Alexander van Dam</li>
+  <li>Bashar Farah</li>
+  <li>Joey de Ruiter</li>
+  <li>Maarten Berden</li>
+  <li>Sander Frentz</li>
+</ul>
+
+
+<h2>Contact</h2>
+<p>
+Om contact met mij op te nemen kun je een mailtje schieten naar <a href="mailto:contact@joeyderuiter.me">contact@joeyderuiter.me</a><br/>
+of mij toevoegen op <a href="www.linkedin.com/in/joeyderuiter-programmer">linkedin</a>
+</p>
+`,
       colour: { r: 255, g: 255, b: 255 },
       cubeParams: {
-        video: '/assets/Firefox.mp4',
-        thumbnail: '/assets/thumbnail.jpg',
-        horizontalColours: { r: 0, g: 0, b: 255 },
-        verticalColours: { r: 255, g: 0, b: 255 }
+        video: '/assets/albert.mp4',
+        thumbnail: '/assets/albert.png',
+        horizontalColours: { r: 13, g: 138, b: 155 },
+        verticalColours: { r: 14, g: 169, b: 196 }
       }
     },
     {
@@ -96,12 +129,12 @@ Tijdens dit project heb ik bijna alle game logica geschreven en een paar levels 
 Om contact met mij op te nemen kun je een mailtje schieten naar <a href="mailto:contact@joeyderuiter.me">contact@joeyderuiter.me</a>
 </p>
 `,
-      colour: { r: 255, g: 255, b: 255 },
+      colour: { r: 244, g: 244, b: 244 },
       cubeParams: {
         video: '/assets/paintboy.mp4',
         thumbnail: '/assets/paintboy-thumbnail.png',
-        horizontalColours: { r: 244, g: 244, b: 244 },
-        verticalColours: { r: 143, g: 229, b: 7 }
+        horizontalColours: { r: 114, g: 183, b: 5 },
+        verticalColours: { r: 121, g: 194, b: 5 }
       }
     }
   ];

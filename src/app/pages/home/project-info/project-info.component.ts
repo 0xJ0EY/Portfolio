@@ -83,7 +83,7 @@ export class ProjectInfoComponent implements OnInit, OnDestroy {
     }
 
     {
-      const bodyColour = project.cubeParams.horizontalColours;
+      const bodyColour = project.colour;
       const bodyRgb = this.createRgbString(bodyColour.r, bodyColour.g, bodyColour.b);
       this.bodyColour = bodyRgb;
     }
