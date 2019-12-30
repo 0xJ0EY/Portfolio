@@ -135,13 +135,12 @@ export class ColourTexture implements Texture {
 export class VideoTexture implements AnimatedTexture {
   private loaded = false;
   private texture: WebGLTexture;
-  private video: TexImageSource;
+  private video: HTMLVideoElement;
 
   constructor(private url: string, private thumbnail: string, private coords: number[]) {}
 
   renderTexture(gl: WebGLRenderingContext): void {
 
-    // Just use a black ColourTexture for the preload texture
     const preloadTexture = new ImageTexture(this.thumbnail, this.coords);
 
     preloadTexture.renderTexture(gl);
@@ -199,6 +198,10 @@ export class VideoTexture implements AnimatedTexture {
     const internalFormat = gl.RGBA;
     const srcFormat = gl.RGBA;
     const srcType = gl.UNSIGNED_BYTE;
+
+    // Bugfix for Firefox
+    // If this the currentTime is exacly 0, it will throw mipmapping errors and will decrease performance.
+    if (this.video.currentTime === 0) { return; }
 
     gl.bindTexture(gl.TEXTURE_2D, this.texture);
     gl.texImage2D(gl.TEXTURE_2D, level, internalFormat,
