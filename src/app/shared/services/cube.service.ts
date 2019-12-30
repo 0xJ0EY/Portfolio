@@ -3,6 +3,15 @@ import { WebGLCube } from '../models/webgl-cube.model';
 import { InteractiveCubeManager } from 'src/app/pages/home/webgl-carousel/webgl-cube-manager/webgl-cube-manager';
 import { Subject, Observable } from 'rxjs';
 
+const contact = `
+<h2>Contact</h2>
+
+<p>
+Om contact met mij op te nemen kun je een mailtje schieten naar <a href="mailto:contact@joeyderuiter.me">contact@joeyderuiter.me</a><br/>
+of mij toevoegen op <a href="https://www.linkedin.com/in/joeyderuiter-programmer">linkedin</a>
+</p>
+`;
+
 @Injectable({
   providedIn: 'root'
 })
@@ -17,13 +26,40 @@ export class CubeService {
   private projects: any[] = [
     {
       name: 'Youi',
-      description: '<h1>Youi</h1>',
+      description: `
+<h1>Youi</h1>
+
+<p>
+Tijdens het laatste groepsproject van het tweede jaar (2019) heb ik gewerkt binnen een team om een
+ prototypen van een Android dating app te ontwikkelen. Deze app moest de functionaliteit bezitten om
+ met je dating partner te kunnen videobellen. Om dit mogelijk te maken heb ik er voor gekozen voor een peer-to-peer
+ oplossing doormiddel van WebRTC.
+
+</p>
+
+<h2>Technologie</h2>
+<p>
+Kotlin voor de Android app met een MVVM structuur.</br>
+NodeJS voor de Firebase cloud functions.</br>
+WebRTC het peer to peer videobellen.
+</p>
+
+<h2>Team</h2>
+<ul>
+  <li>Ewout Millink</li>
+  <li>Joey de Ruiter</li>
+  <li>Omid Wiar</li>
+  <li>Rutget Uijtendaal</li>
+  <li>Vincent Nuis</li>
+  <li>Wim de Groot</li>
+</ul>
+` + contact,
       colour: { r: 255, g: 255, b: 255 },
       cubeParams: {
-        video: '/assets/Firefox.mp4',
-        thumbnail: '/assets/thumbnail.jpg',
-        horizontalColours: { r: 255, g: 0, b: 255 },
-        verticalColours: { r: 255, g: 255, b: 0 }
+        video: '/assets/youi.mp4',
+        thumbnail: '/assets/youi.png',
+        horizontalColours: { r: 214, g: 17, b: 48 },
+        verticalColours: { r: 237, g: 36, b: 68 }
       }
     },
     {
@@ -52,12 +88,7 @@ Joey de Ruiter
 <a href="https://github.com/0xJ0EY/IprwcApi">Code van de API</a></br>
 <a href="https://github.com/0xJ0EY/IprwcClient">Code van de SPA</a>
 </p>
-
-<h2>Contact</h2>
-<p>
-Om contact met mij op te nemen kun je een mailtje schieten naar <a href="mailto:contact@joeyderuiter.me">contact@joeyderuiter.me</a>
-</p>
-`,
+` + contact,
       colour: { r: 245, g: 249, b: 252 },
       cubeParams: {
         video: '/assets/pc-parts.mp4',
@@ -94,14 +125,7 @@ Angular 7, Dropwizard & TravisCI
   <li>Maarten Berden</li>
   <li>Sander Frentz</li>
 </ul>
-
-
-<h2>Contact</h2>
-<p>
-Om contact met mij op te nemen kun je een mailtje schieten naar <a href="mailto:contact@joeyderuiter.me">contact@joeyderuiter.me</a><br/>
-of mij toevoegen op <a href="www.linkedin.com/in/joeyderuiter-programmer">linkedin</a>
-</p>
-`,
+` + contact,
       colour: { r: 255, g: 255, b: 255 },
       cubeParams: {
         video: '/assets/albert.mp4',
@@ -128,7 +152,7 @@ Tijdens dit project heb ik bijna alle game logica geschreven en een paar levels 
 <p>
 Om contact met mij op te nemen kun je een mailtje schieten naar <a href="mailto:contact@joeyderuiter.me">contact@joeyderuiter.me</a>
 </p>
-`,
+` + contact,
       colour: { r: 244, g: 244, b: 244 },
       cubeParams: {
         video: '/assets/paintboy.mp4',
