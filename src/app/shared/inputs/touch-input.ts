@@ -1,5 +1,6 @@
 import Hammer from 'hammerjs';
 import { WebGLInput } from '../../pages/home/webgl-carousel/webgl-renderer/webgl-input-manager';
+import { hasClassInDOMTree } from './mouse-input';
 
 class PanCoords {
   public x = 0;
@@ -24,7 +25,19 @@ export class TouchInput implements WebGLInput {
 
   constructor(private document: Document, private canvas: HTMLCanvasElement) {
     const body = document.querySelector('body');
-    this.hammer = new Hammer(body as HTMLElement, {});
+
+    const cssProps: CssProps = {
+      contentZooming: 'auto',
+      tapHighlightColor: 'auto',
+      touchCallout: 'auto',
+      touchSelect: 'auto',
+      userDrag: 'auto',
+      userSelect: 'auto',
+    };
+
+    this.hammer = new Hammer(body as HTMLElement, {
+      cssProps
+    });
 
     this.hammer.on('pan', this.onPan.bind(this));
     this.hammer.on('swipeleft swiperight', this.onSwipe.bind(this));
@@ -83,6 +96,8 @@ export class TouchInput implements WebGLInput {
   }
 
   private onSwipe(evt: any): void {
+    if (hasClassInDOMTree(evt.target, 'no-swipe')) { return; }
+
     this.useTouchInput(evt.pointerType);
 
     switch (evt.type) {
