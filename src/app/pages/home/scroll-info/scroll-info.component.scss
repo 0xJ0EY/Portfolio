@@ -55,3 +55,12 @@ span {
     line-height: 47px;
   }
 }
+
+// Animations
+.scroll.previous #scroll-wheel {
+  transform: translateY(-5px);
+}
+
+.scroll.next #scroll-wheel {
+  transform: translateY(5px);
+}

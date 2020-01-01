@@ -3,7 +3,7 @@
 </div>
 
 <ng-template #scroll >
-    <div class="scroll">
+    <div class="scroll" [ngClass]="animationState">
         <svg viewBox="0 0 100 100" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
             <title>Mouse</title>
             <desc>Created with Sketch.</desc>
@@ -14,7 +14,7 @@
                 <path d="M19,35.5 L19,68" id="Line" stroke="#000000" stroke-width="7" stroke-linecap="round"></path>
                 <path d="M81.5,35.5 L81.5,65" id="Line" stroke="#000000" stroke-width="7" stroke-linecap="square"></path>
                 <path d="M19,65 C24.1631622,65.0879544 27.8298289,65.4212877 30,66 C33.75,67 39,70 41,72 C43,74 46.6447289,78.719277 49,85 C50,87.6666667 50.5,91.5 50.5,96.5" id="Path" stroke="#000000" stroke-width="7" transform="translate(34.750000, 80.750000) scale(-1, -1) translate(-34.750000, -80.750000) "></path>
-                <path d="M50,30.5 L50,43.5" id="Line-2" stroke="#000000" stroke-width="7" stroke-linecap="round"></path>
+                <path d="M50,30.5 L50,43.5" id="scroll-wheel" stroke="#000000" stroke-width="7" stroke-linecap="round"></path>
             </g>
         </svg>
     
@@ -23,7 +23,7 @@
 </ng-template>
 
 <ng-template #swipe>
-    <div class="swipe">
+    <div class="swipe" [ngClass]="animationState">
         <div class="svg-wrapper">
             <svg viewBox="0 0 95 43" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
                 <title>Swipe</title>
