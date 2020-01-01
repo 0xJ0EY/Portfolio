@@ -1,0 +1,57 @@
+.wrapper {
+  position: absolute;
+  bottom: 53px;
+  left: 50%;
+  transform: translateX(-50%);
+
+  z-index: 100;
+  display: block;
+
+}
+
+svg {
+  float: left;
+}
+
+span {
+  font-family: 'Galyon Regular Regular';
+  font-weight: normal;
+  
+  display: block;
+  float: left;
+}
+
+.svg-wrapper {
+  float: left;
+  display: block;
+}
+
+.swipe {
+  .svg-wrapper {
+    height: 43px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  svg {
+    height: 17px;
+  }
+
+  span {
+    margin-left: 5px;
+    height: 43px;
+    line-height: 43px;
+  }
+}
+
+.scroll {
+  svg {
+    height: 47px;
+  }
+
+  span {
+    height: 47px;
+    line-height: 47px;
+  }
+}

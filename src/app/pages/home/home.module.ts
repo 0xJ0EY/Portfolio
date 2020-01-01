@@ -9,6 +9,7 @@ import { ProjectCounterComponent } from './project-counter/project-counter.compo
 import { TitleComponent } from './title/title.component';
 import { ProjectInfoComponent } from './project-info/project-info.component';
 import { SharedModule } from '../../shared/shared.module';
+import { ScrollInfoComponent } from './scroll-info/scroll-info.component';
 
 @NgModule({
   declarations: [
@@ -17,7 +18,8 @@ import { SharedModule } from '../../shared/shared.module';
     ProjectNameComponent,
     ProjectCounterComponent,
     TitleComponent,
-    ProjectInfoComponent
+    ProjectInfoComponent,
+    ScrollInfoComponent
   ],
   imports: [
     CommonModule,
