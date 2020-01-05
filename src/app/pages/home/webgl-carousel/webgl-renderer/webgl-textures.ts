@@ -39,9 +39,7 @@ export class ImageTexture implements Texture {
       width, height, border, srcFormat, srcType, pixel
     );
 
-    const image = new Image();
-    image.onload = () => {
-
+    this.loadImage(this.url).then(image => {
       gl.bindTexture(gl.TEXTURE_2D, texture);
       gl.texImage2D(
         gl.TEXTURE_2D, mipmapLevel, internalFormat,
@@ -55,12 +53,22 @@ export class ImageTexture implements Texture {
         gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
         gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
       }
-    };
-
-    image.crossOrigin = '';
-    image.src = this.url;
+    });
 
     this.texture = texture;
+  }
+
+  loadImage(url: string): Promise<HTMLImageElement> {
+    return new Promise<HTMLImageElement>(resolve => {
+      const image = new Image();
+
+      image.addEventListener('load', () => {
+        resolve(image);
+      });
+
+      image.src = url;
+      image.crossOrigin = '';
+    });
   }
 
   getTexture(): WebGLTexture {
