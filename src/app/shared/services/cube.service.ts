@@ -57,7 +57,7 @@ WebRTC het peer to peer videobellen.
       colour: { r: 255, g: 255, b: 255 },
       cubeParams: {
         video: '/assets/youi.mp4',
-        thumbnail: '/assets/youi.png',
+        thumbnail: '/assets/youi-thumbnail.jpg',
         horizontalColours: { r: 214, g: 17, b: 48 },
         verticalColours: { r: 237, g: 36, b: 68 }
       }
@@ -92,7 +92,7 @@ Joey de Ruiter
       colour: { r: 245, g: 249, b: 252 },
       cubeParams: {
         video: '/assets/pc-parts.mp4',
-        thumbnail: '/assets/pc-parts-thumbnail.png',
+        thumbnail: '/assets/pc-parts-thumbnail.jpg',
         horizontalColours: { r: 5, g: 118, b: 218 },
         verticalColours: { r: 0, g: 144, b: 248 }
       }
@@ -129,7 +129,7 @@ Angular 7, Dropwizard & TravisCI
       colour: { r: 255, g: 255, b: 255 },
       cubeParams: {
         video: '/assets/albert.mp4',
-        thumbnail: '/assets/albert.png',
+        thumbnail: '/assets/albert-thumbnail.jpg',
         horizontalColours: { r: 13, g: 138, b: 155 },
         verticalColours: { r: 14, g: 169, b: 196 }
       }
@@ -156,7 +156,7 @@ Om contact met mij op te nemen kun je een mailtje schieten naar <a href="mailto:
       colour: { r: 244, g: 244, b: 244 },
       cubeParams: {
         video: '/assets/paintboy.mp4',
-        thumbnail: '/assets/paintboy-thumbnail.png',
+        thumbnail: '/assets/paintboy-thumbnail.jpg',
         horizontalColours: { r: 114, g: 183, b: 5 },
         verticalColours: { r: 121, g: 194, b: 5 }
       }
