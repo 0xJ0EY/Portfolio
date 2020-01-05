@@ -155,48 +155,52 @@ export class VideoTexture implements AnimatedTexture {
 
     this.texture = preloadTexture.getTexture();
 
-    this.loadVideo();
+    this.loadVideo(this.url).then(() => { this.loaded = true; });
   }
 
-  private loadVideo(): void {
-    const video = document.createElement('video');
-    let playing = true;
-    let timeupdate = false;
+  private loadVideo(url: string) {
+    return new Promise<HTMLVideoElement>(resolve => {
+      let playing = false;
+      let timeupdate = false;
+      const video = document.createElement('video');
 
-    video.autoplay = true;
-    video.muted = true;
-    video.loop = true;
+      video.autoplay = true;
+      video.muted = true;
+      video.loop = true;
 
-    video.setAttribute('playsinline', '');
+      const checkStatus = () => {
+        if (playing && timeupdate) {
+          resolve(video);
+        }
+      };
 
-    const checkStatus = () => {
-      if (playing && timeupdate) {
-        this.loaded = true;
-      }
-    };
+      const checkPlaying = () => {
+        playing = true;
+        checkStatus();
 
-    const checkPlaying = () => {
-      playing = true;
-      checkStatus();
+        video.removeEventListener('playing', checkPlaying);
+      };
 
-      video.removeEventListener('playing', checkPlaying);
-    };
+      const checkTimeupdate = () => {
+        timeupdate = true;
+        checkStatus();
 
-    const checkTimeupdate = () => {
-      timeupdate = true;
-      checkStatus();
+        video.removeEventListener('timeupdate', checkTimeupdate);
+      };
 
-      video.removeEventListener('timeupdate', checkTimeupdate);
-    };
+      video.addEventListener('playing', checkPlaying);
+      video.addEventListener('timeupdate', checkTimeupdate);
 
-    video.addEventListener('playing', checkPlaying);
-    video.addEventListener('timeupdate', checkTimeupdate);
+      video.addEventListener('load', () => {
+        resolve(video);
+      });
 
-    video.crossOrigin = '';
-    video.src = this.url;
-    video.play();
+      video.crossOrigin = '';
+      video.src = url;
+      video.play();
 
-    this.video = video;
+      this.video = video;
+    });
   }
 
   update(gl: WebGLRenderingContext): void {
