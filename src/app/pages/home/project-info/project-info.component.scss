@@ -45,8 +45,6 @@ $animation_time: 250ms;
 
     height: 0px;
 
-    overflow-y: auto;
-
     -webkit-transition: $animation_time ease-in-out;
     -moz-transition: $animation_time ease-in-out;
     -o-transition: $animation_time ease-in-out;
@@ -57,8 +55,19 @@ $animation_time: 250ms;
     height: calc(90vh - 80px) !important;
 }
 
+.project-info .content-wrapper .border {
+    overflow-y: auto;
+    
+    border-left: 13px solid;
+    border-right: 13px solid;
+
+    height: 100%;
+    width: calc(100% - 26px);
+}
+
 .project-info .content {
     padding: 20px 20px;
+    display: block;
 
     h1, h2, h3, h4, h5, h6 {
         margin: 0;
