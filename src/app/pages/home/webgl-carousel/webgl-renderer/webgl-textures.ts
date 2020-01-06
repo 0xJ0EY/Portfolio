@@ -62,10 +62,7 @@ export class ImageTexture implements Texture {
     return new Promise<HTMLImageElement>(resolve => {
       const image = new Image();
 
-      image.addEventListener('load', async () => {
-
-        await image.decode();
-
+      image.addEventListener('load', () => {
         resolve(image);
       });
 
