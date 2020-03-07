@@ -9,6 +9,64 @@
 
 }
 
+#prev {
+  display: block;;
+  height: 47px;
+  line-height: 47px;
+  font-family: 'Galyon Bold Bold';
+
+  float: left;
+
+  &.isMobile {
+    /* No spacers, so add some margins */
+    margin-right: 10px;
+
+    height: 43px;
+    line-height: 43px;
+  }
+}
+
+#next {
+  display: block;
+  height: 47px;
+  line-height: 47px;
+  font-family: 'Galyon Bold Bold';
+
+  float: left;
+
+  &.isMobile {
+    /* No spacers, so add some margins */
+    margin-left: 10px;
+
+    height: 43px;
+    line-height: 43px;
+  }
+}
+
+.spacer {
+  display: block;
+  height: 47px;
+  line-height: 47px;
+  margin: 0 5px;
+  font-family: 'Galyon Bold Bold';
+}
+
+.info {
+  float: left;
+  display: block;
+}
+
+.interactive-btn {
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+
+  cursor: pointer;
+}
+
 svg {
   float: left;
 }
@@ -56,11 +114,17 @@ span {
   }
 }
 
-// Animations
 .scroll.previous #scroll-wheel {
   transform: translateY(-5px);
 }
 
 .scroll.next #scroll-wheel {
   transform: translateY(5px);
+}
+
+@media screen and (max-width: 330px) {
+  /* Hide the prev & next buttons */
+  #prev, #next {
+    display: none;
+  }
 }

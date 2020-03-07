@@ -10,10 +10,13 @@ import { Subscription } from 'rxjs';
 })
 export class ScrollInfoComponent implements OnInit, OnDestroy {
 
+  private readonly SCROLL_COOLDOWN = 1000;
+
   private cubeServiceSubscription: Subscription;
   private mobile: boolean;
   private currentPage = 0;
   private animState: 'next' | 'previous' | 'none';
+  private lastScroll = 0;
 
   constructor(
     private deviceService: DeviceDetectorService,
@@ -60,6 +63,28 @@ export class ScrollInfoComponent implements OnInit, OnDestroy {
 
   private checkIsMobileDevice(): boolean {
     return this.deviceService.isMobile() || this.deviceService.isTablet();
+  }
+
+  public canClick(): boolean {
+    return this.lastScroll + this.SCROLL_COOLDOWN < Date.now();
+  }
+
+  public updateClick(): void {
+    this.lastScroll = Date.now();
+  }
+
+  public onClickNext(): void {
+    if (!this.canClick()) { return; }
+
+    this.cubeService.next();
+    this.updateClick();
+  }
+
+  public onClickPrevious(): void {
+    if (!this.canClick()) { return; }
+
+    this.cubeService.previous();
+    this.updateClick();
   }
 
 }

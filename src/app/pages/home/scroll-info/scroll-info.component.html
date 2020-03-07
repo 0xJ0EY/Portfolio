@@ -1,9 +1,13 @@
-<div class="wrapper"> 
+<div class="wrapper">
+    <span id="prev" class="interactive-btn" [class.isMobile]="isMobile" (click)="this.onClickPrevious()">Prev</span>
+    <span class="spacer" *ngIf="isMobile === false">::</span>
     <div *ngIf="isMobile === false; then scroll else swipe"></div>
+    <span class="spacer" *ngIf="isMobile === false">::</span>
+    <span id="next" class="interactive-btn" [class.isMobile]="isMobile" (click)="this.onClickNext()">Next</span>
 </div>
 
 <ng-template #scroll >
-    <div class="scroll" [ngClass]="animationState">
+    <div class="scroll info" [ngClass]="animationState">
         <svg viewBox="0 0 100 100" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
             <title>Mouse</title>
             <desc>Created with Sketch.</desc>
@@ -23,7 +27,7 @@
 </ng-template>
 
 <ng-template #swipe>
-    <div class="swipe" [ngClass]="animationState">
+    <div class="swipe info" [ngClass]="animationState">
         <div class="svg-wrapper">
             <svg viewBox="0 0 95 43" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
                 <title>Swipe</title>
