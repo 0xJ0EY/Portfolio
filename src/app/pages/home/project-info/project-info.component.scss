@@ -42,6 +42,7 @@ $animation_time: 250ms;
 
 .project-info .content-wrapper {
     display: block;
+    background-color: #fff;
 
     height: 0px;
 
@@ -58,11 +59,11 @@ $animation_time: 250ms;
 .project-info .content-wrapper .border {
     overflow-y: auto;
     
-    border-left: 13px solid;
-    border-right: 13px solid;
+    border-left: 3px solid;
+    border-right: 3px solid;
 
     height: 100%;
-    width: calc(100% - 26px);
+    width: calc(100% - 6px);
 }
 
 .project-info .content {
