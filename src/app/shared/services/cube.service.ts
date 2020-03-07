@@ -49,7 +49,7 @@ WebRTC het peer to peer videobellen.
   <li>Ewout Millink</li>
   <li>Joey de Ruiter</li>
   <li>Omid Wiar</li>
-  <li>Rutget Uijtendaal</li>
+  <li>Rutger Uijtendaal</li>
   <li>Vincent Nuis</li>
   <li>Wim de Groot</li>
 </ul>
