@@ -16,7 +16,7 @@ import { CubeService } from '../../../shared/services/cube.service';
 
 export class WebGLCarouselComponent implements AfterViewInit, OnDestroy {
 
-  @ViewChild('webGL', {static: false}) public webGL: ElementRef;
+  @ViewChild('webGL') public webGL: ElementRef;
 
   public window: any;
   private resizeSubscription: Subscription;
