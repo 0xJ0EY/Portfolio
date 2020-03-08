@@ -5,6 +5,8 @@ import { Texture, AnimatedTexture, isAnimatedTexture } from './webgl-textures';
 
 export class WebGLRenderObject {
   public shaderProgram: WebGLProgram;
+  public vertexShader: WebGLShader;
+  public fragmentShader: WebGLShader;
   public programInfo: any;
   public buffers: any;
   public textures: Texture[];
@@ -31,9 +33,14 @@ export class WebGLObjectManager {
     object.init();
 
     const renderObject = new WebGLRenderObject();
+    object.setRenderObject(renderObject);
+
+    const shaders = this.createProgram(object.getVertexShader(), object.getFragmentShader());
 
     renderObject.object = object;
-    renderObject.shaderProgram = this.createProgram(object.getVertexShader(), object.getFragmentShader());
+    renderObject.vertexShader = shaders[0];
+    renderObject.fragmentShader = shaders[1];
+    renderObject.shaderProgram = shaders[2];
 
     // Load textures
     renderObject.textures = [];
@@ -55,7 +62,7 @@ export class WebGLObjectManager {
     return renderObject;
   }
 
-  private createProgram(vertexShaderSrc: string, fragmentShaderSrc: string): WebGLProgram {
+  private createProgram(vertexShaderSrc: string, fragmentShaderSrc: string): [WebGLShader, WebGLShader, WebGLProgram] {
     const vertexShader = this.loadShader(this.gl.VERTEX_SHADER, vertexShaderSrc);
     const fragmentShader = this.loadShader(this.gl.FRAGMENT_SHADER, fragmentShaderSrc);
 
@@ -70,7 +77,7 @@ export class WebGLObjectManager {
       throw new Error('Unable to initialize the shader program: ' + this.gl.getProgramInfoLog(shaderProgram));
     }
 
-    return shaderProgram;
+    return [vertexShader, fragmentShader, shaderProgram];
   }
 
   private loadShader(type: GLenum, source: string): WebGLShader | null {
@@ -120,18 +127,20 @@ export class WebGLObjectManager {
   }
 
   public remove(object: WebGLObject): void {
-    this.objects.forEach((element, index) => {
-      if (element.object === object) {
-        // Free the textures from the webgl instance
-        element.textures.map(t => t.remove(this.gl));
+    const renderObj = object.getRenderObject();
 
-        // Remove object bindings
-        object.delete();
+    this.gl.deleteShader(renderObj.vertexShader);
+    this.gl.deleteShader(renderObj.fragmentShader);
+    this.gl.deleteProgram(renderObj.shaderProgram);
 
-        // Remove the object from the list
-        this.objects.splice(index, 1);
-      }
-    });
+    renderObj.textures.map(t => t.remove(this.gl));
+
+    // Delete the WebGLObject
+    object.delete();
+
+    // Remove the WebGLRenderObject
+    const index = this.objects.indexOf(renderObj);
+    this.objects.splice(index, 1);
   }
 
   // Update the inner objects
