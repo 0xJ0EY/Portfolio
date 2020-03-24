@@ -21,7 +21,10 @@ export class ProjectInfoComponent implements OnInit, OnDestroy {
   public bodyColour: any;
   public bodyHtml: string;
 
+  public moreInfo: string = "";
   public projectName: string;
+
+  private langServerSubscription: Subscription;
 
   constructor(
     @Inject(DOCUMENT) private document: Document,
@@ -35,7 +38,20 @@ export class ProjectInfoComponent implements OnInit, OnDestroy {
     this.cubeServiceSubscription = this.cubeService.onChange.subscribe(this.onProjectChange.bind(this));
     this.document.addEventListener('keydown', this.onKeypress.bind(this));
 
+    this.langServerSubscription = this.langService.languageObservable.subscribe(this.onLanguageChange.bind(this));
+
     this.bindTouchEvents();
+  }
+
+  private onLanguageChange(lang: string) {
+    switch (lang) {
+      case 'en-US': {
+        this.moreInfo = "More information about ";
+      }
+      case 'nl-NL': {
+        this.moreInfo = "Meer informatie over ";
+      }
+    }
   }
 
   private bindTouchEvents(): void {
@@ -118,6 +134,7 @@ export class ProjectInfoComponent implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     this.cubeServiceSubscription.unsubscribe();
+    this.langServerSubscription.unsubscribe();
     this.document.removeEventListener('keydown', this.onKeypress.bind(this));
   }
 

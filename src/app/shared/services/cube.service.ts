@@ -1,7 +1,7 @@
-import { Injectable } from '@angular/core';
+import { Injectable, OnDestroy } from '@angular/core';
 import { WebGLCube } from '../models/webgl-cube.model';
 import { InteractiveCubeManager } from 'src/app/pages/home/webgl-carousel/webgl-cube-manager/webgl-cube-manager';
-import { Subject, Observable } from 'rxjs';
+import { Subject, Observable, Subscription } from 'rxjs';
 import Projects from 'src/projects.json';
 import { LanguageService } from './language.service';
 
@@ -17,9 +17,10 @@ of mij toevoegen op <a href="https://www.linkedin.com/in/j-de-ruiter/">linkedin<
 @Injectable({
   providedIn: 'root'
 })
-export class CubeService {
+export class CubeService implements OnDestroy {
 
   private cubeManager: InteractiveCubeManager;
+  private languageSericeSubscribtion: Subscription;
 
   private subject: Subject<number>;
 
@@ -31,7 +32,13 @@ export class CubeService {
     this.subject = new Subject<number>();
     this.subject.next(0);
     
-    langService.languageObservable.subscribe(this.onLanguageUpdate.bind(this));
+    this.languageSericeSubscribtion = langService
+                                      .languageObservable
+                                      .subscribe(this.onLanguageUpdate.bind(this));
+  }
+  
+  ngOnDestroy(): void {
+    this.languageSericeSubscribtion.unsubscribe();
   }
 
   get onChange(): Observable<number> {

@@ -6,7 +6,7 @@
         [ngStyle]="{'background-color': headerColour}" 
         [ngClass]="headerState">
         <a>
-            <span class="more-info">Meer informatie over {{ projectName }}</span>
+            <span class="more-info">{{ moreInfo }}{{ projectName }}</span>
             <app-chevron class="chevron"></app-chevron>
         </a>
     </div>
