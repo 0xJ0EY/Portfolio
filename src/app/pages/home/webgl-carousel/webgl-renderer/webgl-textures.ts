@@ -229,6 +229,10 @@ export class VideoTexture implements AnimatedTexture {
   }
 
   remove(gl: WebGLRenderingContext): void {
+    this.video.pause();
+    this.video.removeAttribute('src');
+    this.video.load();
+
     gl.deleteTexture(this.texture);
   }
 
