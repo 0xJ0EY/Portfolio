@@ -1,4 +1,6 @@
+
 <span class="wrapper" [ngClass]="loadedState">
+    
     <span class="currentProject" [ngClass]="concatAnimationState"
     [@animationChangeNumber]="animationState" 
     (@animationChangeNumber.start)="onAnimationStart($event)"
@@ -6,3 +8,5 @@
     <span class="seperator">&nbsp;::&nbsp;</span>
     <span class="maxProjects">{{ maxProjects }}</span>
 </span>
+
+<app-language-selector></app-language-selector>

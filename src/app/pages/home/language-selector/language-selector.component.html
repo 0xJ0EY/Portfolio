@@ -1,0 +1,8 @@
+<span class="wrapper" [ngClass]="loadedState">
+  <span class="currentProject" [ngClass]="concatAnimationState"
+  (click)="this.onClick()"
+  [@languageChange]="animationState" 
+  (@languageChange.start)="onAnimationStart($event)"
+  (@languageChange.done)="onAnimationEnd($event)">{{ languageName }}</span> 
+</span>
+

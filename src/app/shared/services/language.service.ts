@@ -6,9 +6,14 @@ import Projects from 'src/projects.json';
   providedIn: 'root'
 })
 export class LanguageService {
-
+  public readonly languages = Projects.languages;
+  public readonly languageNames: Record<string, string> = {
+    "en-US": "EN",
+    "nl-NL": "NL"
+  }
+  
   private readonly DEFAULT_LANG = "default_language";
-  private currentLanguage: BehaviorSubject<string>;
+  private language: BehaviorSubject<string>;
 
   constructor() { 
     this.load();
@@ -20,7 +25,7 @@ export class LanguageService {
 
     const lang = this.fetchLanguage(target);
 
-    this.currentLanguage = new BehaviorSubject(lang);
+    this.language = new BehaviorSubject(lang);
     this.saveCurrentLanguage();
   }
 
@@ -35,7 +40,7 @@ export class LanguageService {
 
   private hasLanguage(language: string): boolean {
 
-    for (const lang of Projects.languages) {
+    for (const lang of this.languages) {
 
       if (lang.startsWith(language)) {
         return lang;
@@ -46,7 +51,7 @@ export class LanguageService {
   }
 
   private fetchLanguage(target: string): string {
-    for (const lang of Projects.languages) {
+    for (const lang of this.languages) {
       if (lang.startsWith(target)) {
         return lang;
       }
@@ -56,20 +61,24 @@ export class LanguageService {
   } 
 
   private setLanguage(language: string) {
-    this.currentLanguage.next(language);
+    this.language.next(language);
   }
 
   public saveCurrentLanguage() {
-    const lang = this.currentLanguage.getValue();
+    const lang = this.language.getValue();
     localStorage.setItem(this.DEFAULT_LANG, lang);
   }
 
-  get currentLang(): string {
-    return this.currentLanguage.getValue();
+  get currentLanguage(): string {
+    return this.language.getValue();
+  }
+
+  get currentLanguageName(): string {
+    return this.languageNames[this.language.getValue()];
   }
 
   get languageObservable(): Observable<string> {
-    return this.currentLanguage.asObservable();
+    return this.language.asObservable();
   }
 
 }

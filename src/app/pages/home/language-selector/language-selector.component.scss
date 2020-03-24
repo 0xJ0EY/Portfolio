@@ -5,14 +5,12 @@ span.wrapper {
     position: absolute;
     display: block;
 
-    top: 50px;
-    right: 100px;
+    right: 110px;
 
-    width: calc(100% - 100px); // Use all the width to fix a minor text rendering bug.
+    // width: calc(100% - 210px); // Use all the width to fix a minor text rendering bug.
 
     z-index: 100;
     font-kerning: -10px;
-    font-size: 1.6em;
     text-align: right;
     transform: rotate3d(1, 0, 0, 90deg);
 
@@ -24,22 +22,6 @@ span.wrapper {
 
 span.wrapper.loaded {
     transform: rotate3d(0,0,0, 0deg);
-}
-
-app-language-selector {
-    position: absolute;
-    top: 50px;
-    right: 60px;
-
-    font-kerning: -10px;
-    font-size: 1.6em;
-    text-align: right;
-
-
-    display: inline-block;
-
-    font-family: 'Galyon Bold Bold';
-    font-weight: normal;
 }
 
 span {
@@ -73,6 +55,7 @@ span.in {
         right: 40px;
     }
     app-language-selector {
+
         top: 100px;
         right: 40px;
     }

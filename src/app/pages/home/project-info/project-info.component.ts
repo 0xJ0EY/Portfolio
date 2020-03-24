@@ -44,13 +44,14 @@ export class ProjectInfoComponent implements OnInit, OnDestroy {
   }
 
   private onLanguageChange(lang: string) {
-    switch (lang) {
-      case 'en-US': {
-        this.moreInfo = "More information about ";
-      }
-      case 'nl-NL': {
-        this.moreInfo = "Meer informatie over ";
-      }
+    if (lang.startsWith("en")) {
+      this.moreInfo = "More information about ";
+      return;
+    }
+
+    if (lang.startsWith("nl")) {
+      this.moreInfo = "Meer informatie over ";
+      return;
     }
   }
 
@@ -112,7 +113,7 @@ export class ProjectInfoComponent implements OnInit, OnDestroy {
   }
 
   private updateProjectContent(project: any): void {
-    const lang = this.langService.currentLang;
+    const lang = this.langService.currentLanguage;
     this.bodyHtml = project.description[lang];
   }
 

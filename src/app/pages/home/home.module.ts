@@ -10,6 +10,7 @@ import { TitleComponent } from './title/title.component';
 import { ProjectInfoComponent } from './project-info/project-info.component';
 import { SharedModule } from '../../shared/shared.module';
 import { ScrollInfoComponent } from './scroll-info/scroll-info.component';
+import { LanguageSelectorComponent } from './language-selector/language-selector.component';
 
 @NgModule({
   declarations: [
@@ -19,7 +20,8 @@ import { ScrollInfoComponent } from './scroll-info/scroll-info.component';
     ProjectCounterComponent,
     TitleComponent,
     ProjectInfoComponent,
-    ScrollInfoComponent
+    ScrollInfoComponent,
+    LanguageSelectorComponent
   ],
   imports: [
     CommonModule,
