@@ -34,6 +34,11 @@ export class ScrollInfoComponent implements OnInit, OnDestroy {
   }
 
   private onCubeChange(page: number): void {
+    // Do not update the number on a change of the project (because it is also used for updating the language)
+    if (this.currentPage === page) {
+      return;
+    }
+
     if (this.currentPage < page) {
       this.startAnimation('next');
     } else {

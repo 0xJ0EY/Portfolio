@@ -62,6 +62,11 @@ export class ProjectCounterComponent implements OnInit, OnDestroy {
   }
 
   onProjectChange() {
+    // Do not update the number on a change of the project (because it is also used for updating the language)
+    if (this.currentProject === this.cubeService.currentPage) {
+      return;
+    }
+
     this.updateAnimationState('out');
   }
 
