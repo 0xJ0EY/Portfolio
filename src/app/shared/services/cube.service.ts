@@ -8,7 +8,7 @@ const contact = `
 
 <p>
 Om contact met mij op te nemen kun je een mailtje schieten naar <a href="mailto:contact@joeyderuiter.me">contact@joeyderuiter.me</a><br/>
-of mij toevoegen op <a href="https://www.linkedin.com/in/joeyderuiter-programmer">linkedin</a>
+of mij toevoegen op <a href="https://www.linkedin.com/in/j-de-ruiter/">linkedin</a>
 </p>
 `;
 
