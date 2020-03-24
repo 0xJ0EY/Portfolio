@@ -3,6 +3,7 @@ import { Subscription, VirtualTimeScheduler } from 'rxjs';
 import { CubeService } from 'src/app/shared/services/cube.service';
 import { DOCUMENT } from '@angular/common';
 import { canScroll, hasClassInDOMTree } from '../../../shared/inputs/mouse-input';
+import { LanguageService } from 'src/app/shared/services/language.service';
 
 @Component({
   selector: 'app-project-info',
@@ -24,7 +25,8 @@ export class ProjectInfoComponent implements OnInit, OnDestroy {
 
   constructor(
     @Inject(DOCUMENT) private document: Document,
-    private cubeService: CubeService
+    private cubeService: CubeService,
+    private langService: LanguageService
   ) { }
 
   ngOnInit() {
@@ -94,7 +96,8 @@ export class ProjectInfoComponent implements OnInit, OnDestroy {
   }
 
   private updateProjectContent(project: any): void {
-    this.bodyHtml = project.description;
+    const lang = this.langService.currentLang;
+    this.bodyHtml = project.description[lang];
   }
 
   public toggleHeader(): void {
