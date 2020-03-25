@@ -100,7 +100,10 @@ export class LanguageSelectorComponent implements OnInit, OnDestroy {
   }
 
   private updateLanguageName(): void {
-    this.languageName = this.langService.currentLanguageName;
+    const displayLangIndex = (this.currentLangIndex + 1) % this.langService.languages.length;
+    const lang = this.langService.languages[displayLangIndex];
+
+    this.languageName = this.langService.languageNames[lang];
   }
 
   public onClick() {
