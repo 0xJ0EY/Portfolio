@@ -5,7 +5,11 @@ export class WebGLRenderer {
 
   private scale: number;
 
-  constructor(private gl: WebGLRenderingContext, private objectManager: WebGLObjectManager) {
+  constructor(
+    private gl: WebGLRenderingContext,
+    private objectManager: WebGLObjectManager,
+    private devicePixelRatio
+  ) {
     this.scale = this.objectScaleOnWidth();
   }
 
@@ -15,16 +19,16 @@ export class WebGLRenderer {
   }
 
   private objectScaleOnWidth() {
-    const width = this.gl.canvas.width;
+    const width = this.gl.canvas.width / this.devicePixelRatio;
 
     if (width > 800) {
       return 1;
-    } else if (width > 600) { // 800 - 601
-      return .75;
-    } else if (width > 400) { // 401 - 600
-      return .5;
+    } else if (width > 800) { // 800 - 601
+      return .90;
+    } else if (width > 600) { // 401 - 600
+      return .80;
     } else { // < 400
-      return .4;
+      return .7;
     }
   }
 
