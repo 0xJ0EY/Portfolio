@@ -21,8 +21,8 @@ export class ProjectInfoComponent implements OnInit, OnDestroy {
   public bodyColour: any;
   public bodyHtml: string;
 
-  public moreInfo: string = "";
-  public projectName: string;
+  public moreInfo = '';
+  public projectName = '';
 
   private langServerSubscription: Subscription;
 
@@ -39,42 +39,17 @@ export class ProjectInfoComponent implements OnInit, OnDestroy {
     this.document.addEventListener('keydown', this.onKeypress.bind(this));
 
     this.langServerSubscription = this.langService.languageObservable.subscribe(this.onLanguageChange.bind(this));
-
-    this.bindTouchEvents();
   }
 
   private onLanguageChange(lang: string) {
-    if (lang.startsWith("en")) {
-      this.moreInfo = "More information about ";
+    if (lang.startsWith('en')) {
+      this.moreInfo = 'More information about ';
       return;
     }
 
-    if (lang.startsWith("nl")) {
-      this.moreInfo = "Meer informatie over ";
+    if (lang.startsWith('nl')) {
+      this.moreInfo = 'Meer informatie over ';
       return;
-    }
-  }
-
-  private bindTouchEvents(): void {
-    const body = document.querySelector('body');
-    const hammer = new Hammer(body as HTMLElement);
-
-    // Hammer defaults are horizontal only
-    hammer.get('swipe').set({ direction: Hammer.DIRECTION_ALL });
-
-    hammer.on('swipeup swipedown', this.onSwipe.bind(this));
-  }
-
-  private onSwipe(evt: any): void {
-    if (hasClassInDOMTree(evt.target, 'no-swipe')) { return; }
-
-    switch (evt.type) {
-      case 'swipeup':
-        this.openHeader();
-        break;
-      case 'swipedown':
-        this.closeHeader();
-        break;
     }
   }
 
