@@ -13,11 +13,11 @@ platformBrowserDynamic().bootstrapModule(AppModule)
   .then(() => {
     const title = document.title;
 
-    document.onfocus = () => { 
+    document.onfocus = () => {
       document.title = title;
     };
 
-    document.onblur = () => { 
+    document.onblur = () => {
       document.title = '👀 ' + title;
     };
   })

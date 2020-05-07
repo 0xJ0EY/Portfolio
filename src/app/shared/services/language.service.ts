@@ -8,14 +8,14 @@ import Projects from 'src/projects.json';
 export class LanguageService {
   public readonly languages = Projects.languages;
   public readonly languageNames: Record<string, string> = {
-    "en-US": "EN",
-    "nl-NL": "NL"
-  }
-  
-  private readonly DEFAULT_LANG = "default_language";
+    'en-US': 'EN',
+    'nl-NL': 'NL'
+  };
+
+  private readonly DEFAULT_LANG = 'default_language';
   private language: BehaviorSubject<string>;
 
-  constructor() { 
+  constructor() {
     this.load();
   }
 
@@ -58,7 +58,7 @@ export class LanguageService {
     }
 
     return Projects.defaultLanguage;
-  } 
+  }
 
   private setLanguage(language: string) {
     this.language.next(language);

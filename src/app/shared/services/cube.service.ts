@@ -31,12 +31,12 @@ export class CubeService implements OnDestroy {
   constructor(public langService: LanguageService) {
     this.subject = new Subject<number>();
     this.subject.next(0);
-    
+
     this.languageSericeSubscribtion = langService
                                       .languageObservable
                                       .subscribe(this.onLanguageUpdate.bind(this));
   }
-  
+
   ngOnDestroy(): void {
     this.languageSericeSubscribtion.unsubscribe();
   }
