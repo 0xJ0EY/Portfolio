@@ -9,4 +9,16 @@ if (environment.production) {
 }
 
 platformBrowserDynamic().bootstrapModule(AppModule)
-  .catch(err => console.error(err));
+  .catch(err => console.error(err))
+  .then(() => {
+    const title = document.title;
+
+    document.onfocus = () => { 
+      document.title = title;
+    };
+
+    document.onblur = () => { 
+      document.title = '👀 ' + title;
+    };
+  })
+;
