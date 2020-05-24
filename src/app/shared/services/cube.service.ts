@@ -5,14 +5,16 @@ import { Subject, Observable, Subscription } from 'rxjs';
 import Projects from 'src/projects.json';
 import { LanguageService } from './language.service';
 
-const contact = `
-<h2>Contact</h2>
+export enum CubeDataState {
+  NORMAL,
+  FADEOUT,
+  FADEIN
+}
 
-<p>
-Om contact met mij op te nemen kun je een mailtje schieten naar <a href="mailto:contact@joeyderuiter.me">contact@joeyderuiter.me</a><br/>
-of mij toevoegen op <a href="https://www.linkedin.com/in/j-de-ruiter/">linkedin</a>
-</p>
-`;
+export class CubeData {
+  public index: number;
+  public state: CubeDataState = CubeDataState.NORMAL;
+}
 
 @Injectable({
   providedIn: 'root'
@@ -22,15 +24,16 @@ export class CubeService implements OnDestroy {
   private cubeManager: InteractiveCubeManager;
   private languageSericeSubscribtion: Subscription;
 
-  private subject: Subject<number>;
+  private subject: Subject<CubeData>;
 
+  private state: CubeDataState = CubeDataState.NORMAL;
   private index = 0;
 
   private projects: any[] = Projects.projects;
 
   constructor(public langService: LanguageService) {
-    this.subject = new Subject<number>();
-    this.subject.next(0);
+    this.subject = new Subject<CubeData>();
+    this.subject.next(this.cubeData());
 
     this.languageSericeSubscribtion = langService
                                       .languageObservable
@@ -41,12 +44,12 @@ export class CubeService implements OnDestroy {
     this.languageSericeSubscribtion.unsubscribe();
   }
 
-  get onChange(): Observable<number> {
-    return this.subject as Observable<number>;
+  get onChange(): Observable<CubeData> {
+    return this.subject as Observable<CubeData>;
   }
 
   private onLanguageUpdate() {
-    this.subject.next(this.index); // Reload the current cube
+    this.subject.next(this.cubeData()); // Reload the current cube
   }
 
   private hasNext(): boolean {
@@ -55,7 +58,14 @@ export class CubeService implements OnDestroy {
 
   private hasPrevious(): boolean {
     return this.index > 0;
-}
+  }
+
+  private cubeData() {
+    const tmp = new CubeData();
+    tmp.index = this.index;
+    tmp.state = this.state;
+    return tmp;
+  }
 
   get getCurrentProject() {
     return this.projects[this.index];
@@ -63,6 +73,10 @@ export class CubeService implements OnDestroy {
 
   get currentName() {
     return this.getCurrentProject.name;
+  }
+
+  get currentState(): CubeDataState {
+    return this.state;
   }
 
   get currentCube(): WebGLCube {
@@ -90,13 +104,29 @@ export class CubeService implements OnDestroy {
   next() {
     if (!this.hasNext()) { return; }
 
-    this.subject.next(++this.index);
+    this.state = CubeDataState.NORMAL;
+    ++this.index;
+
+    this.subject.next(this.cubeData());
   }
 
   previous() {
     if (!this.hasPrevious()) { return; }
 
-    this.subject.next(--this.index);
+    this.state = CubeDataState.NORMAL;
+    --this.index;
+
+    this.subject.next(this.cubeData());
+  }
+
+  fadeout() {
+    this.state = CubeDataState.FADEOUT;
+    this.subject.next(this.cubeData());
+  }
+
+  fadein() {
+    this.state = CubeDataState.FADEIN;
+    this.subject.next(this.cubeData());
   }
 
   registerCubeManager(cubeManager: InteractiveCubeManager) {

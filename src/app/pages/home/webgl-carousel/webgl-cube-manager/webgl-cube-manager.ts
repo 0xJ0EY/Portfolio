@@ -1,7 +1,7 @@
 import { WebGLCube } from '../../../../shared/models/webgl-cube.model';
 import { WebGLObjectManager, WebGLRenderObject } from '../webgl-renderer/webgl-object-manager';
 import { WebGLCubeStateMoveAway, WebGLCubeStateMoveToCenter } from '../../../../shared/models/webgl-cube-state';
-import { CubeService } from '../../../../shared/services/cube.service';
+import { CubeService, CubeData, CubeDataState } from '../../../../shared/services/cube.service';
 import { Subscription, VirtualTimeScheduler } from 'rxjs';
 
 export interface InteractiveCubeManager {
@@ -34,7 +34,23 @@ export class WebGLCubeManager implements InteractiveCubeManager {
     this.cubeChangeSubscription.unsubscribe();
   }
 
-  private onCubeChange(): void {
+  private onCubeChange(data: CubeData): void {
+
+    switch (data.state) {
+      case CubeDataState.NORMAL:
+        this.processNormalState();
+        break;
+      case CubeDataState.FADEOUT:
+        this.processFadeoutState();
+        break;
+      case CubeDataState.FADEIN:
+        this.processFadeinState();
+        break;
+    }
+
+  }
+
+  private processNormalState() {
     this.startProcess();
 
     this.fadeOutLastCube();
@@ -46,6 +62,18 @@ export class WebGLCubeManager implements InteractiveCubeManager {
 
       this.processDone();
     }, 500);
+  }
+
+  private processFadeoutState() {
+    this.fadeOutLastCube();
+
+    setTimeout(() => {
+      this.deleteLastCube();
+    }, 500);
+  }
+
+  private processFadeinState() {
+    this.addCubeFromCurrentIndex();
   }
 
   private fadeOutLastCube(): void {

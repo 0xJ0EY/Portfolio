@@ -1,5 +1,5 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { CubeService } from 'src/app/shared/services/cube.service';
+import { CubeService, CubeDataState } from 'src/app/shared/services/cube.service';
 import { Subscription } from 'rxjs';
 import {
   trigger,
@@ -100,25 +100,38 @@ export class ProjectNameComponent implements OnInit, OnDestroy {
   public onAnimationStart(event: any) {
     if (!this.validAnimState(event.fromState)) { return; }
 
+    if (event.fromState === 'out' && this.cubeService.currentState === CubeDataState.FADEOUT) {
+      return;
+    }
+
     if (event.fromState === 'in' && event.toState === 'idle') {
       this.updateAnimationState('idle');
+      return;
     }
 
     if (event.fromState === 'out' && event.toState === 'in') {
       this.updateAnimationState('idle');
       this.triggerAngularAnimation('idle');
+      return;
     }
   }
 
   public onAnimationEnd(event: any) {
     if (event.toState === 'out') {
-      this.updateProjectName();
       this.triggerAngularAnimation('in');
       this.updateAnimationState('in');
+
+      this.updateProjectName();
     }
   }
 
   private updateProjectName() {
+    if (this.cubeService.currentState === CubeDataState.FADEOUT) {
+      this.name = '';
+      this.updateAnimationState('out');
+      return;
+    }
+
     this.name = this.cubeService.currentName;
   }
 

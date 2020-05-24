@@ -11,6 +11,8 @@ import { ProjectInfoComponent } from './project-info/project-info.component';
 import { SharedModule } from '../../shared/shared.module';
 import { ScrollInfoComponent } from './scroll-info/scroll-info.component';
 import { LanguageSelectorComponent } from './language-selector/language-selector.component';
+import { MoreInfoBtnComponent } from './more-info-btn/more-info-btn.component';
+import { MoreInfoComponent } from './more-info/more-info.component';
 
 @NgModule({
   declarations: [
@@ -21,7 +23,9 @@ import { LanguageSelectorComponent } from './language-selector/language-selector
     TitleComponent,
     ProjectInfoComponent,
     ScrollInfoComponent,
-    LanguageSelectorComponent
+    LanguageSelectorComponent,
+    MoreInfoBtnComponent,
+    MoreInfoComponent
   ],
   imports: [
     CommonModule,
