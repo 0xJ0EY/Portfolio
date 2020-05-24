@@ -1,2 +1,9 @@
 <button (click)="this.onFadeout()">Fadeout</button>
 <button (click)="this.onFadein()">Fadein</button>
+<a id="more-info" (click)="this.onClick()" 
+    [class.idle]="this.state == 'idle'"
+    [class.start-fadein]="this.state == 'start-fadein'"
+    [class.fadein]="this.state == 'fadein'"
+    [class.fadeout]="this.state == 'fadeout'"
+    [class.hidden]="this.state == 'hidden'"
+>:: <span>{{ projectName }}</span> ::</a>

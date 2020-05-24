@@ -1,0 +1,62 @@
+$start_animation_time: 250ms;
+$animation_time: 100ms;
+
+
+#more-info {
+    position: fixed;
+    display: inline-block;
+
+    z-index: 100;
+
+    padding: .2em 1em;
+    font-size: 20px;
+    font-family: 'Galyon Bold Bold';
+
+    cursor: pointer;
+
+    span {
+        font-family: 'Galyon Regular Regular';
+        letter-spacing: -.5px;;
+    }
+
+    &.start-fadein {
+        animation-name: fadein;
+        animation-duration: $start_animation_time;
+        animation-timing-function: ease-in-out;
+    }
+
+    &.fadein {
+        animation-name: fadein;
+        animation-duration: $animation_time;
+        animation-timing-function: ease-in-out;
+    }
+
+    &.fadeout {
+        animation-name: fadeout;
+        animation-duration: $animation_time;
+        animation-timing-function: ease-in-out;
+    }
+
+    &.hidden {
+        display: none;
+    }
+}
+
+
+@keyframes fadein {
+    0%   {
+        transform: rotate3d(.8, 0, 0, 90deg);
+    }
+    100% {
+        transform: rotate3d(1, 0, 0, 0);
+    }
+}
+
+@keyframes fadeout {
+    0%   {
+        transform: rotate3d(1, 0, 0, 0);
+    }
+    100% {
+        transform: rotate3d(-.8, 0, 0, 90deg);
+    }
+}
