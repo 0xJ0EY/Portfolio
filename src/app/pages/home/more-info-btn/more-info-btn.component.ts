@@ -16,6 +16,7 @@ export class MoreInfoBtnComponent implements OnInit, OnDestroy {
 
   private format = '';
   public projectName = '';
+  public projectColour = '#000';
 
   private transitioning = false;
   public state: 'idle' | 'start-fadein' | 'fadein' | 'fadeout' | 'hidden' = 'hidden';
@@ -85,7 +86,19 @@ export class MoreInfoBtnComponent implements OnInit, OnDestroy {
   }
 
   private updateProjectName() {
-    this.projectName = this.format + this.service.currentName; 
+    this.projectName = this.format + this.service.currentName;
+  }
+
+  private updateProjectColour() {
+    const currentProject: any = this.service.getCurrentProject;
+    const colours = currentProject.cubeParams.verticalColours;
+
+    this.projectColour = [
+      'rgb(',
+      colours.r, ',',
+      colours.g, ',',
+      colours.b, ')'
+    ].join('');
   }
 
   private reload(): void {
@@ -96,6 +109,7 @@ export class MoreInfoBtnComponent implements OnInit, OnDestroy {
 
     setTimeout(() => {
       this.updateProjectName();
+      this.updateProjectColour();
       this.state = 'fadein';
 
 
@@ -122,6 +136,9 @@ export class MoreInfoBtnComponent implements OnInit, OnDestroy {
   private startFadein(): void {
     if (!this.canTransition()) { return; }
     this.startTransition();
+
+    this.updateProjectName();
+    this.updateProjectColour();
 
     // Every animation has a 100ms wait time
     setTimeout(() => {
