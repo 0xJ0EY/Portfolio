@@ -1,0 +1,59 @@
+$animation_time: 100ms;
+
+#less-info {
+    position: fixed;
+
+    left: 600px;
+
+    z-index: 100;
+
+    padding: 5px;
+    border: 2px solid #000;
+
+    border-radius: 100%;
+
+    cursor: pointer;
+    display: block;
+
+    &.hidden {
+        display: none;
+    }
+
+    &:hover {
+        transform: scale(1.1);
+    }
+
+    &.fadein {
+        animation-name: less-btn-fadein;
+        animation-duration: $animation_time;
+        animation-timing-function: ease-in-out;
+    }
+
+    &.fadeout {
+        animation-name: less-btn-fadeout;
+        animation-duration: $animation_time;
+        animation-timing-function: ease-in-out;
+    }
+
+    svg {
+        display: block;
+    }
+}
+
+@keyframes less-btn-fadeout {
+    0%   {
+        transform: rotate3d(.8, 0, 0, 90deg);
+    }
+    100% {
+        transform: rotate3d(1, 0, 0, 0);
+    }
+}
+
+@keyframes less-btn-fadein {
+    0%   {
+        transform: rotate3d(1, 0, 0, 0);
+    }
+    100% {
+        transform: rotate3d(-.8, 0, 0, 90deg);
+    }
+}

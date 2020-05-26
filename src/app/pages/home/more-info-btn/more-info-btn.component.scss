@@ -16,8 +16,12 @@ $animation_time: 100ms;
 
     span {
         font-family: 'Galyon Regular Regular';
-        letter-spacing: -.5px;;
+        letter-spacing: -.5px;
         color: #000;
+
+        &:hover {
+            text-decoration: underline;
+        }
     }
 
     &.start-fadein {
@@ -42,7 +46,6 @@ $animation_time: 100ms;
         display: none;
     }
 }
-
 
 @keyframes fadein {
     0%   {

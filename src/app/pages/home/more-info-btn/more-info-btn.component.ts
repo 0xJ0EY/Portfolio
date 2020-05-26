@@ -50,7 +50,7 @@ export class MoreInfoBtnComponent implements OnInit, OnDestroy {
   }
 
   public onClick() {
-    if (this.service.currentState !== CubeDataState.NORMAL) { return; }
+    if (this.service.currentState !== CubeDataState.NORMAL && this.service.currentState !== CubeDataState.FADEIN) { return; }
 
     this.service.fadeout();
   }

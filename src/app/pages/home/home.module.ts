@@ -13,6 +13,7 @@ import { ScrollInfoComponent } from './scroll-info/scroll-info.component';
 import { LanguageSelectorComponent } from './language-selector/language-selector.component';
 import { MoreInfoBtnComponent } from './more-info-btn/more-info-btn.component';
 import { MoreInfoComponent } from './more-info/more-info.component';
+import { LessInfoBtnComponent } from './less-info-btn/less-info-btn.component';
 
 @NgModule({
   declarations: [
@@ -25,7 +26,8 @@ import { MoreInfoComponent } from './more-info/more-info.component';
     ScrollInfoComponent,
     LanguageSelectorComponent,
     MoreInfoBtnComponent,
-    MoreInfoComponent
+    MoreInfoComponent,
+    LessInfoBtnComponent
   ],
   imports: [
     CommonModule,
