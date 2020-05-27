@@ -6,7 +6,11 @@ $animation_time: 100ms;
     position: fixed;
     display: inline-block;
 
+    left: 50%;
+    bottom: 3px;
     z-index: 100;
+
+    transform: translateX(-50%);
 
     padding: .2em 1em;
     font-size: 20px;
@@ -49,18 +53,18 @@ $animation_time: 100ms;
 
 @keyframes fadein {
     0%   {
-        transform: rotate3d(.8, 0, 0, 90deg);
+        transform: translateX(-50%) rotate3d(.8, 0, 0, 90deg);
     }
     100% {
-        transform: rotate3d(1, 0, 0, 0);
+        transform: translateX(-50%) rotate3d(1, 0, 0, 0);
     }
 }
 
 @keyframes fadeout {
     0%   {
-        transform: rotate3d(1, 0, 0, 0);
+        transform: translateX(-50%) rotate3d(1, 0, 0, 0);
     }
     100% {
-        transform: rotate3d(-.8, 0, 0, 90deg);
+        transform: translateX(-50%) rotate3d(-.8, 0, 0, 90deg);
     }
 }
