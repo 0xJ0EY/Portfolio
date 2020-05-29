@@ -65,6 +65,10 @@
   user-select: none;
 
   cursor: pointer;
+
+  &:hover, &:focus {
+    text-decoration: underline;
+  }
 }
 
 svg {

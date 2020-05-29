@@ -22,7 +22,7 @@ $animation_time: 100ms;
         font-family: 'Galyon Regular Regular';
         color: #000;
 
-        &:hover {
+        &:hover, &:focus {
             text-decoration: underline;
         }
     }

@@ -35,7 +35,7 @@ span {
 
     transform: rotate3d(1, 0, 0, 0);
 
-    &:hover {
+    &:hover, &:focus {
         text-decoration: underline;
     }
 
