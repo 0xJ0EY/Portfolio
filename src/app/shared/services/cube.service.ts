@@ -49,6 +49,12 @@ export class CubeService implements OnDestroy {
   }
 
   private onLanguageUpdate() {
+    if (this.state === CubeDataState.FADEOUT) { return; } // When the cube is faded out, none is shown
+
+    if (this.state === CubeDataState.FADEIN) {
+      this.state = CubeDataState.NORMAL;
+    }
+
     this.subject.next(this.cubeData()); // Reload the current cube
   }
 
