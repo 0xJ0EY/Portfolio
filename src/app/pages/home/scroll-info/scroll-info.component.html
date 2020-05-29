@@ -1,4 +1,10 @@
-<div class="wrapper">
+<div class="wrapper"
+    [class.idle]="this.state == 'idle'"
+    [class.start-fadein]="this.state == 'start-fadein'"
+    [class.fadein]="this.state == 'fadein'"
+    [class.fadeout]="this.state == 'fadeout'"
+    [class.hidden]="this.state == 'hidden'"
+>
     <span id="prev" class="interactive-btn" [class.isMobile]="isMobile" (click)="this.onClickPrevious()">Prev</span>
     <span class="spacer" *ngIf="isMobile === false">::</span>
     <div *ngIf="isMobile === false; then scroll else swipe"></div>

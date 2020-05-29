@@ -1,3 +1,5 @@
+$animation_time: 100ms;
+
 .wrapper {
   position: absolute;
   bottom: 42px;
@@ -6,6 +8,22 @@
 
   z-index: 100;
   display: block;
+
+  &.hidden {
+    display: none;
+  }
+
+  &.fadein {
+    animation-name: scroll-component-fadein;
+    animation-duration: $animation_time;
+    animation-timing-function: ease-in-out;
+  }
+
+  &.fadeout {
+    animation-name: scroll-component-fadeout;
+    animation-duration: $animation_time;
+    animation-timing-function: ease-in-out;
+  }
 
 }
 
@@ -130,5 +148,23 @@ span {
   /* Hide the prev & next buttons */
   #prev, #next {
     display: none;
+  }
+}
+
+@keyframes scroll-component-fadeout {
+  0%   {
+    transform: translateX(-50%) rotate3d(1, 0, 0, 0);
+  }
+  100% {
+    transform: translateX(-50%) rotate3d(.8, 0, 0, 90deg);
+  }
+}
+
+@keyframes scroll-component-fadein {
+  0%   {
+    transform: translateX(-50%) rotate3d(-.8, 0, 0, 90deg);
+  }
+  100% {
+    transform: translateX(-50%) rotate3d(1, 0, 0, 0);
   }
 }
