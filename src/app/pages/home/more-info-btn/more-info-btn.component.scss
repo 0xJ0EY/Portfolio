@@ -12,7 +12,7 @@ $animation_time: 100ms;
 
     transform: translateX(-50%);
 
-    padding: 0 1em .25em;
+    padding: 0 0 .25em;
     font-size: 1.6em;
     font-family: 'Galyon Bold Bold';
 
@@ -20,7 +20,6 @@ $animation_time: 100ms;
 
     span {
         font-family: 'Galyon Regular Regular';
-        letter-spacing: -.5px;
         color: #000;
 
         &:hover {
