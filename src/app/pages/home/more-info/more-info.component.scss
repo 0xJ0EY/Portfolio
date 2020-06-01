@@ -1,0 +1,11 @@
+.container {
+  margin: 0 auto;
+  width: 1024px;
+  height: 100%;
+
+  display: block;
+
+  &.hidden {
+    display: none;
+  }
+}
