@@ -88,8 +88,9 @@ export class WebGLObjectManager {
     this.gl.compileShader(shader);
 
     if (!this.gl.getShaderParameter(shader, this.gl.COMPILE_STATUS)) {
+      const error = this.gl.getShaderInfoLog(shader);
       this.gl.deleteShader(shader);
-      throw new Error('An error occurred compiling the shaders: ' + this.gl.getShaderInfoLog(shader));
+      throw new Error('An error occurred compiling the shaders: ' + error);
     }
 
     return shader;
