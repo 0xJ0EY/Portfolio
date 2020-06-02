@@ -14,6 +14,7 @@ import { LanguageSelectorComponent } from './language-selector/language-selector
 import { MoreInfoBtnComponent } from './more-info-btn/more-info-btn.component';
 import { MoreInfoComponent } from './more-info/more-info.component';
 import { LessInfoBtnComponent } from './less-info-btn/less-info-btn.component';
+import { SocialBtnComponent } from './social-btn/social-btn.component';
 
 @NgModule({
   declarations: [
@@ -27,7 +28,8 @@ import { LessInfoBtnComponent } from './less-info-btn/less-info-btn.component';
     LanguageSelectorComponent,
     MoreInfoBtnComponent,
     MoreInfoComponent,
-    LessInfoBtnComponent
+    LessInfoBtnComponent,
+    SocialBtnComponent
   ],
   imports: [
     CommonModule,
