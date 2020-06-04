@@ -10,7 +10,6 @@ span.wrapper {
     z-index: 100;
     font-kerning: -10px;
     text-align: right;
-    transform: rotate3d(1, 0, 0, 90deg);
 
     -webkit-transition: $start_animation_time ease-in-out;
     -moz-transition: $start_animation_time ease-in-out;
@@ -18,14 +17,7 @@ span.wrapper {
     transition: $start_animation_time ease-in-out;
 }
 
-span.wrapper.loaded {
-    transform: rotate3d(0,0,0, 0deg);
-}
-
-span {
-
-    display: inline-block;
-
+.currentProject {
     cursor: pointer;
 
     font-family: 'Galyon Bold Bold';
@@ -33,25 +25,55 @@ span {
 
     text-transform: uppercase;
 
-    transform: rotate3d(1, 0, 0, 0);
+    display: block;
+
 
     &:hover, &:focus {
         text-decoration: underline;
     }
 
-    -webkit-transition: $animation_time ease-in-out;
-    -moz-transition: $animation_time ease-in-out;
-    -o-transition: $animation_time ease-in-out;
-    transition: $animation_time ease-in-out;
+    &.fadein {
+        animation-name: social-btn-fadein;
+        animation-duration: $animation_time;
+        animation-timing-function: ease-in-out;
+    }
+    
+    &.fadeout {
+        animation-name: social-btn-fadeout;
+        animation-duration: $animation_time;
+        animation-timing-function: ease-in-out;
+    }
+    
+    &.start-fadein {
+        animation-name: lang-select-fadein;
+        animation-duration: $start_animation_time;
+        animation-timing-function: ease-in-out;
+    }
+    
+    &.hidden {
+        display: none;
+    }
+
 }
 
-span.out {
-    transform: rotate3d(.8, 0, 0, 90deg);
-}
 
-span.in {
-    transform: rotate3d(-.8, 0, 0, 90deg);
-}
+@keyframes lang-select-fadein {
+    0%   {
+        transform: rotate3d(.8, 0, 0, 90deg);
+    }
+    100% {
+        transform: rotate3d(1, 0, 0, 0);
+    }
+  }
+  
+  @keyframes lang-select-fadeout {
+    0%   {
+        transform: rotate3d(1, 0, 0, 0);
+    }
+    100% {
+        transform: rotate3d(-.8, 0, 0, 90deg);
+    }
+  }
 
 
 @media screen and (max-width: 600px) {
@@ -68,5 +90,25 @@ span.in {
 @media screen and (max-width: 400px) {
     span.wrapper {
         right: 30px;
+    }
+}
+
+@media screen and (max-width: 600px) {
+    .currentProject {
+        &.mobile-fadein {
+            animation-name: social-btn-fadein;
+            animation-duration: $animation_time;
+            animation-timing-function: ease-in-out;
+        }
+        
+        &.mobile-fadeout {
+            animation-name: social-btn-fadeout;
+            animation-duration: $animation_time;
+            animation-timing-function: ease-in-out;
+        }
+        
+        &.mobile-hidden {
+            display: none;
+        }
     }
 }

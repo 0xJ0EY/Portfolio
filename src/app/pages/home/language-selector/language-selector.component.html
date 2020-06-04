@@ -1,8 +1,14 @@
-<span class="wrapper" [ngClass]="loadedState">
-  <span class="currentProject" [ngClass]="concatAnimationState"
-  (click)="this.onClick()"
-  [@languageChange]="animationState" 
-  (@languageChange.start)="onAnimationStart($event)"
-  (@languageChange.done)="onAnimationEnd($event)">{{ languageName }}</span> 
+<span class="wrapper">
+  <span class="currentProject"
+  [class.first-load]="initialLoad == true"
+  [class.idle]="this.state == 'idle'"
+  [class.start-fadein]="this.state == 'start-fadein'"
+  [class.fadein]="this.state == 'fadein'"
+  [class.fadeout]="this.state == 'fadeout'"
+  [class.hidden]="this.state == 'hidden'"
+  [class.mobile-fadein]="this.state == 'mobile-fadein'"
+  [class.mobile-fadeout]="this.state == 'mobile-fadeout'"
+  [class.mobile-hidden]="this.state == 'mobile-hidden'"
+  (click)="this.onClick()">{{ languageName }}</span> 
 </span>
 

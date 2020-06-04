@@ -1,40 +1,24 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Subscription } from 'rxjs';
-import {
-  trigger,
-  state,
-  style,
-  animate,
-  transition
-} from '@angular/animations';
 import { LanguageService } from 'src/app/shared/services/language.service';
+import { CubeService, CubeData, CubeDataState } from '../../../shared/services/cube.service';
 
 
 @Component({
   selector: 'app-language-selector',
   templateUrl: './language-selector.component.html',
-  styleUrls: ['./language-selector.component.scss'],
-  animations: [
-    trigger('languageChange', [
-      state('in', style({})),
-      state('idle', style({})),
-      state('out', style({})),
-      transition('in => idle', [
-        animate('100ms')
-      ]),
-      transition('idle => out', [
-        animate('100ms')
-      ]),
-      transition('out => in', [])
-    ])
-  ]
+  styleUrls: ['./language-selector.component.scss']
 })
 export class LanguageSelectorComponent implements OnInit, OnDestroy {
 
-  private initialLoad = false;
+  private readonly START_ANIMATION_WAIT_TIME = 100;
+  private readonly START_ANIMATION_TIME = 250;
+  private readonly ANIMATION_TIME = 100;
 
-  public currentProject = 1;
-  public maxProjects = 1;
+  public initialLoad = true;
+
+  private transitioning = false;
+  public state: 'idle' | 'start-fadein' | 'fadein' | 'fadeout' | 'hidden' | 'mobile-fadein' | 'mobile-fadeout' | 'mobile-hidden' = 'hidden';
 
   public animationState = 'idle';
   public prevAnimationState = 'in';
@@ -43,60 +27,36 @@ export class LanguageSelectorComponent implements OnInit, OnDestroy {
   public languageName: string;
 
   private langServiceSubscription: Subscription;
+  private cubeServiceSubscription: Subscription;
 
-  constructor(private langService: LanguageService) { }
+  constructor(private langService: LanguageService, private cubeService: CubeService) {
+    this.langServiceSubscription = this.langService.languageObservable.subscribe(this.onLanguageChange.bind(this));
+    this.cubeServiceSubscription = this.cubeService.onChange.subscribe(this.onCubeChange.bind(this));
+  }
 
   ngOnInit() {
-    this.onLanguageChange();
+    this.startFadein();
+  }
 
-    this.langServiceSubscription = this.langService.languageObservable.subscribe(this.onLanguageChange.bind(this));
-
-    setTimeout(this.startAnimation.bind(this), 100);
+  private onCubeChange(cubeData: CubeData): void {
+    switch (cubeData.state) {
+      case CubeDataState.FADEOUT:
+        this.fadeout();
+        break;
+      case CubeDataState.FADEIN:
+        this.fadein();
+        break;
+    }
   }
 
   private onLanguageChange(): void  {
-    this.updateAnimationState('out');
+    if (this.initialLoad) { return; } // We have not yet completed the first animation
+    this.reload();
   }
 
   ngOnDestroy(): void {
     this.langServiceSubscription.unsubscribe();
-  }
-
-  startAnimation() {
-    this.initialLoad = true;
-  }
-
-  private validAnimState(animState: string): boolean {
-    return ['in', 'out', 'idle'].includes(animState);
-  }
-
-  get concatAnimationState(): string {
-    return this.animationState + ' old_' + this.prevAnimationState + ' ' + this.currentProject;
-  }
-
-  get loadedState(): string {
-    return this.initialLoad ? 'loaded' : '';
-  }
-
-
-  private updateAnimationState(animState: string) {
-    if (!this.validAnimState(animState)) { throw new Error('Unsupported state'); }
-
-    this.prevAnimationState = this.animationState;
-    this.animationState = animState;
-  }
-
-  public onAnimationStart(event: any) {
-    if (event.fromState === 'out' && event.toState === 'in') {
-      this.updateAnimationState('idle');
-    }
-  }
-
-  public onAnimationEnd(event: any) {
-    if (event.toState === 'out') {
-      this.updateLanguageName();
-      this.updateAnimationState('in');
-    }
+    this.cubeServiceSubscription.unsubscribe();
   }
 
   private updateLanguageName(): void {
@@ -110,6 +70,89 @@ export class LanguageSelectorComponent implements OnInit, OnDestroy {
     this.currentLangIndex = (this.currentLangIndex + 1) % this.langService.languages.length;
     const lang = this.langService.languages[this.currentLangIndex];
     this.langService.update(lang);
+  }
+
+  private reload(): void {
+    if (!this.canTransition()) { return; }
+    this.startTransition();
+
+    this.state = 'fadeout';
+
+    setTimeout(() => {
+      this.updateLanguageName();
+      this.state = 'fadein';
+
+      setTimeout(() => {
+        this.showButton();
+      }, this.ANIMATION_TIME);
+    }, this.ANIMATION_TIME);
+
+    this.endTransition();
+  }
+
+  private fadeout(): void {
+    if (!this.canTransition()) { return; }
+    this.startTransition();
+
+    this.state = 'mobile-fadeout';
+
+    setTimeout(() => {
+      this.hideButton();
+      this.endTransition();
+    }, this.ANIMATION_TIME);
+  }
+
+  private startFadein(): void {
+    if (!this.canTransition()) { return; }
+    this.startTransition();
+
+    this.updateLanguageName();
+
+    // Every animation has a 100ms wait time
+    setTimeout(() => {
+
+      this.state = 'start-fadein';
+
+      setTimeout(() => {
+        this.showButton();
+        this.endTransition();
+
+        this.initialLoad = false;
+      }, this.START_ANIMATION_TIME);
+    }, this.START_ANIMATION_WAIT_TIME);
+
+  }
+
+  private fadein(): void {
+    if (!this.canTransition()) { return; }
+    this.startTransition();
+
+    this.state = 'mobile-fadein';
+
+    setTimeout(() => {
+      this.showButton();
+      this.endTransition();
+    }, this.ANIMATION_TIME);
+  }
+
+  private hideButton(): void {
+    this.state = 'mobile-hidden';
+  }
+
+  private showButton(): void {
+    this.state = 'idle';
+  }
+
+  private canTransition(): boolean {
+    return this.transitioning === false;
+  }
+
+  private startTransition(): void {
+    this.transitioning = true;
+  }
+
+  private endTransition(): void {
+    this.transitioning = false;
   }
 
 }
