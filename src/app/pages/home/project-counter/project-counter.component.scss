@@ -80,6 +80,14 @@ span.in {
     transform: rotate3d(-.8, 0, 0, 90deg);
 }
 
+@media screen and (max-width: 800px) {
+
+    app-social-btn {
+        top: 100px;
+        right: 100px;
+    }
+}
+
 
 @media screen and (max-width: 600px) {
     span.wrapper {
@@ -88,6 +96,10 @@ span.in {
     app-language-selector {
         top: 100px;
         right: 0px;
+    }
+    app-social-btn {
+        top: 150px;
+        right: 40px;
     }
 }
 

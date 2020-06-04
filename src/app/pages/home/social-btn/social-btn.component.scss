@@ -1,3 +1,14 @@
+$animation_time: 100ms;
+
+:host {
+  -webkit-transition: $animation_time ease-in-out;
+  -moz-transition: $animation_time ease-in-out;
+  -o-transition: $animation_time ease-in-out;
+  transition: $animation_time ease-in-out;
+
+  z-index: 100;
+}
+
 .social-btn {
 
   a {
