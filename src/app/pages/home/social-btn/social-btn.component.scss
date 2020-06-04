@@ -18,6 +18,10 @@ $animation_time: 100ms;
     animation-timing-function: ease-in-out;
   }
 
+  &.hidden.first-load {
+    display: none;
+  }
+
   a {
     margin-left: 10px;
   }

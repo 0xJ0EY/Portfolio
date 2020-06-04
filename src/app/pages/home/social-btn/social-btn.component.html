@@ -1,4 +1,5 @@
 <div class="social-btn"
+    [class.first-load]="firstLoad == true"
     [class.idle]="this.state == 'idle'"
     [class.start-fadein]="this.state == 'start-fadein'"
     [class.fadein]="this.state == 'fadein'"
