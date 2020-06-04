@@ -9,7 +9,7 @@ $animation_time: 100ms;
 
     white-space: nowrap;
     left: 50%;
-    display: block;;
+    display: block;
 
     transform: translateX(-50%);
 
@@ -66,5 +66,17 @@ $animation_time: 100ms;
     }
     100% {
         transform: translateX(-50%) rotate3d(-.8, 0, 0, 90deg);
+    }
+}
+
+@media screen and (max-width: 600px) {
+    #more-info {
+        font-size: 1.2em;
+    }
+}
+
+@media screen and (max-width: 400px) {
+    #more-info {
+        font-size: 1.0em;
     }
 }
