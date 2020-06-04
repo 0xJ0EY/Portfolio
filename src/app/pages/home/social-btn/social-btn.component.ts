@@ -13,7 +13,7 @@ export class SocialBtnComponent implements OnInit, OnDestroy {
   private readonly START_ANIMATION_TIME = 250;
   private readonly ANIMATION_TIME = 100;
 
-  public firstLoad = true;
+  public initialLoad = true;
 
   private transitioning = false;
   public state: 'idle' | 'start-fadein' | 'fadein' | 'fadeout' | 'hidden' = 'hidden';
@@ -69,7 +69,7 @@ export class SocialBtnComponent implements OnInit, OnDestroy {
         this.showButton();
         this.endTransition();
 
-        this.firstLoad = false;
+        this.initialLoad = false;
       }, this.START_ANIMATION_TIME);
     }, this.START_ANIMATION_WAIT_TIME);
 
