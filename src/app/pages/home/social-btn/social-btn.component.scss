@@ -1,3 +1,4 @@
+$start_animation_time: 250ms;
 $animation_time: 100ms;
 
 :host {
@@ -11,6 +12,28 @@ $animation_time: 100ms;
 
 .social-btn {
 
+  &.start-fadein {
+    animation-name: social-btn-fadein;
+    animation-duration: $start_animation_time;
+    animation-timing-function: ease-in-out;
+  }
+
+  &.fadein {
+    animation-name: social-btn-fadein;
+    animation-duration: $animation_time;
+    animation-timing-function: ease-in-out;
+  }
+
+  &.fadeout {
+    animation-name: social-btn-fadeout;
+    animation-duration: $animation_time;
+    animation-timing-function: ease-in-out;
+  }
+
+  &.hidden {
+    display: none;
+  }
+
   a {
     margin-left: 10px;
   }
@@ -20,4 +43,22 @@ $animation_time: 100ms;
     width: 30px;
     height: 30px;
   } 
+}
+
+@keyframes social-btn-fadein {
+  0%   {
+      transform: rotate3d(.8, 0, 0, 90deg);
+  }
+  100% {
+      transform: rotate3d(1, 0, 0, 0);
+  }
+}
+
+@keyframes social-btn-fadeout {
+  0%   {
+      transform: rotate3d(1, 0, 0, 0);
+  }
+  100% {
+      transform: rotate3d(-.8, 0, 0, 90deg);
+  }
 }
