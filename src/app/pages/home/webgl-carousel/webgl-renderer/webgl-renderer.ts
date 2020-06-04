@@ -1,5 +1,5 @@
 import { mat4 } from 'gl-matrix';
-import { WebGLObjectManager } from './webgl-object-manager';
+import { WebGLObjectManager, WebGLRenderObject } from './webgl-object-manager';
 
 export class WebGLRenderer {
 
@@ -84,95 +84,109 @@ export class WebGLRenderer {
     );
   }
 
+  private translateObject(modelViewMatrix: mat4, renderObject: WebGLRenderObject): void {
+    mat4.translate(
+      modelViewMatrix,
+      modelViewMatrix,
+      [
+        renderObject.object.getPositionX(),
+        renderObject.object.getPositionY(),
+        renderObject.object.getPositionZ(),
+      ]
+    );
+  }
+
+  private rotateObject(modelViewMatrix: mat4, renderObject: WebGLRenderObject): void {
+    mat4.rotateX(modelViewMatrix, modelViewMatrix, renderObject.object.getRotationX());
+    mat4.rotateY(modelViewMatrix, modelViewMatrix, renderObject.object.getRotationY());
+    mat4.rotateZ(modelViewMatrix, modelViewMatrix, renderObject.object.getRotationZ());
+  }
+
+  private scaleObjects(modelViewMatrix: mat4, renderObject: WebGLRenderObject, scaleFactor: number): void {
+    mat4.scale(
+      modelViewMatrix,
+      modelViewMatrix,
+      [
+        renderObject.object.getScaleX() * this.scale * scaleFactor,
+        renderObject.object.getScaleY() * this.scale * scaleFactor,
+        renderObject.object.getScaleZ() * this.scale * scaleFactor
+      ]
+    );
+  }
+
+  private setupRenderBuffers(modelViewMatrix: mat4, renderObject: WebGLRenderObject, projectionMatrix: mat4) {
+    // Tell WebGL how to pull out the positions from the position
+    // buffer into the vertexPosition attribute
+    {
+      const numComponents = 3;
+      const type = this.gl.FLOAT;
+      const normalize = false;
+      const stride = 0;
+      const offset = 0;
+      this.gl.bindBuffer(this.gl.ARRAY_BUFFER, renderObject.buffers.position);
+      this.gl.vertexAttribPointer(
+        renderObject.programInfo.attribLocations.vertexPosition,
+        numComponents,
+        type,
+        normalize,
+        stride,
+        offset
+      );
+      this.gl.enableVertexAttribArray(
+          renderObject.programInfo.attribLocations.vertexPosition
+      );
+    }
+
+    // Tell WebGL how to pull out the colors from the color buffer
+    // into the vertexColor attribute.
+    {
+      const numComponents = 2;
+      const type = this.gl.FLOAT;
+      const normalize = false;
+      const stride = 0;
+      const offset = 0;
+      this.gl.bindBuffer(this.gl.ARRAY_BUFFER, renderObject.buffers.textureCoords);
+      this.gl.vertexAttribPointer(
+        renderObject.programInfo.attribLocations.textureCoord,
+        numComponents,
+        type,
+        normalize,
+        stride,
+        offset
+      );
+
+      this.gl.enableVertexAttribArray(renderObject.programInfo.attribLocations.textureCoord);
+    }
+
+    // Tell WebGL which indices to use to index the vertices
+    this.gl.bindBuffer(this.gl.ELEMENT_ARRAY_BUFFER, renderObject.buffers.indices);
+
+    // Tell WebGL to use our program when drawing
+    this.gl.useProgram(renderObject.programInfo.program);
+
+    // Set the shader uniforms
+    this.gl.uniformMatrix4fv(
+      renderObject.programInfo.uniformLocations.projectionMatrix,
+      false,
+      projectionMatrix
+    );
+
+    this.gl.uniformMatrix4fv(
+      renderObject.programInfo.uniformLocations.modelViewMatrix,
+      false,
+      modelViewMatrix
+    );
+  }
+
   private renderObjects(projectionMatrix: mat4): void {
     this.objectManager.renderObjects.forEach((renderObject) => {
       const modelViewMatrix = mat4.create();
 
-      mat4.translate(
-        modelViewMatrix,
-        modelViewMatrix,
-        [
-          renderObject.object.getPositionX(),
-          renderObject.object.getPositionY(),
-          renderObject.object.getPositionZ(),
-        ]
-      );
+      this.translateObject(modelViewMatrix, renderObject);
+      this.rotateObject(modelViewMatrix, renderObject);
+      this.scaleObjects(modelViewMatrix, renderObject, 1);
 
-      mat4.rotateX(modelViewMatrix, modelViewMatrix, renderObject.object.getRotationX());
-      mat4.rotateY(modelViewMatrix, modelViewMatrix, renderObject.object.getRotationY());
-      mat4.rotateZ(modelViewMatrix, modelViewMatrix, renderObject.object.getRotationZ());
-
-      mat4.scale(
-        modelViewMatrix,
-        modelViewMatrix,
-        [
-          renderObject.object.getScaleX() * this.scale,
-          renderObject.object.getScaleY() * this.scale,
-          renderObject.object.getScaleZ() * this.scale
-        ]
-      );
-
-      // Tell WebGL how to pull out the positions from the position
-      // buffer into the vertexPosition attribute
-      {
-        const numComponents = 3;
-        const type = this.gl.FLOAT;
-        const normalize = false;
-        const stride = 0;
-        const offset = 0;
-        this.gl.bindBuffer(this.gl.ARRAY_BUFFER, renderObject.buffers.position);
-        this.gl.vertexAttribPointer(
-          renderObject.programInfo.attribLocations.vertexPosition,
-          numComponents,
-          type,
-          normalize,
-          stride,
-          offset
-        );
-        this.gl.enableVertexAttribArray(
-            renderObject.programInfo.attribLocations.vertexPosition
-        );
-      }
-
-      // Tell WebGL how to pull out the colors from the color buffer
-      // into the vertexColor attribute.
-      {
-        const numComponents = 2;
-        const type = this.gl.FLOAT;
-        const normalize = false;
-        const stride = 0;
-        const offset = 0;
-        this.gl.bindBuffer(this.gl.ARRAY_BUFFER, renderObject.buffers.textureCoords);
-        this.gl.vertexAttribPointer(
-          renderObject.programInfo.attribLocations.textureCoord,
-          numComponents,
-          type,
-          normalize,
-          stride,
-          offset
-        );
-
-        this.gl.enableVertexAttribArray(renderObject.programInfo.attribLocations.textureCoord);
-      }
-
-      // Tell WebGL which indices to use to index the vertices
-      this.gl.bindBuffer(this.gl.ELEMENT_ARRAY_BUFFER, renderObject.buffers.indices);
-
-      // Tell WebGL to use our program when drawing
-      this.gl.useProgram(renderObject.programInfo.program);
-
-      // Set the shader uniforms
-      this.gl.uniformMatrix4fv(
-        renderObject.programInfo.uniformLocations.projectionMatrix,
-        false,
-        projectionMatrix
-      );
-
-      this.gl.uniformMatrix4fv(
-        renderObject.programInfo.uniformLocations.modelViewMatrix,
-        false,
-        modelViewMatrix
-      );
+      this.setupRenderBuffers(modelViewMatrix, renderObject, projectionMatrix);
 
       let sidesDrawn = 0;
 
@@ -210,91 +224,11 @@ export class WebGLRenderer {
     this.objectManager.renderObjects.forEach((renderObject) => {
       const modelViewMatrix = mat4.create();
 
-      mat4.translate(
-        modelViewMatrix,
-        modelViewMatrix,
-        [
-          renderObject.object.getPositionX(),
-          renderObject.object.getPositionY(),
-          renderObject.object.getPositionZ(),
-        ]
-      );
+      this.translateObject(modelViewMatrix, renderObject);
+      this.rotateObject(modelViewMatrix, renderObject);
+      this.scaleObjects(modelViewMatrix, renderObject, 1.03);
 
-      mat4.rotateX(modelViewMatrix, modelViewMatrix, renderObject.object.getRotationX());
-      mat4.rotateY(modelViewMatrix, modelViewMatrix, renderObject.object.getRotationY());
-      mat4.rotateZ(modelViewMatrix, modelViewMatrix, renderObject.object.getRotationZ());
-
-      mat4.scale(
-        modelViewMatrix,
-        modelViewMatrix,
-        [
-          renderObject.object.getScaleX() * this.scale * 1.03,
-          renderObject.object.getScaleY() * this.scale * 1.03,
-          renderObject.object.getScaleZ() * this.scale * 1.03
-        ]
-      );
-
-      // Tell WebGL how to pull out the positions from the position
-      // buffer into the vertexPosition attribute
-      {
-        const numComponents = 3;
-        const type = this.gl.FLOAT;
-        const normalize = false;
-        const stride = 0;
-        const offset = 0;
-        this.gl.bindBuffer(this.gl.ARRAY_BUFFER, renderObject.buffers.position);
-        this.gl.vertexAttribPointer(
-          renderObject.programInfo.attribLocations.vertexPosition,
-          numComponents,
-          type,
-          normalize,
-          stride,
-          offset
-        );
-        this.gl.enableVertexAttribArray(
-            renderObject.programInfo.attribLocations.vertexPosition
-        );
-      }
-
-      // Tell WebGL how to pull out the colors from the color buffer
-      // into the vertexColor attribute.
-      {
-        const numComponents = 2;
-        const type = this.gl.FLOAT;
-        const normalize = false;
-        const stride = 0;
-        const offset = 0;
-        this.gl.bindBuffer(this.gl.ARRAY_BUFFER, renderObject.buffers.textureCoords);
-        this.gl.vertexAttribPointer(
-          renderObject.programInfo.attribLocations.textureCoord,
-          numComponents,
-          type,
-          normalize,
-          stride,
-          offset
-        );
-
-        this.gl.enableVertexAttribArray(renderObject.programInfo.attribLocations.textureCoord);
-      }
-
-      // Tell WebGL which indices to use to index the vertices
-      this.gl.bindBuffer(this.gl.ELEMENT_ARRAY_BUFFER, renderObject.buffers.indices);
-
-      // Tell WebGL to use our program when drawing
-      this.gl.useProgram(renderObject.programInfo.program);
-
-      // Set the shader uniforms
-      this.gl.uniformMatrix4fv(
-        renderObject.programInfo.uniformLocations.projectionMatrix,
-        false,
-        projectionMatrix
-      );
-
-      this.gl.uniformMatrix4fv(
-        renderObject.programInfo.uniformLocations.modelViewMatrix,
-        false,
-        modelViewMatrix
-      );
+      this.setupRenderBuffers(modelViewMatrix, renderObject, projectionMatrix);
 
       let sidesDrawn = 0;
 
