@@ -4,11 +4,12 @@ $animation_time: 100ms;
 
 #more-info {
     position: fixed;
-    display: inline-block;
-
-    left: 50%;
     bottom: 3px;
     z-index: 100;
+
+    white-space: nowrap;
+    left: 50%;
+    display: block;;
 
     transform: translateX(-50%);
 
