@@ -18,22 +18,6 @@ $animation_time: 100ms;
     animation-timing-function: ease-in-out;
   }
 
-  &.fadein {
-    animation-name: social-btn-fadein;
-    animation-duration: $animation_time;
-    animation-timing-function: ease-in-out;
-  }
-
-  &.fadeout {
-    animation-name: social-btn-fadeout;
-    animation-duration: $animation_time;
-    animation-timing-function: ease-in-out;
-  }
-
-  &.hidden {
-    display: none;
-  }
-
   a {
     margin-left: 10px;
   }
@@ -60,5 +44,25 @@ $animation_time: 100ms;
   }
   100% {
       transform: rotate3d(-.8, 0, 0, 90deg);
+  }
+}
+
+@media screen and (max-width: 600px) {
+  .social-btn {
+    &.fadein {
+      animation-name: social-btn-fadein;
+      animation-duration: $animation_time;
+      animation-timing-function: ease-in-out;
+    }
+  
+    &.fadeout {
+      animation-name: social-btn-fadeout;
+      animation-duration: $animation_time;
+      animation-timing-function: ease-in-out;
+    }
+  
+    &.hidden {
+      display: none;
+    }
   }
 }
