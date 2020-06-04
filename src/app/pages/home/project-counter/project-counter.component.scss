@@ -8,7 +8,7 @@ span.wrapper {
     top: 50px;
     right: 100px;
 
-    width: calc(100% - 100px); // Use all the width to fix a minor text rendering bug.
+    width: 100px; // Use a fixed width to fix a minor text rendering bug.
 
     z-index: 100;
     font-kerning: -10px;
