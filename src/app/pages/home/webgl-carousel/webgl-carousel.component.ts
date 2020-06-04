@@ -47,7 +47,7 @@ export class WebGLCarouselComponent implements AfterViewInit, OnDestroy {
   startRenderer(): void {
     this.resizeSubscription = this.resizeService.onResize.subscribe(this.onResize.bind(this));
 
-    const gl = this.webGL.nativeElement.getContext('webgl');
+    const gl = this.webGL.nativeElement.getContext('webgl', { stencil: true });
 
     if (!gl) {
       alert('Unable to initialize WebGL. Your browser or machine may not support it.');
