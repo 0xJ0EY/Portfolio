@@ -1,11 +1,81 @@
+$animation_time: 100ms;
+
 .container {
-  margin: 0 auto;
-  width: 1024px;
-  height: 100%;
+  margin: auto;
+  position: relative;
+
+  width: 850px;
+  height: 100vh;
+
+  z-index: 100;
+  overflow: auto;
 
   display: block;
 
   &.hidden {
     display: none;
+  }
+
+
+  &.fadein > .info-card {
+    animation-name: more-info-fadein;
+    animation-duration: $animation_time;
+    animation-timing-function: ease-in-out;
+  }
+  
+  &.fadeout > .info-card {
+    animation-name: more-info-fadeout;
+    animation-duration: $animation_time;
+    animation-timing-function: ease-in-out;
+  }
+}
+
+.info-card {
+  padding: 15px 20px;
+  display: block;
+
+  
+
+  z-index: 100;
+
+  margin: 30px 30px;
+
+  &:first-child {
+    margin-top: 150px;
+  }
+
+  background-color: #fff;
+  border-radius: 3px;
+  box-shadow: 0px 0px 16px 0px rgba(232,232,232,0.5);
+
+  h3 {
+    padding: 0;
+    margin: 0 0 5px 0;
+
+    text-transform: uppercase;
+
+    font-family: 'Galyon Bold Bold';
+  }
+
+  span {
+    font-family: 'Galyon Regular Regular';
+  }
+}
+
+@keyframes more-info-fadeout {
+  0%   {
+      transform: rotate3d(.8, 0, 0, 90deg);
+  }
+  100% {
+      transform: rotate3d(1, 0, 0, 0);
+  }
+}
+
+@keyframes more-info-fadein {
+  0%   {
+      transform: rotate3d(1, 0, 0, 0);
+  }
+  100% {
+      transform: rotate3d(-.8, 0, 0, 90deg);
   }
 }

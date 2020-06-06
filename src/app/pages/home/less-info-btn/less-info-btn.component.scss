@@ -3,9 +3,10 @@ $animation_time: 100ms;
 #less-info {
     position: fixed;
 
-    left: 600px;
+    top: 150px;
+    left: calc(50% + 410px);
 
-    z-index: 100;
+    z-index: 110;
 
     padding: 5px;
     border: 2px solid #000;
@@ -27,7 +28,7 @@ $animation_time: 100ms;
         animation-name: less-btn-fadein;
         animation-duration: $animation_time;
         animation-timing-function: ease-in-out;
-    }
+}
 
     &.fadeout {
         animation-name: less-btn-fadeout;
