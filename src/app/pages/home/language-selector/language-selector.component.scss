@@ -7,9 +7,10 @@ span.wrapper {
 
     right: 110px;
 
+    width: 40px; // Fix language switching problems
+
     z-index: 100;
     font-kerning: -10px;
-    text-align: right;
 
     -webkit-transition: $start_animation_time ease-in-out;
     -moz-transition: $start_animation_time ease-in-out;
