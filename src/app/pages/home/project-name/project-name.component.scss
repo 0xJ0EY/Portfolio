@@ -13,6 +13,8 @@ $animation_time: 250ms;
     z-index: 100;
 
     left: 100px;
+    width: calc(100vw - 100px);
+    overflow: hidden;
 }
 
 .title h1 {
@@ -106,11 +108,6 @@ $animation_time: 250ms;
 
 h1 {
     margin: 0;
-}
-
-.title.intro {
-    overflow: visible;
-    width: 100%;
 }
 
 .title.intro h1.second-title {
