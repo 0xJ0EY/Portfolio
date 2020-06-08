@@ -4,6 +4,24 @@ import { Subscription } from 'rxjs';
 import { LanguageService } from '../../../shared/services/language.service';
 import { CubeDataState } from 'src/app/shared/services/cube.service';
 
+export interface MoreInfoCard {
+  type: 'text' | 'image';
+}
+
+export class MoreInfoText implements MoreInfoCard {
+  public title: string;
+  public text: string;
+  public type: 'text' | 'image' = 'text';
+}
+
+export class MoreInfoImage implements MoreInfoCard {
+  public title: string;
+  public image: string;
+  public description: string;
+
+  public type: 'text' | 'image' = 'image';
+}
+
 @Component({
   selector: 'app-more-info',
   templateUrl: './more-info.component.html',
@@ -19,6 +37,11 @@ export class MoreInfoComponent implements OnInit, OnDestroy {
   private langServiceSubscription: Subscription;
 
   private transitioning = false;
+
+  public cards = [
+    {title: 'monkaS', text: 'Lorem ipsum', type: 'text'},
+    {title: 'test', image: 'https://i.imgur.com/OTzULyY.jpeg', type: 'image'}
+  ];
 
   constructor(
     private cubeService: CubeService,

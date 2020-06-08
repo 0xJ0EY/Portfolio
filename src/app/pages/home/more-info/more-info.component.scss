@@ -60,6 +60,12 @@ $animation_time: 100ms;
   span {
     font-family: 'Galyon Regular Regular';
   }
+
+  img {
+    width: 90%;
+    margin: 16px auto;
+    display: block;
+  }
 }
 
 @keyframes more-info-fadeout {

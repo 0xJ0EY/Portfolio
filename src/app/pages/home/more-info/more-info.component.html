@@ -5,13 +5,21 @@
   [class.fadeout]="this.state == 'fadeout'"
   [class.hidden]="this.state == 'hidden'"
 >
-  <div class="info-card">
-    <h3>Title goes here</h3>
-    <span>Lorem ipsum dolor sit amet consectetur adipisicing elit. Nisi sint autem molestiae necessitatibus dolorum. Quia ex repellendus in voluptates provident et voluptas animi possimus quas necessitatibus. At necessitatibus possimus tenetur!</span>
-  </div>
 
-  <div class="info-card">
-    <h3>Title goes here #2</h3>
-    <span>Lorem ipsum dolor sit amet consectetur adipisicing elit. Nisi sint autem molestiae necessitatibus dolorum. Quia ex repellendus in voluptates provident et voluptas animi possimus quas necessitatibus. At necessitatibus possimus tenetur!</span>
-  </div>
+<div class="info-card"  *ngFor='let card of cards'>
+  <ng-container
+    [ngTemplateOutlet]="card['type'] == 'text' ? cardtext : cardimage"
+    [ngTemplateOutletContext]="{card: card}"
+  ></ng-container>
 </div>
+
+<ng-template #cardtext let-card='card'>
+  <h3 *ngIf="card.title !== null">{{ card.title }}</h3>
+  <span *ngIf="card.text !== null">{{ card.text }}</span>
+</ng-template>
+
+<ng-template #cardimage let-card='card'>
+  <h3 *ngIf="card.title !== null">{{ card.title }}</h3>
+  <img [src]="card.image" [alt]="card.image">
+  <span class="img-description" *ngIf="card.description !== null">{{ card.description }}</span>
+</ng-template>
