@@ -48,7 +48,7 @@ $animation_time: 100ms;
   border-radius: 3px;
   box-shadow: 0px 0px 16px 0px rgba(232,232,232,0.5);
 
-  h3 {
+  h1, h2, h3, h4, h5, h6 {
     padding: 0;
     margin: 0 0 5px 0;
 
@@ -65,6 +65,8 @@ $animation_time: 100ms;
     width: 90%;
     margin: 16px auto;
     display: block;
+
+    border-radius: 3px;
   }
 }
 

@@ -14,12 +14,12 @@
 </div>
 
 <ng-template #cardtext let-card='card'>
-  <h3 *ngIf="card.title !== null">{{ card.title }}</h3>
+  <h2 *ngIf="card.title !== null">{{ card.title }}</h2>
   <span *ngIf="card.text !== null">{{ card.text }}</span>
 </ng-template>
 
 <ng-template #cardimage let-card='card'>
-  <h3 *ngIf="card.title !== null">{{ card.title }}</h3>
+  <h2 *ngIf="card.title !== null">{{ card.title }}</h2>
   <img [src]="card.image" [alt]="card.image">
   <span class="img-description" *ngIf="card.description !== null">{{ card.description }}</span>
 </ng-template>

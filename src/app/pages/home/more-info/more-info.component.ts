@@ -38,10 +38,7 @@ export class MoreInfoComponent implements OnInit, OnDestroy {
 
   private transitioning = false;
 
-  public cards = [
-    {title: 'monkaS', text: 'Lorem ipsum', type: 'text'},
-    {title: 'test', image: 'https://i.imgur.com/OTzULyY.jpeg', type: 'image'}
-  ];
+  public cards = [];
 
   constructor(
     private cubeService: CubeService,
@@ -49,6 +46,11 @@ export class MoreInfoComponent implements OnInit, OnDestroy {
   ) {
     this.cubeServiceSubscription = this.cubeService.onChange.subscribe(this.onProjectChange.bind(this));
     this.langServiceSubscription = this.langService.languageObservable.subscribe(this.onLanguageChange.bind(this));
+  }
+
+  ngOnInit(): void {
+    const currentProject = this.cubeService.getCurrentProject;
+    this.updateCards(currentProject);
   }
 
   ngOnDestroy(): void {
@@ -65,13 +67,18 @@ export class MoreInfoComponent implements OnInit, OnDestroy {
         this.fadein();
         break;
       case CubeDataState.NORMAL:
+        const currentProject = this.cubeService.getCurrentProject;
+        this.updateCards(currentProject);
         break;
     }
   }
 
   private onLanguageChange(lang: string): void {
-    
-    
+  }
+
+  private updateCards(project: any): void {
+    const lang = this.langService.currentLanguage;
+    this.cards = project.cards[lang];
   }
 
   private fadeout(): void {
@@ -116,9 +123,6 @@ export class MoreInfoComponent implements OnInit, OnDestroy {
 
   private hideButton(): void {
     this.state = 'hidden';
-  }
-
-  ngOnInit(): void {
   }
 
 }
