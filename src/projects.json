@@ -6,14 +6,15 @@
       "name": "Youi",
       "description": {
         "en-US": "<h1>Youi</h1><p>For the last group project of my second year of university (2019) I worked on a prototype Android dating app called Youi. One of the must-haves was that the app should contain the functionality to video call your dating partner. This functionality was eventually implemented with a from scratch peer-to-peer WebRTC solution.</p><h2>Technology</h2><p>Kotlin for the Android based on a MVVM structure.</br>NodeJS for the Firebase cloud functions.</br>WebRTC for the peer-to-peer videocall solution.</p><h2>Team</h2><ul><li>Ewout Millink</li><li>Omid Wiar</li><li>Rutger Uijtendaal</li><li>Vincent Nuis</li><li>Joey de Ruiter</li><li>Wim de Groot</li></ul><h2>Contact</h2><p>To get in contact with me you can send me an email to <a href=\"mailto:contact@joeyderuiter.me\">contact@joeyderuiter.me</a><br/>or add me on linkedin <a href=\"https://www.linkedin.com/in/j-de-ruiter/\">LinkedIn</a></p>",
-        "nl-NL": "<h1>Youi</h1><p>Tijdens het laatste groepsproject van het tweede jaar (2019) heb ik gewerkt binnen een team om een prototypen van een Android dating app te ontwikkelen. Deze app moest de functionaliteit bezitten om met je dating partner te kunnen videobellen. Om dit mogelijk te maken heb ik er voor gekozen voor een peer-to-peer oplossing doormiddel van WebRTC.</p><h2>Technologie</h2><p>Kotlin voor de Android app met een MVVM structuur.</br>NodeJS voor de Firebase cloud functions.</br>WebRTC het peer to peer videobellen.</p><h2>Team</h2><ul><li>Ewout Millink</li><li>Omid Wiar</li><li>Rutger Uijtendaal</li><li>Vincent Nuis</li><li>Joey de Ruiter</li><li>Wim de Groot</li></ul><h2>Contact</h2><p>Om contact met mij op te nemen kun je een mailtje schieten naar <a href=\"mailto:contact@joeyderuiter.me\">contact@joeyderuiter.me</a><br/>of mij toevoegen op <a href=\"https://www.linkedin.com/in/j-de-ruiter/\">LinkedIn</a></p>"
+        "nl-NL": ""
       },
       "cards": {
         "en-US": [
         ],
         "nl-NL": [
-          {"title": "monkaS", "text": "Lorem ipsum", "type": "text"},
-          {"title": "test", "image": "https://i.imgur.com/OTzULyY.jpeg", "type": "image"}
+          {"title": "Youi", "text": "Tijdens het laatste groepsproject van het tweede jaar (2019) heb ik gewerkt binnen een team om een prototypen van een Android dating app te ontwikkelen. Deze app moest de functionaliteit bezitten om met je dating partner te kunnen videobellen. Om dit mogelijk te maken heb ik er voor gekozen voor een peer-to-peer oplossing doormiddel van WebRTC.", "type": "text"},
+          {"title": "Technologie", "text": "Kotlin voor de Android app met een MVVM structuur.</br>NodeJS voor de Firebase cloud functions.</br>WebRTC het peer to peer videobellen.", "type": "text"},
+          {"title": "Team", "text": "<ul><li>Ewout Millink</li><li>Omid Wiar</li><li>Wim de Groot</li><li>Vincent Nuis</li><li>Rutger Uijtendaal</li><li>Joey de Ruiter</li></ul>", "type": "text"}
         ]
       },
       "colour": { "r": 255, "g": 255, "b": 255 },
