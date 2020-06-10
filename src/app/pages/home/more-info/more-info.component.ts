@@ -79,6 +79,33 @@ export class MoreInfoComponent implements OnInit, OnDestroy {
   private updateCards(project: any): void {
     const lang = this.langService.currentLanguage;
     this.cards = project.cards[lang];
+    this.addContactCard();
+  }
+
+  private addContactCard(): void {
+
+    let card: MoreInfoCard;
+
+    switch (this.langService.currentLanguage) {
+      case 'en-US':
+        card = {
+          title: 'Contact',
+          // tslint:disable-next-line
+          text: 'To get in contact with me you can send me an email to <a href=\"mailto:contact@joeyderuiter.me\">contact@joeyderuiter.me</a> or add me on linkedin <a href=\"https://www.linkedin.com/in/j-de-ruiter/\">LinkedIn</a>',
+          type: 'text'
+        } as MoreInfoText;
+        break;
+      case 'nl-NL':
+        card = {
+          title: 'Contact',
+          // tslint:disable-next-line
+          text: 'Om contact met mij op te nemen kun je mij mailen naar <a href=\"mailto:contact@joeyderuiter.me\">contact@joeyderuiter.me</a> of mij toevoegen op <a href=\"https://www.linkedin.com/in/j-de-ruiter/\">LinkedIn</a>',
+          type: 'text'
+        } as MoreInfoText;
+        break;
+    }
+
+    this.cards.push(card);
   }
 
   private fadeout(): void {
