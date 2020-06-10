@@ -1,8 +1,9 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, Inject } from '@angular/core';
 import { CubeService, CubeData } from '../../../shared/services/cube.service';
 import { Subscription } from 'rxjs';
 import { LanguageService } from '../../../shared/services/language.service';
 import { CubeDataState } from 'src/app/shared/services/cube.service';
+import { DOCUMENT } from '@angular/common';
 
 export interface MoreInfoCard {
   type: 'text' | 'image';
@@ -41,9 +42,12 @@ export class MoreInfoComponent implements OnInit, OnDestroy {
   public cards = [];
 
   constructor(
+    @Inject(DOCUMENT) private document: Document,
     private cubeService: CubeService,
     private langService: LanguageService
   ) {
+    this.document.addEventListener('keydown', this.onKeypress.bind(this));
+
     this.cubeServiceSubscription = this.cubeService.onChange.subscribe(this.onProjectChange.bind(this));
     this.langServiceSubscription = this.langService.languageObservable.subscribe(this.onLanguageChange.bind(this));
   }
@@ -71,6 +75,20 @@ export class MoreInfoComponent implements OnInit, OnDestroy {
         this.updateCards(currentProject);
         break;
     }
+  }
+
+  private onKeypress(evt: KeyboardEvent): void {
+    switch (evt.code) {
+      case 'Escape':
+        this.closeView();
+        break;
+    }
+  }
+
+  private closeView(): void {
+    if (this.state !== 'idle') { return; }
+
+    this.cubeService.fadein();
   }
 
   private onLanguageChange(lang: string): void {
