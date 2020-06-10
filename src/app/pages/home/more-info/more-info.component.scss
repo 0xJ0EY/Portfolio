@@ -87,3 +87,24 @@ $animation_time: 100ms;
       transform: rotate3d(-.8, 0, 0, 90deg);
   }
 }
+
+@media screen and (max-width: 950px) {
+  .container {
+    width: 100%;
+  }
+
+  .info-card {
+    margin-left: 40px;
+    margin-right: 90px;
+  }
+}
+
+@media screen and (max-width: 600px) {
+  .info-card {
+    margin-left: 40px;
+
+    &:first-child {
+      margin-top: 100px;
+    }
+  }
+}

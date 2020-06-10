@@ -58,3 +58,13 @@ $animation_time: 100ms;
         transform: rotate3d(-.8, 0, 0, 90deg);
     }
 }
+
+
+
+@media screen and (max-width: 950px) {
+    #less-info {
+        top: 100px;
+        left: auto;
+        right: 40px;
+    }
+  }
