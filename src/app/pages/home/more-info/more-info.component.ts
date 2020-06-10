@@ -74,11 +74,16 @@ export class MoreInfoComponent implements OnInit, OnDestroy {
   }
 
   private onLanguageChange(lang: string): void {
+    if (this.state === 'hidden') { return; }
+
+    this.reload();
   }
 
   private updateCards(project: any): void {
     const lang = this.langService.currentLanguage;
-    this.cards = project.cards[lang];
+
+    // Make a shallow copy of the "immutable" cards and add the contact card under that
+    this.cards = project.cards[lang].slice(0);
     this.addContactCard();
   }
 
@@ -106,6 +111,25 @@ export class MoreInfoComponent implements OnInit, OnDestroy {
     }
 
     this.cards.push(card);
+  }
+
+  private reload(): void {
+    if (!this.canTransistion()) { return; }
+    this.startTransition();
+
+    this.state = 'fadein';
+
+    setTimeout(() => {
+      const currentProject = this.cubeService.getCurrentProject;
+      this.updateCards(currentProject);
+
+      this.state = 'fadeout';
+
+      setTimeout(() => {
+        this.showButton();
+        this.endTransistion();
+      }, this.ANIMATION_TIME);
+    }, this.ANIMATION_TIME);
   }
 
   private fadeout(): void {
