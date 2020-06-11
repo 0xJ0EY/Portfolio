@@ -96,6 +96,10 @@ $animation_time: 100ms;
   .info-card {
     margin-left: 40px;
     margin-right: 90px;
+
+    &:last-child {
+      margin-bottom: 100px;
+    }
   }
 }
 
@@ -105,6 +109,10 @@ $animation_time: 100ms;
 
     &:first-child {
       margin-top: 100px;
+    }
+
+    &:last-child {
+      margin-bottom: 100px;
     }
   }
 }
