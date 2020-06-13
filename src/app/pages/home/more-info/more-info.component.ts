@@ -79,7 +79,7 @@ export class MoreInfoComponent implements OnInit, OnDestroy {
       case CubeDataState.FADEOUT:
         this.fadeout();
         break;
-      case CubeDataState.FADEIN:      
+      case CubeDataState.FADEIN:
         this.fadein();
         break;
       case CubeDataState.NORMAL:

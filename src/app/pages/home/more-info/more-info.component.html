@@ -7,7 +7,7 @@
   [class.hidden]="this.state == 'hidden'"
 >
 
-<div class="info-card"  *ngFor='let card of cards'>
+<div class="info-card" [ngClass]="card['type']" *ngFor='let card of cards'>
   <ng-container
     [ngTemplateOutlet]="card['type'] == 'text' ? cardtext : (card['type'] == 'image' ? cardimage : cardvideo) "
     [ngTemplateOutletContext]="{card: card}"
@@ -27,8 +27,10 @@
 
 <ng-template #cardvideo let-card='card'>
   <h2 *ngIf="card.title !== null">{{ card.title }}</h2>
-  <video controls>
-    <source [src]="card.video" type="video/mp4">
-  </video>
+  <video src="/assets/youi.mp4" controls></video>
+  <!-- <video muted playsinline height="250" width="250" controls> -->
+    <!-- <source src="/assets/youi.mp4" type="video/mp4"> -->
+    <!-- <source [src]="card.video" type="video/mp4"> -->
+  <!-- </video> -->
   <span class="img-description" *ngIf="card.description !== null" [innerHTML]="card.description"></span>
 </ng-template>

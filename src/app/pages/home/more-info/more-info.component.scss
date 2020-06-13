@@ -16,7 +16,6 @@ $animation_time: 100ms;
     display: none;
   }
 
-
   &.fadein > .info-card {
     animation-name: more-info-fadein;
     animation-duration: $animation_time;
@@ -27,6 +26,19 @@ $animation_time: 100ms;
     animation-name: more-info-fadeout;
     animation-duration: $animation_time;
     animation-timing-function: ease-in-out;
+  }
+
+  /*
+  Safari only fix,
+  This disables the animation with the transform: rotation3d()
+  If there is a rotation applied on the video object, the controls will not load unless you go into fullscreen first
+  */
+  &.fadein > .info-card:not(:root:root).video {
+    animation-name: none;
+  }
+
+  &.fadeout > .info-card:not(:root:root).video {
+    animation-name: none;
   }
 }
 
