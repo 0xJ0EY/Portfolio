@@ -6,7 +6,7 @@ import { CubeDataState } from 'src/app/shared/services/cube.service';
 import { DOCUMENT } from '@angular/common';
 
 export interface MoreInfoCard {
-  type:  'text' | 'image' | 'video';
+  type: 'text' | 'image' | 'video';
 }
 
 export class MoreInfoText implements MoreInfoCard {
@@ -20,7 +20,7 @@ export class MoreInfoImage implements MoreInfoCard {
   public image: string;
   public description: string;
 
-  public type:  'text' | 'image' | 'video' = 'image';
+  public type: 'text' | 'image' | 'video' = 'image';
 }
 
 export class MoreInfoVideo implements MoreInfoCard {
@@ -28,7 +28,7 @@ export class MoreInfoVideo implements MoreInfoCard {
   public vi: string;
   public description: string;
 
-  public type:  'text' | 'image' | 'video' = 'video';
+  public type: 'text' | 'image' | 'video' = 'video';
 }
 
 @Component({
@@ -45,7 +45,7 @@ export class MoreInfoComponent implements OnInit, OnDestroy {
   private cubeServiceSubscription: Subscription;
   private langServiceSubscription: Subscription;
 
-  @ViewChild('container') private container : ElementRef;
+  @ViewChild('container') private container: ElementRef;
 
   private transitioning = false;
 

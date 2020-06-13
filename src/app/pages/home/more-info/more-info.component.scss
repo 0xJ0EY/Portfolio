@@ -35,6 +35,7 @@ $animation_time: 100ms;
   */
   &.fadein > .info-card:not(:root:root).video {
     animation-name: none;
+    display: none;
   }
 
   &.fadeout > .info-card:not(:root:root).video {
@@ -81,6 +82,7 @@ $animation_time: 100ms;
     outline: none; // Chrome shows a black outline for video elements
     border-radius: 3px;
   }
+
 }
 
 @keyframes more-info-fadeout {
