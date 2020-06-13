@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, Inject } from '@angular/core';
+import { Component, OnInit, OnDestroy, Inject, ViewChild, ElementRef } from '@angular/core';
 import { CubeService, CubeData } from '../../../shared/services/cube.service';
 import { Subscription } from 'rxjs';
 import { LanguageService } from '../../../shared/services/language.service';
@@ -6,13 +6,13 @@ import { CubeDataState } from 'src/app/shared/services/cube.service';
 import { DOCUMENT } from '@angular/common';
 
 export interface MoreInfoCard {
-  type: 'text' | 'image';
+  type:  'text' | 'image' | 'video';
 }
 
 export class MoreInfoText implements MoreInfoCard {
   public title: string;
   public text: string;
-  public type: 'text' | 'image' = 'text';
+  public type: 'text' | 'image' | 'video' = 'text';
 }
 
 export class MoreInfoImage implements MoreInfoCard {
@@ -20,7 +20,15 @@ export class MoreInfoImage implements MoreInfoCard {
   public image: string;
   public description: string;
 
-  public type: 'text' | 'image' = 'image';
+  public type:  'text' | 'image' | 'video' = 'image';
+}
+
+export class MoreInfoVideo implements MoreInfoCard {
+  public title: string;
+  public vi: string;
+  public description: string;
+
+  public type:  'text' | 'image' | 'video' = 'video';
 }
 
 @Component({
@@ -36,6 +44,8 @@ export class MoreInfoComponent implements OnInit, OnDestroy {
 
   private cubeServiceSubscription: Subscription;
   private langServiceSubscription: Subscription;
+
+  @ViewChild('container') private container : ElementRef;
 
   private transitioning = false;
 
@@ -58,6 +68,8 @@ export class MoreInfoComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
+    this.document.removeEventListener('keydown', this.onKeypress.bind(this));
+
     this.cubeServiceSubscription.unsubscribe();
     this.langServiceSubscription.unsubscribe();
   }
@@ -67,7 +79,7 @@ export class MoreInfoComponent implements OnInit, OnDestroy {
       case CubeDataState.FADEOUT:
         this.fadeout();
         break;
-      case CubeDataState.FADEIN:
+      case CubeDataState.FADEIN:      
         this.fadein();
         break;
       case CubeDataState.NORMAL:
@@ -85,9 +97,14 @@ export class MoreInfoComponent implements OnInit, OnDestroy {
     }
   }
 
+  private resetScroll(): void {
+    this.container.nativeElement.scrollTop = 0;
+
+    // console.log(this.container.nativeElement.scrollTop);
+  }
+
   private closeView(): void {
     if (this.state !== 'idle') { return; }
-
     this.cubeService.fadein();
   }
 
@@ -144,7 +161,7 @@ export class MoreInfoComponent implements OnInit, OnDestroy {
       this.state = 'fadeout';
 
       setTimeout(() => {
-        this.showButton();
+        this.showView();
         this.endTransistion();
       }, this.ANIMATION_TIME);
     }, this.ANIMATION_TIME);
@@ -157,7 +174,7 @@ export class MoreInfoComponent implements OnInit, OnDestroy {
     this.state = 'fadeout';
 
     setTimeout(() => {
-      this.showButton();
+      this.showView();
       this.endTransistion();
     }, this.ANIMATION_TIME);
   }
@@ -169,7 +186,9 @@ export class MoreInfoComponent implements OnInit, OnDestroy {
     this.state = 'fadein';
 
     setTimeout(() => {
-      this.hideButton();
+      this.hideView();
+      this.resetScroll();
+
       this.endTransistion();
     }, this.ANIMATION_TIME);
   }
@@ -186,11 +205,11 @@ export class MoreInfoComponent implements OnInit, OnDestroy {
     this.transitioning = false;
   }
 
-  private showButton(): void {
+  private showView(): void {
     this.state = 'idle';
   }
 
-  private hideButton(): void {
+  private hideView(): void {
     this.state = 'hidden';
   }
 

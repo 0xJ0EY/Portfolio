@@ -61,11 +61,12 @@ $animation_time: 100ms;
     font-family: 'Galyon Regular Regular';
   }
 
-  img {
+  img, video {
     width: 90%;
     margin: 16px auto;
     display: block;
 
+    outline: none; // Chrome shows a black outline for video elements
     border-radius: 3px;
   }
 }

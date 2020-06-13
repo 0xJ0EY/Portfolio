@@ -1,4 +1,5 @@
 <div class="container"
+  #container
   [class.idle]="this.state == 'idle'"
   [class.start-fadein]="this.state == 'start-fadein'"
   [class.fadein]="this.state == 'fadein'"
@@ -8,7 +9,7 @@
 
 <div class="info-card"  *ngFor='let card of cards'>
   <ng-container
-    [ngTemplateOutlet]="card['type'] == 'text' ? cardtext : cardimage"
+    [ngTemplateOutlet]="card['type'] == 'text' ? cardtext : (card['type'] == 'image' ? cardimage : cardvideo) "
     [ngTemplateOutletContext]="{card: card}"
   ></ng-container>
 </div>
@@ -21,5 +22,13 @@
 <ng-template #cardimage let-card='card'>
   <h2 *ngIf="card.title !== null">{{ card.title }}</h2>
   <img [src]="card.image" [alt]="card.image">
+  <span class="img-description" *ngIf="card.description !== null" [innerHTML]="card.description"></span>
+</ng-template>
+
+<ng-template #cardvideo let-card='card'>
+  <h2 *ngIf="card.title !== null">{{ card.title }}</h2>
+  <video controls>
+    <source [src]="card.video" type="video/mp4">
+  </video>
   <span class="img-description" *ngIf="card.description !== null" [innerHTML]="card.description"></span>
 </ng-template>

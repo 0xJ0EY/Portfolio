@@ -2,7 +2,6 @@ import { Component, OnInit, OnDestroy, ViewEncapsulation, Inject } from '@angula
 import { Subscription, VirtualTimeScheduler } from 'rxjs';
 import { CubeService } from 'src/app/shared/services/cube.service';
 import { DOCUMENT } from '@angular/common';
-import { canScroll, hasClassInDOMTree } from '../../../shared/inputs/mouse-input';
 import { LanguageService } from 'src/app/shared/services/language.service';
 
 @Component({
