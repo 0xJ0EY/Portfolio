@@ -27,7 +27,12 @@
 
 <ng-template #cardvideo let-card='card'>
   <h2 *ngIf="card.title !== null">{{ card.title }}</h2>
-  <video muted playsinline controls>
+  <video 
+    autoplay
+    loop
+    muted
+    playsinline controls="true"
+  >
     <source [src]="card.video" type="video/mp4">
   </video>
   <span class="img-description" *ngIf="card.description !== null" [innerHTML]="card.description"></span>
