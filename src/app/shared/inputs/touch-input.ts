@@ -23,7 +23,7 @@ export class TouchInput implements WebGLInput {
 
   private readonly hammer: HammerManager;
 
-  constructor(private document: Document, private canvas: HTMLCanvasElement) {
+  constructor(document: Document, private canvas: HTMLCanvasElement) {
     const body = document.querySelector('body');
 
     const cssProps: CssProps = {

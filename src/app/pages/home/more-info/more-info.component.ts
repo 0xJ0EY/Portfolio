@@ -1,9 +1,19 @@
-import { Component, OnInit, OnDestroy, Inject, ViewChild, ElementRef, QueryList, AfterViewInit, ViewChildren, AfterContentChecked } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  OnDestroy,
+  Inject,
+  ViewChild,
+  ElementRef,
+  QueryList,
+  ViewChildren
+} from '@angular/core';
 import { CubeService, CubeData } from '../../../shared/services/cube.service';
 import { Subscription } from 'rxjs';
 import { LanguageService } from '../../../shared/services/language.service';
 import { CubeDataState } from 'src/app/shared/services/cube.service';
 import { DOCUMENT } from '@angular/common';
+import { TapInput } from 'src/app/shared/inputs/tap-input';
 
 export interface MoreInfoCard {
   type: 'text' | 'image' | 'video';
@@ -48,7 +58,6 @@ export class MoreInfoComponent implements OnInit, OnDestroy {
   @ViewChild('container') private container: ElementRef;
   @ViewChildren('videoplayer') private videoPlayers: QueryList<ElementRef>;
 
-  private updatedContent = false;
   private transitioning = false;
 
   public cards = [];
@@ -59,6 +68,8 @@ export class MoreInfoComponent implements OnInit, OnDestroy {
     private langService: LanguageService
   ) {
     this.document.addEventListener('keydown', this.onKeypress.bind(this));
+
+    TapInput.getInstance().registerCallback(this.onTouchTap.bind(this));
 
     this.cubeServiceSubscription = this.cubeService.onChange.subscribe(this.onProjectChange.bind(this));
     this.langServiceSubscription = this.langService.languageObservable.subscribe(this.onLanguageChange.bind(this));
@@ -71,6 +82,8 @@ export class MoreInfoComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     this.document.removeEventListener('keydown', this.onKeypress.bind(this));
+
+    TapInput.getInstance().deleteCallback(this.onTouchTap.bind(this));
 
     this.cubeServiceSubscription.unsubscribe();
     this.langServiceSubscription.unsubscribe();
@@ -91,6 +104,12 @@ export class MoreInfoComponent implements OnInit, OnDestroy {
     }
   }
 
+  private onTouchTap(evt: any): void {
+    if (evt.tapCount === 2) {
+      this.openView();
+    }
+  }
+
   private onKeypress(evt: KeyboardEvent): void {
     switch (evt.code) {
       case 'Escape':
@@ -106,6 +125,11 @@ export class MoreInfoComponent implements OnInit, OnDestroy {
   private closeView(): void {
     if (this.state !== 'idle') { return; }
     this.cubeService.fadein();
+  }
+
+  private openView(): void {
+    if (this.state !== 'hidden') { return; }
+    this.cubeService.fadeout();
   }
 
   private onLanguageChange(lang: string): void {
