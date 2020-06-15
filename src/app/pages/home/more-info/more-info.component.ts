@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, Inject, ViewChild, ElementRef, QueryList, AfterViewInit, ViewChildren } from '@angular/core';
+import { Component, OnInit, OnDestroy, Inject, ViewChild, ElementRef, QueryList, AfterViewInit, ViewChildren, AfterContentChecked } from '@angular/core';
 import { CubeService, CubeData } from '../../../shared/services/cube.service';
 import { Subscription } from 'rxjs';
 import { LanguageService } from '../../../shared/services/language.service';
@@ -36,7 +36,7 @@ export class MoreInfoVideo implements MoreInfoCard {
   templateUrl: './more-info.component.html',
   styleUrls: ['./more-info.component.scss']
 })
-export class MoreInfoComponent implements OnInit, OnDestroy, AfterViewInit {
+export class MoreInfoComponent implements OnInit, OnDestroy {
 
   private readonly ANIMATION_TIME = 100;
 
@@ -48,6 +48,7 @@ export class MoreInfoComponent implements OnInit, OnDestroy, AfterViewInit {
   @ViewChild('container') private container: ElementRef;
   @ViewChildren('videoplayer') private videoPlayers: QueryList<ElementRef>;
 
+  private updatedContent = false;
   private transitioning = false;
 
   public cards = [];
@@ -65,7 +66,7 @@ export class MoreInfoComponent implements OnInit, OnDestroy, AfterViewInit {
 
   ngOnInit(): void {
     const currentProject = this.cubeService.getCurrentProject;
-    this.updateCards(currentProject, true);
+    this.updateCards(currentProject);
   }
 
   ngOnDestroy(): void {
@@ -73,11 +74,6 @@ export class MoreInfoComponent implements OnInit, OnDestroy, AfterViewInit {
 
     this.cubeServiceSubscription.unsubscribe();
     this.langServiceSubscription.unsubscribe();
-  }
-
-  ngAfterViewInit(): void {
-    // We can only update the video players after they have been loaded within ngOnInit()
-    this.updateVideoPlayers();
   }
 
   private onProjectChange(cubeData: CubeData): void {
@@ -90,7 +86,7 @@ export class MoreInfoComponent implements OnInit, OnDestroy, AfterViewInit {
         break;
       case CubeDataState.NORMAL:
         const currentProject = this.cubeService.getCurrentProject;
-        this.updateCards(currentProject, false);
+        this.updateCards(currentProject);
         break;
     }
   }
@@ -118,16 +114,15 @@ export class MoreInfoComponent implements OnInit, OnDestroy, AfterViewInit {
     this.reload();
   }
 
-  private updateCards(project: any, init: boolean): void {
+  private updateCards(project: any): void {
     const lang = this.langService.currentLanguage;
 
     // Make a shallow copy of the "immutable" cards and add the contact card under that
     this.cards = project.cards[lang].slice(0);
     this.addContactCard();
 
-    if (!init) {
-      this.updateVideoPlayers();
-    }
+    this.updatedContent = true;
+    this.stopVideoPlayers();
   }
 
   private addContactCard(): void {
@@ -156,15 +151,36 @@ export class MoreInfoComponent implements OnInit, OnDestroy, AfterViewInit {
     this.cards.push(card);
   }
 
-  private updateVideoPlayers(): void {
+  private startVideoPlayers(): void {
+    if (!this.videoPlayers) { return; }
+
     this.videoPlayers.forEach((element: ElementRef) => {
       const video: HTMLVideoElement = element.nativeElement;
-      
+
+      video.currentTime = 0;
       video.autoplay = true;
       video.muted = true;
       video.loop = true;
       video.controls = true;
-      video.setAttribute('playsinline', '')
+      video.setAttribute('playsinline', '');
+
+      video.play();
+    });
+  }
+
+  private stopVideoPlayers(): void {
+    if (!this.videoPlayers) { return; }
+
+    this.videoPlayers.forEach((element: ElementRef) => {
+      const video: HTMLVideoElement = element.nativeElement;
+
+      video.muted = true;
+      video.autoplay = false;
+      video.loop = true;
+      video.controls = true;
+      video.setAttribute('playsinline', '');
+
+      video.pause();
     });
   }
 
@@ -172,11 +188,13 @@ export class MoreInfoComponent implements OnInit, OnDestroy, AfterViewInit {
     if (!this.canTransistion()) { return; }
     this.startTransition();
 
+    this.stopVideoPlayers();
+
     this.state = 'fadein';
 
     setTimeout(() => {
       const currentProject = this.cubeService.getCurrentProject;
-      this.updateCards(currentProject, false);
+      this.updateCards(currentProject);
 
       this.state = 'fadeout';
 
@@ -192,6 +210,8 @@ export class MoreInfoComponent implements OnInit, OnDestroy, AfterViewInit {
     this.startTransition();
 
     this.state = 'fadeout';
+
+    this.startVideoPlayers();
 
     setTimeout(() => {
       this.showView();
