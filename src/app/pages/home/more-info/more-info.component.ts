@@ -145,7 +145,6 @@ export class MoreInfoComponent implements OnInit, OnDestroy {
     this.cards = project.cards[lang].slice(0);
     this.addContactCard();
 
-    this.updatedContent = true;
     this.stopVideoPlayers();
   }
 
