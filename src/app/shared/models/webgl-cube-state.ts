@@ -105,11 +105,11 @@ export class WebGLCubeStateIdle extends WebGLCubeState {
       position = this.parentInput.mouse.percentage;
     }
 
-    const verticalRotation = -45 + position.x * 90;
-    const horizontalRotation = -45 + position.y * 90;
+    const verticalRotation = -40 + position.x * 80;
+    const horizontalRotation = -40 + position.y * 80;
 
-    const clampedVerticalRotation = clamp(verticalRotation, -45, 45);
-    const clampedHorizontalRotation = clamp(horizontalRotation, -45, 45);
+    const clampedVerticalRotation = clamp(verticalRotation, -40, 40);
+    const clampedHorizontalRotation = clamp(horizontalRotation, -40, 40);
 
     return { x: clampedHorizontalRotation, y: clampedVerticalRotation };
   }
