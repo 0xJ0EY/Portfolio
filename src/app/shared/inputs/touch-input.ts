@@ -43,8 +43,19 @@ export class TouchInput implements WebGLInput {
     this.hammer.on('swipeleft swiperight', this.onSwipe.bind(this));
   }
 
+  private validPanEvent(evt: any): boolean {
+    return  !(
+              evt.changedPointers[0].clientX === 0 &&
+              evt.changedPointers[0].clientY === 0
+            );
+  }
+
   private onPan(evt: any): void {
     this.useTouchInput(evt.pointerType);
+
+    if (!this.validPanEvent(evt)) {
+      return;
+    }
 
     this.panCoords.x = evt.changedPointers[0].clientX as number;
     this.panCoords.y = evt.changedPointers[0].clientY as number;
