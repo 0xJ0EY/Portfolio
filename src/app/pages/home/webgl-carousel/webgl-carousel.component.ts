@@ -26,7 +26,8 @@ export class WebGLCarouselComponent implements AfterViewInit, OnDestroy {
   private cubeManager: WebGLCubeManager;
 
   private animationFrameId: number;
-  private then = 0;
+  private then = null;
+  private offset = 0;
 
   constructor(
     @Inject(DOCUMENT) private document: Document,
@@ -88,6 +89,11 @@ export class WebGLCarouselComponent implements AfterViewInit, OnDestroy {
 
   onAnimationFrame(now: number): void {
     now *= 0.001; // Convert to seconds
+
+    if (this.then === null) {
+      this.then = now;
+    }
+
     const deltaTime = now - this.then;
     this.then = now;
 
