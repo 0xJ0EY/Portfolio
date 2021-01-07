@@ -4,6 +4,7 @@ import { WebGLInputManager } from 'src/app/pages/home/webgl-carousel/webgl-rende
 import { MouseScroll, MouseScrollDirection } from '../inputs/mouse-input';
 import { InteractiveCubeManager } from 'src/app/pages/home/webgl-carousel/webgl-cube-manager/webgl-cube-manager';
 import { SwipeState } from '../inputs/touch-input';
+import { AnimatedTexture, isAnimatedTexture, VideoTexture } from 'src/app/pages/home/webgl-carousel/webgl-renderer/webgl-textures';
 
 export abstract class WebGLCubeState {
 
@@ -17,6 +18,8 @@ export abstract class WebGLCubeState {
   set input(input: WebGLInputManager) {
     this.parentInput = input;
   }
+
+  onStateChange(): void {};
 
   abstract onScroll(mouseScroll: MouseScroll, cubeManager: InteractiveCubeManager): void;
   abstract onSwipe(swipeState: SwipeState, cubeManager: InteractiveCubeManager): void;
@@ -67,6 +70,12 @@ export class WebGLCubeStateMoveAway extends WebGLCubeState {
 }
 
 export class WebGLCubeStateIdle extends WebGLCubeState {
+
+  onStateChange(): void {
+    this.parent.getTextures()
+      .filter(x => isAnimatedTexture(x))
+      .forEach(x => (x as VideoTexture).loadVideo());
+  };
 
   onSwipe(swipeState: SwipeState, cubeManager: InteractiveCubeManager): void {
     switch (swipeState) {

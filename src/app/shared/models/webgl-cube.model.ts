@@ -24,6 +24,7 @@ export class WebGLCube extends WebGLObject {
   private targetRotation: { x: number, y: number };
 
   private state: WebGLCubeState;
+  private textures: Texture[];
 
   constructor(
     private videoUrl: string,
@@ -93,7 +94,6 @@ export class WebGLCube extends WebGLObject {
       8,  9,  10,     8,  10, 11,   // top
       12, 13, 14,     12, 14, 15,   // bottom
       16, 17, 18,     16, 18, 19,   // right
-
     ];
   }
 
@@ -124,6 +124,7 @@ export class WebGLCube extends WebGLObject {
   setState(state: WebGLCubeState) {
     state.cube = this;
     state.input = this.input;
+    state.onStateChange();
     this.state = state;
   }
 
@@ -200,6 +201,14 @@ export class WebGLCube extends WebGLObject {
   }
 
   getTextures(): Texture[] {
+    if (this.textures == null) {
+      this.textures = this.generateTextures();
+    }
+
+    return this.textures; 
+  }
+
+  generateTextures(): Texture[] {
     return [
       new VideoTexture(
         this.videoUrl,

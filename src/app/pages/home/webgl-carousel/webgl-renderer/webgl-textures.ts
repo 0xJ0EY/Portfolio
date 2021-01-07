@@ -141,7 +141,7 @@ export class ColourTexture implements Texture {
 }
 
 export class VideoTexture implements AnimatedTexture {
-  private loaded = false;
+  public loaded = false;
   private texture: WebGLTexture;
   private video: HTMLVideoElement;
 
@@ -154,11 +154,9 @@ export class VideoTexture implements AnimatedTexture {
     preloadTexture.renderTexture(gl);
 
     this.texture = preloadTexture.getTexture();
-
-    this.loadVideo(this.url).then(() => { this.loaded = true; });
   }
 
-  private loadVideo(url: string) {
+  public async loadVideo() {    
     return new Promise<HTMLVideoElement>(resolve => {
       let playing = false;
       let timeupdate = false;
@@ -197,11 +195,11 @@ export class VideoTexture implements AnimatedTexture {
       });
 
       video.crossOrigin = '';
-      video.src = url;
+      video.src = this.url;
       video.play();
 
       this.video = video;
-    });
+    }).then(() => this.loaded = true);
   }
 
   update(gl: WebGLRenderingContext): void {
@@ -230,9 +228,11 @@ export class VideoTexture implements AnimatedTexture {
   }
 
   remove(gl: WebGLRenderingContext): void {
-    this.video.pause();
-    this.video.removeAttribute('src');
-    this.video.load();
+    if (this.video !== undefined) {
+      this.video.pause();
+      this.video.removeAttribute('src');
+      this.video.load();
+    }
 
     gl.deleteTexture(this.texture);
   }
