@@ -21,7 +21,7 @@
       "colour": { "r": 255, "g": 255, "b": 255 },
       "cubeParams": {
         "video": "/assets/youi.mp4",
-        "thumbnail": "/assets/youi-thumbnail.jpg",
+        "thumbnail": "/assets/youi-thumbnail.png",
         "horizontalColours": { "r": 214, "g": 17, "b": 48 },
         "verticalColours": { "r": 237, "g": 36, "b": 68 }
       }
@@ -45,7 +45,7 @@
       "colour": { "r": 245, "g": 249, "b": 252 },
       "cubeParams": {
         "video": "/assets/pc-parts.mp4",
-        "thumbnail": "/assets/pc-parts-thumbnail.jpg",
+        "thumbnail": "/assets/pc-parts-thumbnail.png",
         "horizontalColours": { "r": 5, "g": 118, "b": 218 },
         "verticalColours": { "r": 0, "g": 144, "b": 248 }
       }
@@ -69,7 +69,7 @@
       "colour": { "r": 255, "g": 255, "b": 255 },
       "cubeParams": {
         "video": "/assets/albert.mp4",
-        "thumbnail": "/assets/albert-thumbnail.jpg",
+        "thumbnail": "/assets/albert-thumbnail.png",
         "horizontalColours": { "r": 13, "g": 138, "b": 155  },
         "verticalColours": { "r": 14, "g": 169, "b": 196 }
       }
