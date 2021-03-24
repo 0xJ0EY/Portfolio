@@ -156,8 +156,8 @@ export class VideoTexture implements AnimatedTexture {
     this.texture = preloadTexture.getTexture();
   }
 
-  public async loadVideo() {    
-    return new Promise<HTMLVideoElement>(resolve => {
+  public async loadVideo() {
+    return new Promise<HTMLVideoElement>(async (resolve, reject) => {
       let playing = false;
       let timeupdate = false;
       const video = document.createElement('video');
@@ -169,6 +169,18 @@ export class VideoTexture implements AnimatedTexture {
 
       const checkStatus = () => {
         if (playing && timeupdate) {
+
+          // TODO: Delete this when Firefox fixes their mobile Android browser
+          // Validate if we can extract data from the video element, otherwise keep showing the thumbnail
+          const canvas = document.createElement('canvas');
+          const context = canvas.getContext('2d');
+
+          try {
+            context.drawImage(video, 0, 0, video.width, video.height);
+          } catch(err) {
+            reject();
+          }
+
           resolve(video);
         }
       };
@@ -199,7 +211,9 @@ export class VideoTexture implements AnimatedTexture {
       video.play();
 
       this.video = video;
-    }).then(() => this.loaded = true);
+    })
+    .then(() => this.loaded = true)
+    .catch(() => this.loaded = false)
   }
 
   update(gl: WebGLRenderingContext): void {
