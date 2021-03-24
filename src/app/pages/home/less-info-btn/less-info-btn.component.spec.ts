@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
 import { LessInfoBtnComponent } from './less-info-btn.component';
 
@@ -6,7 +6,7 @@ describe('LessInfoBtnComponent', () => {
   let component: LessInfoBtnComponent;
   let fixture: ComponentFixture<LessInfoBtnComponent>;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [ LessInfoBtnComponent ]
     })

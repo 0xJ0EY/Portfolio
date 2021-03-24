@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
 import { ScrollInfoComponent } from './scroll-info.component';
 
@@ -6,7 +6,7 @@ describe('ScrollInfoComponent', () => {
   let component: ScrollInfoComponent;
   let fixture: ComponentFixture<ScrollInfoComponent>;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [ ScrollInfoComponent ]
     })
