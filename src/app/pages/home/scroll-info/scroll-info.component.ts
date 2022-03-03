@@ -2,6 +2,7 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { DeviceDetectorService } from 'ngx-device-detector';
 import { CubeService, CubeData, CubeDataState } from 'src/app/shared/services/cube.service';
 import { Subscription } from 'rxjs';
+import { isInternetExplorer } from 'src/app/shared/helpers/browser';
 
 @Component({
   selector: 'app-scroll-info',
@@ -154,4 +155,7 @@ export class ScrollInfoComponent implements OnInit, OnDestroy {
     this.state = 'hidden';
   }
 
+  public showMouseIcon(): boolean {
+    return !isInternetExplorer();
+  }
 }

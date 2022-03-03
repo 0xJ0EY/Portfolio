@@ -28,12 +28,11 @@ $animation_time: 100ms;
 }
 
 #prev {
-  display: block;
   height: 47px;
   line-height: 47px;
   font-family: 'Galyon Bold Bold';
 
-  float: left;
+  display: inline-block;
 
   &.isMobile {
     /* No spacers, so add some margins */
@@ -45,12 +44,9 @@ $animation_time: 100ms;
 }
 
 #next {
-  display: block;
   height: 47px;
   line-height: 47px;
   font-family: 'Galyon Bold Bold';
-
-  float: left;
 
   &.isMobile {
     /* No spacers, so add some margins */
@@ -62,17 +58,12 @@ $animation_time: 100ms;
 }
 
 .spacer {
-  display: block;
   height: 47px;
   line-height: 47px;
   margin: 0 5px;
   font-family: 'Galyon Bold Bold';
 }
 
-.info {
-  float: left;
-  display: block;
-}
 
 .interactive-btn {
   -webkit-touch-callout: none;
@@ -96,14 +87,12 @@ svg {
 span {
   font-family: 'Galyon Regular Regular';
   font-weight: normal;
-  
-  display: block;
-  float: left;
+
+  display: inline-block;
 }
 
 .svg-wrapper {
   float: left;
-  display: block;
 }
 
 .swipe {
@@ -125,8 +114,15 @@ span {
   }
 }
 
+.mouse-wrapper {
+  display: inline-block;
+}
+
 .scroll {
-  svg { 
+
+  display: inline-block;
+
+  svg {
     height: 47px;
   }
 
