@@ -16,7 +16,7 @@ import { CubeService } from '../../../shared/services/cube.service';
 
 export class WebGLCarouselComponent implements AfterViewInit, OnDestroy {
 
-  @ViewChild('webGL', { static: true }) public webGL: ElementRef;
+  @ViewChild('ctx', { static: true }) public ctx: ElementRef;
 
   public window: any;
   private resizeSubscription: Subscription;
@@ -45,10 +45,15 @@ export class WebGLCarouselComponent implements AfterViewInit, OnDestroy {
     setTimeout(this.startRenderer.bind(this), 1);
   }
 
+  private createWebGLContext(): WebGLRenderingContext {
+    return  this.ctx.nativeElement.getContext('webgl', { stencil: true }) ||
+            this.ctx.nativeElement.getContext('experimental-webgl', { stencil: true })
+  }
+
   startRenderer(): void {
     this.resizeSubscription = this.resizeService.onResize.subscribe(this.onResize.bind(this));
 
-    const gl = this.webGL.nativeElement.getContext('webgl', { stencil: true });
+    const gl = this.createWebGLContext();
 
     if (!gl) {
       alert('Unable to initialize WebGL. Your browser or machine may not support it.');
@@ -70,8 +75,8 @@ export class WebGLCarouselComponent implements AfterViewInit, OnDestroy {
 
     const devicePixelRatio = window.devicePixelRatio || 1;
 
-    this.webGL.nativeElement.width = Math.round(this.window.innerWidth * devicePixelRatio);
-    this.webGL.nativeElement.height = Math.round(this.window.innerHeight * devicePixelRatio);
+    this.ctx.nativeElement.width = Math.round(this.window.innerWidth * devicePixelRatio);
+    this.ctx.nativeElement.height = Math.round(this.window.innerHeight * devicePixelRatio);
 
     // If it has a viewport, update it aswell
     if (this.renderer != null) {

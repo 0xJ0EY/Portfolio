@@ -2,6 +2,7 @@ import { WebGLObject } from 'src/app/shared/models/webgl-object.model';
 import { WebGLInputManager } from 'src/app/pages/home/webgl-carousel/webgl-renderer/webgl-input-manager';
 import { WebGLTimeManager } from 'src/app/pages/home/webgl-carousel/webgl-renderer/webgl-time-manager';
 import { Texture, AnimatedTexture, isAnimatedTexture } from './webgl-textures';
+import { supportsAnimatedTextures } from 'src/app/shared/helpers/browser';
 
 export class WebGLRenderObject {
   public shaderProgram: WebGLProgram;
@@ -150,9 +151,11 @@ export class WebGLObjectManager {
     this.objects.forEach(val => {
       val.object.update(deltaTime);
 
-      val.textures
-        .filter(texture => isAnimatedTexture(texture))
-        .forEach(texture => (texture as AnimatedTexture).update(this.gl));
+      if (supportsAnimatedTextures()) {
+        val.textures
+          .filter(texture => isAnimatedTexture(texture))
+          .forEach(texture => (texture as AnimatedTexture).update(this.gl));
+      }
     });
 
     // Clear old inputs by updating the inputmanager
