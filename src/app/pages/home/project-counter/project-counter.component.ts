@@ -8,6 +8,7 @@ import {
   animate,
   transition
 } from '@angular/animations';
+import { isInternetExplorer } from 'src/app/shared/helpers/browser';
 
 
 @Component({
@@ -67,7 +68,11 @@ export class ProjectCounterComponent implements OnInit, OnDestroy {
       return;
     }
 
-    this.updateAnimationState('out');
+    if (!isInternetExplorer()) {
+      this.updateAnimationState('out');
+    } else {
+      this.updateProjectName();
+    }
   }
 
   private validAnimState(animState: string): boolean {
